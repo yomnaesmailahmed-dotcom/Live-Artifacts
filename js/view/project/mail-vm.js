@@ -25,7 +25,7 @@ export function buildMail(S, act, perm) {
       summary: c.summary || c.subject || '(no summary)', from: v.from, subject: c.subject, received: when(c.received_at),
       quote: c.quote, hasQuote: !!c.quote, reason: c.reason, hasReason: !!c.reason,
       confidence: v.confidenceLabel, confStyle: CONF_CHIP[c.confidence] || CONF_CHIP.medium,
-      impact: v.impact, hasImpact: !!v.impact, keywords: v.keywords,
+      impact: v.impact, hasImpact: !!v.impact, keywords: v.keywords, hasKeywords: !!v.keywords,
       deliverable: c.deliverable_id ? delTitle[c.deliverable_id] || '' : '', hasDeliverable: !!c.deliverable_id,
       link: /^https:\/\//i.test(c.web_link || '') ? c.web_link : '', hasLink: /^https:\/\//i.test(c.web_link || ''),
       isNew: c.status === 'new', isDismissed: c.status === 'dismissed',

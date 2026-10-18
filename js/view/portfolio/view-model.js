@@ -49,6 +49,7 @@ export function buildViewModel(S, act) {
       due: a.due_on ? fmtDate(a.due_on) : 'no due date', late: a.due_on && a.due_on < today ? 'OVERDUE' : '',
       href: `./Project.dc.html?id=${a.project_id}#timeline`, verb: 'Update',
     })),
+    ...emailWaiting(S, projName),
   ].sort((a, b) => a.sort.localeCompare(b.sort));
   const canCreate = isManagement(S);
 
@@ -92,4 +93,21 @@ export function buildViewModel(S, act) {
     createLabel: S.createBusy ? 'Creating…' : 'Create project',
     openCreate: act.openCreate, closeCreate: act.closeCreate, createProject: act.createProject,
   };
+}
+
+// One line per project I run (DM / PTM) that has Outlook-scan candidates nobody has decided on yet.
+function emailWaiting(S, projName) {
+  const me = S.user && S.user.id;
+  const mine = new Set(S.members.filter((m) => m.user_id === me && ['dm', 'ptm'].includes(m.role)).map((m) => m.project_id));
+  const by = {};
+  S.newMail.filter((c) => c.status === 'new' && mine.has(c.project_id)).forEach((c) => { (by[c.project_id] = by[c.project_id] || []).push(c); });
+  return Object.entries(by).map(([pid, list]) => {
+    const oldest = list.map((c) => String(c.received_at || '')).sort()[0] || '';
+    return {
+      sort: oldest.slice(0, 10) || '9999', kind: 'EMAIL',
+      title: `${list.length} client email${list.length === 1 ? '' : 's'} may change the scope`, project: projName[pid] || '',
+      due: oldest ? `since ${fmtDate(oldest.slice(0, 10))}` : '', late: '',
+      href: `./Project.dc.html?id=${pid}#variations`, verb: 'Review',
+    };
+  });
 }

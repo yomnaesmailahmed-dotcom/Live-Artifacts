@@ -4,7 +4,7 @@ import { createPageStore } from './page-base.js';
 import { errMsg, newId } from '../lib/store.js';
 
 const pageInitial = () => ({
-  projects: [], clients: [], members: [], people: {}, metrics: {}, myQueries: [], myActions: [],
+  projects: [], clients: [], members: [], people: {}, metrics: {}, myQueries: [], myActions: [], newMail: [],
   loaded: false,
   filter: { client: '', dm: '', status: '', q: '' },
   creating: false, createBusy: false, createErr: '',
@@ -31,7 +31,9 @@ export function createPortfolioStore(session) {
       // "Waiting on you": queries assigned to me, actions I own (any project I can see)
       const myQueries = createLiveTable({ sb, table: 'ptm_queries', filter: { column: 'assigned_to', value: s.user.id }, onChange: (rows) => store.set({ myQueries: rows }), onStatus: trackStatus('myQueries') });
       const myActions = createLiveTable({ sb, table: 'actions', filter: { column: 'owner_id', value: s.user.id }, onChange: (rows) => store.set({ myActions: rows }), onStatus: trackStatus('myActions') });
-      tables = [projects, clients, members, myQueries, myActions];
+      // ...and client emails the Outlook scan flagged on projects I run (filtered to DM / PTM in the view)
+      const newMail = createLiveTable({ sb, table: 'mail_candidates', filter: { column: 'status', value: 'new' }, columns: 'id, project_id, received_at, status', onChange: (rows) => store.set({ newMail: rows }), onStatus: trackStatus('newMail') });
+      tables = [projects, clients, members, myQueries, myActions, newMail];
       api.projects = projects; api.clients = clients;
       await Promise.all(tables.map((t) => t.start()));
       // deliverables/submissions are not loaded here; their changes only refresh the metrics
