@@ -1,0 +1,3 @@
+# Database migrations contain the admin allow-list; keep them out of the public repo.
+supabase/
+.claude/
