@@ -6,10 +6,10 @@ const NAV_OFF = 'color: #3A3F46; text-decoration: none; padding-bottom: 2px;';
 
 export function buildShell(S, act, active) {
   const role = (S.profile && S.profile.role) || 'member';
-  const company = (S.settings && S.settings.company_name) || 'Project Controls';
+  const company = (S.settings && S.settings.company_name) || '';
   return {
     ...buildAccount(S, act),
-    companyName: company.toUpperCase(),
+    brand: company ? `${company.toUpperCase()} · PROJECT CONTROLS` : 'PROJECT CONTROLS',
     navProjects: active === 'projects' ? NAV_ON : NAV_OFF,
     navReview: active === 'review' ? NAV_ON : NAV_OFF,
     navAdmin: active === 'admin' ? NAV_ON : NAV_OFF,
