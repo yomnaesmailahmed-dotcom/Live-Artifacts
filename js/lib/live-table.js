@@ -150,6 +150,39 @@ export function createLiveTable({
     }
   }
 
+  // Insert-or-update by primary key (composite-key tables such as run_decisions). Debounced like update().
+  const upserts = new Map();
+  function upsert(value, { typing = false } = {}) {
+    const key = keyOf(value);
+    rows.set(key, { ...(rows.get(key) || {}), ...value });
+    emit();
+    upserts.set(key, { ...(upserts.get(key) || {}), ...value });
+    queue.set(key, { ...(queue.get(key) || {}), ...value }); // marks the columns pending
+    status();
+    clearTimeout(timers.get(key));
+    timers.set(key, setTimeout(() => flushUpsert(key), typing ? TYPING_MS : CLICK_MS));
+  }
+  async function flushUpsert(key) {
+    timers.delete(key);
+    const row = upserts.get(key);
+    if (!row) return;
+    if (inflight.has(key)) { timers.set(key, setTimeout(() => flushUpsert(key), CLICK_MS * 3)); return; }
+    upserts.delete(key);
+    queue.delete(key);
+    inflight.set(key, row);
+    status();
+    try {
+      const { error } = await sb.from(table).upsert(stamp(encode(row)), keyCols ? { onConflict: keyCols.join(',') } : undefined);
+      if (error) throw error;
+      lastError = '';
+    } catch (e) {
+      fail(e);
+    } finally {
+      inflight.delete(key);
+      status();
+    }
+  }
+
   async function remove(key) {
     const prev = rows.get(key);
     if (!prev) return;
@@ -170,7 +203,7 @@ export function createLiveTable({
   async function flushAll() {
     const keys = [...queue.keys()];
     keys.forEach((k) => clearTimeout(timers.get(k)));
-    await Promise.all(keys.map(flush));
+    await Promise.all(keys.map((k) => (upserts.has(k) ? flushUpsert(k) : flush(k))));
   }
 
   function close() {
@@ -184,5 +217,5 @@ export function createLiveTable({
     await load();
   }
 
-  return { start, load, list, get: (key) => rows.get(key), keyOf, insert, insertMany, update, remove, flushAll, close };
+  return { start, load, list, get: (key) => rows.get(key), keyOf, insert, insertMany, update, upsert, remove, flushAll, close };
 }

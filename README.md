@@ -8,8 +8,17 @@ Being built in phases. Done: (1) roles, clients, projects, deliverables +
 submissions, teams/invites, admin, live presence; (2) variation orders with the
 email checkpoint, internal/external incidents, PCU hours ledger; (3) timeline
 (milestones + Gantt), action plan, PTM → DM queries, weekly team status, and
-"Waiting on you" on the Projects page. Next: generic management review (4) ·
-Outlook VO scan (5).
+"Waiting on you" on the Projects page; (4) the management review runs over the
+real data. Next: Outlook VO scan (5).
+
+**Management review (phase 4, `Main.dc.html`).** Scope = whole company, one
+client or one DM; period = since the last approved review → report date.
+Steps: data check → changes since the last review (written from the audit
+trail) → project cards → questions for the DMs (generated from the gaps) →
+conflicts between sources → status, delay responsibility and commentary →
+output (checklist, summary, editable briefing notes, 4-sheet Excel via SheetJS
+0.20.3 from cdn.sheetjs.com, approval). Every tick, answer and pick is a
+`run_decisions` row, synced live; others on the same review show in the header.
 
 **Schedule rules (phase 3).** An unfinished milestone slips when its forecast
 (or today) passes its baseline → Delayed. An action is late when it's overdue
@@ -33,7 +42,7 @@ still a draft.
 | `Projects.dc.html` (home) | Portfolio of every project you can see: status (with the reason), late deliverables, next due, last submission, filters, **New project** (management) |
 | `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Timeline** (Gantt, milestones, action plan with owners) · **Queries & status** (PTM → DM queries with answers, weekly team status) · **Variations** (VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
 | `Admin.dc.html` | Company name, at-risk %, email-scan keywords · people and global roles · clients |
-| `Main.dc.html` | The original 8-step COO summary refresh (made generic in phase 4) |
+| `Main.dc.html` | Management review: the 8-step refresh over the real projects in a scope, with Excel export and briefing notes |
 
 Roles: **admin** / **management** see every project; **members** see projects
 they're on, as **DM** (edits + manages the team), **PTM** (edits), **team** or
