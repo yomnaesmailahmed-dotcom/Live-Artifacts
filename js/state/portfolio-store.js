@@ -37,6 +37,9 @@ export function createPortfolioStore(session) {
         .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'components' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'variations' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incidents' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'hours_snapshots' }, scheduleMetrics)
         .subscribe();
       await loadMetrics();
       store.set({ loaded: true });

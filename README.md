@@ -4,17 +4,27 @@ A company-wide project-controls workspace for the management department, backed
 by Supabase (Auth, PostgreSQL, Row Level Security, Realtime, Presence). It is a
 plain static site: no build step, no framework, and supabase-js comes from the CDN.
 
-Being built in phases. Phase 1 (done): roles, clients, projects, deliverables +
-submissions, teams/invites, admin, live presence. Next: variation orders,
-incidents and hours (2) · PTM queries, team status, action plan (3) · generic
-management review (4) · Outlook VO scan (5).
+Being built in phases. Done: (1) roles, clients, projects, deliverables +
+submissions, teams/invites, admin, live presence; (2) variation orders with the
+email checkpoint, internal/external incidents, PCU hours ledger. Next: PTM
+queries, team status, action plan (3) · generic management review (4) ·
+Outlook VO scan (5).
+
+**How the numbers work (phase 2).** Budget = baseline + approved external VO
+hours. Consumed = latest PCU snapshot (per component, or one project total).
+To complete = planned hours of open deliverables + remaining incident hours.
+At completion = consumed + to complete. Contract finish = baseline + approved
+VO days. Status: Delayed if a deliverable is late, the forecast passes the
+contract finish, or an open incident has a time impact; At Risk at ≥ the
+admin's threshold (90%), when the forecast exceeds budget, or while a VO is
+still a draft.
 
 ## Pages
 
 | Page | What it does |
 | --- | --- |
 | `Projects.dc.html` (home) | Portfolio of every project you can see: status (with the reason), late deliverables, next due, last submission, filters, **New project** (management) |
-| `Project.dc.html?id=…` | **Overview** (details, components, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel) · **Team** (roles, invites by email, who's here now) |
+| `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Variations** (VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
 | `Admin.dc.html` | Company name, at-risk %, email-scan keywords · people and global roles · clients |
 | `Main.dc.html` | The original 8-step COO summary refresh (made generic in phase 4) |
 

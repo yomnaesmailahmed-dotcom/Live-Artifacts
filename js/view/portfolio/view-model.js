@@ -27,8 +27,11 @@ export function buildViewModel(S, act) {
     .sort((a, b) => (clientName[a.p.client_id] || '').localeCompare(clientName[b.p.client_id] || '') || String(a.p.code).localeCompare(String(b.p.code)) || a.p.name.localeCompare(b.p.name));
 
   const count = (s) => all.filter((x) => x.status === s).length;
-  const overdue = all.reduce((n, x) => n + (x.m.deliverables_overdue || 0), 0);
-  const budget = all.reduce((n, x) => n + Number(x.p.budget_hours || 0), 0);
+  const sum = (f) => all.reduce((n, x) => n + Number(f(x) || 0), 0);
+  const overdue = sum((x) => x.m.deliverables_overdue);
+  const budget = sum((x) => (x.m.budget_total ?? x.p.budget_hours));
+  const consumed = sum((x) => x.m.consumed_hours);
+  const vos = sum((x) => x.m.vo_open), incs = sum((x) => x.m.incidents_open);
 
   const dmIds = [...new Set(all.flatMap((x) => x.dms))];
   const canCreate = isManagement(S);
@@ -42,7 +45,8 @@ export function buildViewModel(S, act) {
     noMatch: S.loaded && all.length > 0 && shown.length === 0,
     canCreate, cannotCreate: !canCreate,
     kTotal: all.length, kOn: count('On Track'), kDelayed: count('Delayed'), kRisk: count('At Risk'), kHold: count('On Hold'), kOverdue: overdue,
-    kBudget: fmtHours(budget),
+    kBudget: fmtHours(budget), kConsumed: fmtHours(consumed), kVos: vos, kIncs: incs,
+    kPct: budget > 0 ? `${Math.round((consumed / budget) * 1000) / 10}%` : '—',
     clientOptions: S.clients.map((c) => ({ value: c.id, label: c.name })),
     dmOptions: dmIds.map((id) => ({ value: id, label: nameOf(id) })),
     statusOptions: STATUSES.map((s) => ({ value: s, label: s })),
@@ -59,7 +63,11 @@ export function buildViewModel(S, act) {
       overdue: m.deliverables_overdue ? `${m.deliverables_overdue} late` : '', overdueStyle: m.deliverables_overdue ? 'color: #C00000; font-weight: 600;' : '',
       next: m.next_due_on ? `${fmtDate(m.next_due_on)} · ${m.next_due_title || ''}` : '—',
       last: m.last_submission_on ? `${fmtDate(m.last_submission_on)} · ${m.last_submission_title || ''} ${m.last_submission_rev || ''}`.trim() : '—',
-      budget: fmtHours(p.budget_hours),
+      budget: fmtHours(m.budget_total ?? p.budget_hours),
+      hours: m.consumed_hours ? `${fmtHours(m.consumed_hours)} · ${m.consumed_pct ?? '—'}%` : '—',
+      hoursStyle: m.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #A00000; font-weight: 600;' : '',
+      eac: m.eac ? fmtHours(m.eac) : '—', eacStyle: Number(m.hours_variance) < 0 ? 'color: #C00000; font-weight: 600;' : '',
+      open: [m.vo_open ? `${m.vo_open} VO` : '', m.incidents_open ? `${m.incidents_open} INC` : ''].filter(Boolean).join(' · ') || '—',
     })),
     creating: S.creating, notCreating: !S.creating,
     createBusy: S.createBusy, createErr: S.createErr, hasCreateErr: !!S.createErr,

@@ -5,11 +5,12 @@ import { projectPermissions, PROJECT_ROLES, PROJECT_ROLE_SHORT } from '../../dom
 import { SOURCES, SOURCE_SHORT, DELIVERABLE_STATUSES, SUBMISSION_RESPONSES, WORK_STATUSES, isOverdue, parseDeliverableRows } from '../../domain/deliverables.js';
 import { fmtDate, fmtHours, todayIso, displayName, initials } from '../../ui/format.js';
 import { STATUS_CHIP, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js';
+import { buildRegisters } from './registers-vm.js';
 
 const STATUS_OVERRIDES = ['', 'Not Started', 'On Track', 'At Risk', 'Delayed', 'On Hold', 'Completed', 'Not Awarded'];
 const PO = ['Not Provided', 'Received', 'Not Received'];
 const opts = (list) => list.map((v) => (Array.isArray(v) ? { value: v[0], label: v[1] } : { value: v, label: v || 'Automatic (from data)' }));
-const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['team', 'Team']];
+const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['variations', 'Variations'], ['incidents', 'Incidents'], ['hours', 'Hours'], ['team', 'Team']];
 
 export function buildViewModel(S, act) {
   const shell = buildShell(S, act, 'projects');
@@ -51,6 +52,8 @@ export function buildViewModel(S, act) {
       setHours: act.editDeliverable(d.id, 'planned_hours'), setStatus: act.editDeliverable(d.id, 'status'),
       toggle: () => act.toggleExpand(d.id), askDelete: () => act.askDelete(delKey), confirmDelete: () => act.removeRow('deliverables', d.id),
       addSubmission: () => act.addSubmission(d.id),
+      checkpoint: () => act.openCheckpoint({ deliverableId: d.id }),
+      voRef: d.variation_id ? d.source_ref || 'VO' : '',
       subs: subs.map((s) => {
         const sKey = `s:${s.id}`;
         return {
@@ -59,6 +62,7 @@ export function buildViewModel(S, act) {
           setResponse: act.editSubmission(s.id, 'client_response'), setResponseOn: act.editSubmission(s.id, 'response_on'), setNotes: act.editSubmission(s.id, 'notes'),
           confirming: S.confirmDelete === sKey, notConfirming: S.confirmDelete !== sKey,
           askDelete: () => act.askDelete(sKey), confirmDelete: () => act.removeRow('submissions', s.id),
+          checkpoint: () => act.openCheckpoint({ deliverableId: d.id, submissionId: s.id }),
         };
       }),
       noSubs: !subs.length,
@@ -102,8 +106,15 @@ export function buildViewModel(S, act) {
     here: here.map((p) => ({ initials: initials(p.name || p.email), title: `${p.name || p.email} — ${p.tab}` })),
     hasHere: here.length > 0, hereLabel: here.length === 1 ? '1 other person here' : `${here.length} others here`,
 
-    tabs: TAB_LABELS.map(([k, label]) => ({ label: k === 'deliverables' ? `${label} · ${S.deliverables.length}` : (k === 'team' ? `${label} · ${S.members.length}` : label), selected: S.tab === k ? 'true' : 'false', pick: () => act.setTab(k) })),
+    tabs: TAB_LABELS.map(([k, label]) => {
+      const n = { deliverables: S.deliverables.length, variations: S.variations.length, incidents: S.incidents.filter((i) => i.status !== 'Closed').length, team: S.members.length }[k];
+      return { label: n === undefined ? label : `${label} · ${n}`, selected: S.tab === k ? 'true' : 'false', pick: () => act.setTab(k) };
+    }),
     tOverview: S.tab === 'overview', tDeliverables: S.tab === 'deliverables', tTeam: S.tab === 'team',
+    tVariations: S.tab === 'variations', tIncidents: S.tab === 'incidents', tHours: S.tab === 'hours',
+    ...buildRegisters(S, act, perm),
+    kConsumed: fmtHours(M.consumed_hours || 0), kBudgetTotal: fmtHours(M.budget_total ?? P.budget_hours), kEac: fmtHours(M.eac || 0),
+    kPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, kVoOpen: M.vo_open || 0, kIncOpen: M.incidents_open || 0,
 
     // overview
     kTotal: M.deliverables_total || 0, kSubmitted: M.deliverables_submitted || 0, kApproved: M.deliverables_approved || 0,
