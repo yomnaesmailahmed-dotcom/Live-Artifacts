@@ -6,11 +6,12 @@ import { SOURCES, SOURCE_SHORT, DELIVERABLE_STATUSES, SUBMISSION_RESPONSES, WORK
 import { fmtDate, fmtHours, todayIso, displayName, initials } from '../../ui/format.js';
 import { STATUS_CHIP, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js';
 import { buildRegisters } from './registers-vm.js';
+import { buildSchedule } from './schedule-vm.js';
 
 const STATUS_OVERRIDES = ['', 'Not Started', 'On Track', 'At Risk', 'Delayed', 'On Hold', 'Completed', 'Not Awarded'];
 const PO = ['Not Provided', 'Received', 'Not Received'];
 const opts = (list) => list.map((v) => (Array.isArray(v) ? { value: v[0], label: v[1] } : { value: v, label: v || 'Automatic (from data)' }));
-const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['variations', 'Variations'], ['incidents', 'Incidents'], ['hours', 'Hours'], ['team', 'Team']];
+const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['timeline', 'Timeline'], ['queries', 'Queries & status'], ['variations', 'Variations'], ['incidents', 'Incidents'], ['hours', 'Hours'], ['team', 'Team']];
 
 export function buildViewModel(S, act) {
   const shell = buildShell(S, act, 'projects');
@@ -107,12 +108,14 @@ export function buildViewModel(S, act) {
     hasHere: here.length > 0, hereLabel: here.length === 1 ? '1 other person here' : `${here.length} others here`,
 
     tabs: TAB_LABELS.map(([k, label]) => {
-      const n = { deliverables: S.deliverables.length, variations: S.variations.length, incidents: S.incidents.filter((i) => i.status !== 'Closed').length, team: S.members.length }[k];
+      const n = { deliverables: S.deliverables.length, timeline: S.milestones.length, queries: S.queries.filter((q) => q.status === 'Open').length, variations: S.variations.length, incidents: S.incidents.filter((i) => i.status !== 'Closed').length, team: S.members.length }[k];
       return { label: n === undefined ? label : `${label} · ${n}`, selected: S.tab === k ? 'true' : 'false', pick: () => act.setTab(k) };
     }),
     tOverview: S.tab === 'overview', tDeliverables: S.tab === 'deliverables', tTeam: S.tab === 'team',
     tVariations: S.tab === 'variations', tIncidents: S.tab === 'incidents', tHours: S.tab === 'hours',
+    tTimeline: S.tab === 'timeline', tQueries: S.tab === 'queries',
     ...buildRegisters(S, act, perm),
+    ...buildSchedule(S, act, perm),
     kConsumed: fmtHours(M.consumed_hours || 0), kBudgetTotal: fmtHours(M.budget_total ?? P.budget_hours), kEac: fmtHours(M.eac || 0),
     kPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, kVoOpen: M.vo_open || 0, kIncOpen: M.incidents_open || 0,
 

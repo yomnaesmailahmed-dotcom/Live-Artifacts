@@ -16,5 +16,6 @@ export function projectPermissions(globalRole, projectRole) {
     canEdit: mgmt || projectRole === 'dm' || projectRole === 'ptm',
     canManage: mgmt || projectRole === 'dm',
     canDelete: mgmt,
+    canContribute: mgmt || ['dm', 'ptm', 'team'].includes(projectRole),
   };
 }

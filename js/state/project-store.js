@@ -8,7 +8,9 @@ import { todayIso, displayName } from '../ui/format.js';
 import { parseDeliverableRows, nextRevision, deliverablePatchForSubmission, deliverableSort } from '../domain/deliverables.js';
 import { voFromCheckpoint, voFromIncident, deliverableFromVo, parsePcuRows, monthToPeriod, currentMonth, snapshotKey } from '../domain/registers.js';
 
-const TABS = ['overview', 'deliverables', 'variations', 'incidents', 'hours', 'team'];
+import { weekStart } from '../domain/schedule.js';
+
+const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'team'];
 const tabFromHash = () => { const t = (window.location.hash || '').replace('#', ''); return TABS.includes(t) ? t : 'overview'; };
 const projectIdFromUrl = () => new URL(window.location.href).searchParams.get('id') || '';
 
@@ -21,11 +23,14 @@ const pageInitial = () => ({
   variations: [], incidents: [], hours: [],
   checkpoint: null, checkpointBusy: false, checkpointErr: '', highlightVo: '',
   pcuOpen: false, pcuText: '', pcuMsg: '',
+  milestones: [], actions: [], queries: [], statuses: [],
+  queryBusy: false, queryErr: '', statusBusy: false, statusErr: '', queryFilter: 'open',
 });
 
-const NUM = Object.fromEntries(['planned_hours', 'budget_hours', 'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct'].map((k) => [k, 'number']));
+const NUM = Object.fromEntries(['planned_hours', 'budget_hours', 'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
+  'actual_hours', 'hours_this_period'].map((k) => [k, 'number']));
 const DATES = ['start_date', 'baseline_finish', 'forecast_finish', 'actual_finish', 'baseline_date', 'forecast_date', 'actual_date', 'submitted_on', 'response_on',
-  'email_received_on', 'decided_on', 'occurred_on', 'due_on'];
+  'email_received_on', 'decided_on', 'occurred_on', 'due_on', 'baseline_start', 'start_on', 'done_on', 'period_start'];
 const codecs = { ...NUM, ...Object.fromEntries(DATES.map((d) => [d, 'date'])) };
 
 export function createProjectStore(session) {
@@ -56,6 +61,10 @@ export function createProjectStore(session) {
       const byNumber = (a, b) => (b.number || 0) - (a.number || 0) || String(b.created_at || '').localeCompare(String(a.created_at || ''));
       T.variations = mk('variations', { table: 'variations', filter: byProject, sort: byNumber, onChange: (r) => { store.set({ variations: r }); scheduleMetrics(); } });
       T.incidents = mk('incidents', { table: 'incidents', filter: byProject, sort: byNumber, onChange: (r) => { store.set({ incidents: r }); scheduleMetrics(); } });
+      T.milestones = mk('milestones', { table: 'milestones', filter: byProject, sort: (a, b) => (a.sort_order - b.sort_order) || String(a.baseline_finish || '9999').localeCompare(String(b.baseline_finish || '9999')) || String(a.created_at || '').localeCompare(String(b.created_at || '')), onChange: (r) => { store.set({ milestones: r }); scheduleMetrics(); } });
+      T.actions = mk('actions', { table: 'actions', filter: byProject, sort: (a, b) => String(a.due_on || '9999').localeCompare(String(b.due_on || '9999')) || (a.number || 0) - (b.number || 0), onChange: (r) => { store.set({ actions: r }); scheduleMetrics(); } });
+      T.queries = mk('queries', { table: 'ptm_queries', filter: byProject, sort: byNumber, onChange: (r) => { store.set({ queries: r }); scheduleMetrics(); loadPeople(r.flatMap((q) => [q.raised_by, q.assigned_to, q.answered_by].filter(Boolean).map((user_id) => ({ user_id })))); } });
+      T.statuses = mk('statuses', { table: 'team_status', filter: byProject, sort: (a, b) => String(b.period_start).localeCompare(String(a.period_start)) || String(b.updated_at || '').localeCompare(String(a.updated_at || '')), onChange: (r) => { store.set({ statuses: r }); scheduleMetrics(); loadPeople(r.filter((x) => x.reported_by).map((x) => ({ user_id: x.reported_by }))); } });
       T.hours = mk('hours', { table: 'hours_snapshots', filter: byProject, sort: (a, b) => String(b.period).localeCompare(String(a.period)) || String(a.component_id || '').localeCompare(String(b.component_id || '')), onChange: (r) => { store.set({ hours: r }); scheduleMetrics(); } });
       await Promise.all(Object.values(T).map((t) => t.start()));
       T.invites = mk('invites', { table: 'project_invites', filter: byProject, hasOrigin: false, onChange: (r) => store.set({ invites: r }) });
@@ -87,7 +96,8 @@ export function createProjectStore(session) {
   const value = (e) => (e && e.target ? e.target.value : e);
   const TYPED = new Set(['name', 'code', 'location', 'stage', 'scope_summary', 'rfp_ref', 'proposal_ref', 'title', 'phase', 'source_ref', 'notes', 'revision', 'discipline', 'planned_hours', 'budget_hours',
     'description', 'email_from', 'email_subject', 'email_link', 'email_quote', 'client_ref', 'action', 'owner', 'note',
-    'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct']);
+    'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
+    'owner_name', 'question', 'context', 'answer', 'team', 'done_text', 'next_text', 'blockers', 'actual_hours', 'hours_this_period']);
 
   function setTab(tab) {
     store.set({ tab });
@@ -278,6 +288,80 @@ export function createProjectStore(session) {
     } catch (_) { /* shown in header */ }
   }
 
+  // ── timeline: milestones + action plan ──
+  async function addMilestone() {
+    const S = store.get();
+    const sort = S.milestones.reduce((m, x) => Math.max(m, x.sort_order || 0), 0) + 1;
+    try { await T.milestones.insert({ project_id: S.projectId, title: '', kind: 'Milestone', sort_order: sort }); } catch (_) { /* shown in header */ }
+  }
+  // Keep a start ≤ finish pair valid (the tables enforce it): moving one end past the other drags it along.
+  function keepOrdered(row, field, v, startKey, endKey) {
+    const patch = { [field]: v };
+    if (!v || !row) return patch;
+    if (field === endKey && row[startKey] && v < row[startKey]) patch[startKey] = v;
+    if (field === startKey && row[endKey] && v > row[endKey]) patch[endKey] = v;
+    return patch;
+  }
+  const editMilestone = (id, field) => (e) => {
+    let v = value(e);
+    if (field === 'component_id' && v === '') v = null;
+    T.milestones.update(id, keepOrdered(T.milestones.get(id), field, v, 'baseline_start', 'baseline_finish'), { typing: TYPED.has(field) });
+  };
+  async function addAction(milestoneId = null) {
+    const S = store.get();
+    const ms = milestoneId ? S.milestones.find((m) => m.id === milestoneId) : null;
+    const due = ms ? (ms.forecast_finish || ms.baseline_finish || null) : null;
+    const today = todayIso();
+    try {
+      // start never after due (the table enforces start_on <= due_on): a past milestone gets start = due
+      await T.actions.insert({ project_id: S.projectId, title: '', milestone_id: milestoneId, start_on: due && due < today ? due : today, due_on: due, status: 'Not Started' });
+    } catch (_) { /* shown in header */ }
+  }
+  const editAction = (id, field) => (e) => {
+    let v = value(e);
+    if (['owner_id', 'milestone_id', 'deliverable_id'].includes(field) && v === '') v = null;
+    T.actions.update(id, keepOrdered(T.actions.get(id), field, v, 'start_on', 'due_on'), { typing: TYPED.has(field) });
+  };
+
+  // ── PTM queries + team status ──
+  async function raiseQuery(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const { form, values } = readForm(e);
+    if (!values.question || !values.question.trim()) { store.set({ queryErr: 'Write the question for the DM.' }); return; }
+    store.set({ queryBusy: true, queryErr: '' });
+    try {
+      await T.queries.insert({
+        project_id: store.get().projectId, question: values.question.trim(), context: (values.context || '').trim(),
+        priority: values.priority || 'Normal', assigned_to: values.assigned_to || null, due_on: values.due_on || null,
+        deliverable_id: values.deliverable_id || null, milestone_id: values.milestone_id || null, status: 'Open',
+      });
+      store.set({ queryBusy: false });
+      if (form) form.reset();
+    } catch (err) { store.set({ queryBusy: false, queryErr: errMsg(err) }); }
+  }
+  const editQuery = (id, field) => (e) => {
+    let v = value(e);
+    if (['assigned_to', 'deliverable_id', 'milestone_id'].includes(field) && v === '') v = null;
+    T.queries.update(id, { [field]: v }, { typing: TYPED.has(field) });
+  };
+  async function addStatus(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const { form, values } = readForm(e);
+    const S = store.get();
+    const period = weekStart(values.period_start || todayIso());
+    store.set({ statusBusy: true, statusErr: '' });
+    try {
+      await T.statuses.insert({
+        project_id: S.projectId, period_start: period, team: (values.team || '').trim(), status_flag: values.status_flag || 'On Track',
+        progress_pct: values.progress_pct === '' ? null : values.progress_pct, hours_this_period: values.hours_this_period === '' ? null : values.hours_this_period,
+        done_text: (values.done_text || '').trim(), next_text: (values.next_text || '').trim(), blockers: (values.blockers || '').trim(),
+      });
+      store.set({ statusBusy: false });
+      if (form) form.reset();
+    } catch (err) { store.set({ statusBusy: false, statusErr: errMsg(err) }); }
+  }
+  const editStatus = (id, field) => (e) => T.statuses.update(id, { [field]: value(e) }, { typing: TYPED.has(field) });
+
   session.setBeforeSignOut(async () => { await Promise.all(Object.values(T).map((t) => t.flushAll())); });
   window.addEventListener('hashchange', () => { const t = tabFromHash(); if (t !== store.get().tab) setTab(t); });
 
@@ -296,6 +380,9 @@ export function createProjectStore(session) {
       addVo, editVo, voToDeliverable,
       addIncident, editIncident, incidentToVo,
       addSnapshot, editSnapshot, importPcu,
+      addMilestone, editMilestone, addAction, editAction,
+      raiseQuery, editQuery, addStatus, editStatus,
+      setQueryFilter: (f) => store.set({ queryFilter: f }),
       togglePcu: () => store.set({ pcuOpen: !store.get().pcuOpen, pcuMsg: '' }),
       setPcuText: (e) => store.set({ pcuText: value(e) }),
       removeMember: (key) => removeRow('members', key),

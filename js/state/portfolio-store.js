@@ -4,7 +4,7 @@ import { createPageStore } from './page-base.js';
 import { errMsg, newId } from '../lib/store.js';
 
 const pageInitial = () => ({
-  projects: [], clients: [], members: [], people: {}, metrics: {},
+  projects: [], clients: [], members: [], people: {}, metrics: {}, myQueries: [], myActions: [],
   loaded: false,
   filter: { client: '', dm: '', status: '', q: '' },
   creating: false, createBusy: false, createErr: '',
@@ -23,12 +23,15 @@ export function createPortfolioStore(session) {
       if (watch && sb) sb.removeChannel(watch); watch = null;
       clearTimeout(metricsTimer);
     },
-    async onReady(client) {
+    async onReady(client, s) {
       sb = client;
       const projects = createLiveTable({ sb, table: 'projects', onChange: (rows) => store.set({ projects: rows }), onStatus: trackStatus('projects') });
       const clients = createLiveTable({ sb, table: 'clients', sort: (a, b) => a.name.localeCompare(b.name), onChange: (rows) => store.set({ clients: rows }), onStatus: trackStatus('clients') });
       const members = createLiveTable({ sb, table: 'project_members', onChange: (rows) => { store.set({ members: rows }); loadPeople(rows); }, onStatus: trackStatus('members') });
-      tables = [projects, clients, members];
+      // "Waiting on you": queries assigned to me, actions I own (any project I can see)
+      const myQueries = createLiveTable({ sb, table: 'ptm_queries', filter: { column: 'assigned_to', value: s.user.id }, onChange: (rows) => store.set({ myQueries: rows }), onStatus: trackStatus('myQueries') });
+      const myActions = createLiveTable({ sb, table: 'actions', filter: { column: 'owner_id', value: s.user.id }, onChange: (rows) => store.set({ myActions: rows }), onStatus: trackStatus('myActions') });
+      tables = [projects, clients, members, myQueries, myActions];
       api.projects = projects; api.clients = clients;
       await Promise.all(tables.map((t) => t.start()));
       // deliverables/submissions are not loaded here; their changes only refresh the metrics
@@ -40,6 +43,10 @@ export function createPortfolioStore(session) {
         .on('postgres_changes', { event: '*', schema: 'public', table: 'variations' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'incidents' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'hours_snapshots' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'milestones' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'actions' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'ptm_queries' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'team_status' }, scheduleMetrics)
         .subscribe();
       await loadMetrics();
       store.set({ loaded: true });

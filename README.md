@@ -6,9 +6,16 @@ plain static site: no build step, no framework, and supabase-js comes from the C
 
 Being built in phases. Done: (1) roles, clients, projects, deliverables +
 submissions, teams/invites, admin, live presence; (2) variation orders with the
-email checkpoint, internal/external incidents, PCU hours ledger. Next: PTM
-queries, team status, action plan (3) · generic management review (4) ·
+email checkpoint, internal/external incidents, PCU hours ledger; (3) timeline
+(milestones + Gantt), action plan, PTM → DM queries, weekly team status, and
+"Waiting on you" on the Projects page. Next: generic management review (4) ·
 Outlook VO scan (5).
+
+**Schedule rules (phase 3).** An unfinished milestone slips when its forecast
+(or today) passes its baseline → Delayed. An action is late when it's overdue
+or due after its milestone → At Risk; so is a team update marked Blocked.
+Team members can update status, actual hours and notes of their own actions;
+anyone on the project except viewers can raise queries and post status.
 
 **How the numbers work (phase 2).** Budget = baseline + approved external VO
 hours. Consumed = latest PCU snapshot (per component, or one project total).
@@ -24,7 +31,7 @@ still a draft.
 | Page | What it does |
 | --- | --- |
 | `Projects.dc.html` (home) | Portfolio of every project you can see: status (with the reason), late deliverables, next due, last submission, filters, **New project** (management) |
-| `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Variations** (VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
+| `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Timeline** (Gantt, milestones, action plan with owners) · **Queries & status** (PTM → DM queries with answers, weekly team status) · **Variations** (VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
 | `Admin.dc.html` | Company name, at-risk %, email-scan keywords · people and global roles · clients |
 | `Main.dc.html` | The original 8-step COO summary refresh (made generic in phase 4) |
 

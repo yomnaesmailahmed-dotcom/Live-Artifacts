@@ -1,7 +1,7 @@
 // Projects page bindings.
 import { buildShell } from '../shell.js';
 import { isManagement } from '../../state/session-store.js';
-import { fmtDate, fmtHours, displayName } from '../../ui/format.js';
+import { fmtDate, fmtHours, displayName, todayIso } from '../../ui/format.js';
 import { STATUS_CHIP } from '../../ui/tokens.js';
 
 const STATUSES = ['On Track', 'At Risk', 'Delayed', 'On Hold', 'Not Started', 'Completed', 'Not Awarded'];
@@ -34,6 +34,22 @@ export function buildViewModel(S, act) {
   const vos = sum((x) => x.m.vo_open), incs = sum((x) => x.m.incidents_open);
 
   const dmIds = [...new Set(all.flatMap((x) => x.dms))];
+
+  // Waiting on you
+  const today = todayIso();
+  const projName = Object.fromEntries(S.projects.map((p) => [p.id, `${p.code ? p.code + ' · ' : ''}${p.name}`]));
+  const waiting = [
+    ...S.myQueries.filter((q) => q.status === 'Open').map((q) => ({
+      sort: q.due_on || '9999', kind: 'QUERY', title: q.question, project: projName[q.project_id] || '',
+      due: q.due_on ? fmtDate(q.due_on) : 'no due date', late: q.due_on && q.due_on < today ? 'OVERDUE' : '',
+      href: `./Project.dc.html?id=${q.project_id}#queries`, verb: 'Answer',
+    })),
+    ...S.myActions.filter((a) => !['Done', 'Cancelled'].includes(a.status)).map((a) => ({
+      sort: a.due_on || '9999', kind: 'ACTION', title: a.title || '(untitled action)', project: projName[a.project_id] || '',
+      due: a.due_on ? fmtDate(a.due_on) : 'no due date', late: a.due_on && a.due_on < today ? 'OVERDUE' : '',
+      href: `./Project.dc.html?id=${a.project_id}#timeline`, verb: 'Update',
+    })),
+  ].sort((a, b) => a.sort.localeCompare(b.sort));
   const canCreate = isManagement(S);
 
   return {
@@ -44,6 +60,7 @@ export function buildViewModel(S, act) {
     hasRows: shown.length > 0,
     noMatch: S.loaded && all.length > 0 && shown.length === 0,
     canCreate, cannotCreate: !canCreate,
+    waiting, hasWaiting: waiting.length > 0, waitingLabel: `Waiting on you · ${waiting.length}`,
     kTotal: all.length, kOn: count('On Track'), kDelayed: count('Delayed'), kRisk: count('At Risk'), kHold: count('On Hold'), kOverdue: overdue,
     kBudget: fmtHours(budget), kConsumed: fmtHours(consumed), kVos: vos, kIncs: incs,
     kPct: budget > 0 ? `${Math.round((consumed / budget) * 1000) / 10}%` : '—',
@@ -67,7 +84,8 @@ export function buildViewModel(S, act) {
       hours: m.consumed_hours ? `${fmtHours(m.consumed_hours)} · ${m.consumed_pct ?? '—'}%` : '—',
       hoursStyle: m.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #A00000; font-weight: 600;' : '',
       eac: m.eac ? fmtHours(m.eac) : '—', eacStyle: Number(m.hours_variance) < 0 ? 'color: #C00000; font-weight: 600;' : '',
-      open: [m.vo_open ? `${m.vo_open} VO` : '', m.incidents_open ? `${m.incidents_open} INC` : ''].filter(Boolean).join(' · ') || '—',
+      open: [m.vo_open ? `${m.vo_open} VO` : '', m.incidents_open ? `${m.incidents_open} INC` : '', m.queries_open ? `${m.queries_open} Q` : '',
+        m.actions_late ? `${m.actions_late} late ACT` : '', m.milestones_late ? `${m.milestones_late} slip` : ''].filter(Boolean).join(' · ') || '—',
     })),
     creating: S.creating, notCreating: !S.creating,
     createBusy: S.createBusy, createErr: S.createErr, hasCreateErr: !!S.createErr,
