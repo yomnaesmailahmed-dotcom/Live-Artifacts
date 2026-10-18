@@ -39,6 +39,7 @@ assert(candidateRow({ projectId: 'p', folderRowId: 'f', connectionId: 'c', m: { 
 assert(safeReturnTo('https://yomnaesmailahmed-dotcom.github.io/summary-refresh/Project.dc.html?id=1#variations').endsWith('#variations'), 'return to the app');
 assert(safeReturnTo('https://evil.example/x').startsWith('https://yomnaesmailahmed-dotcom.github.io/summary-refresh/') && safeReturnTo('https://yomnaesmailahmed-dotcom.github.io/other/').includes('/summary-refresh/'), 'foreign return URLs refused');
 assert(safeReturnTo('http://localhost:5517/Project.dc.html').startsWith('http://localhost:5517/'), 'localhost allowed for testing');
+assert(safeReturnTo('https://yomnaesmailahmed-dotcom.github.io/Live-Artifacts/Project.dc.html?id=1').includes('/Live-Artifacts/Project.dc.html'), 'second copy of the site (Live-Artifacts) allowed');
 
 // client side: candidate → draft VO
 const cand = { id: 'k1', project_id: 'p', summary: 'Third option for Plot 4', quote: 'Please add a third option', reason: 'New scope', from_name: 'Ahmed', from_address: 'a@client.sa', subject: 'RE: options', received_at: '2026-10-15T08:00:00Z', web_link: 'https://outlook.office365.com/x', deliverable_id: 'd-2', time_impact_days: 7, hours_impact: 40, confidence: 'high', matched_keywords: ['add'], status: 'new' };

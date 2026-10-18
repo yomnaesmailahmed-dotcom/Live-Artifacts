@@ -148,12 +148,15 @@ export function candidateRow(opts: { projectId: string; folderRowId: string; con
 
 // Only send people back to the app's own pages after connecting Outlook.
 export const RETURN_ORIGINS = ['https://yomnaesmailahmed-dotcom.github.io', 'http://localhost:5517'];
+// The same site is published from two repos on GitHub Pages.
+export const SITE_PATHS = ['/summary-refresh/', '/Live-Artifacts/'];
 export function safeReturnTo(url: string | null | undefined): string {
+  const home = `${RETURN_ORIGINS[0]}${SITE_PATHS[0]}Admin.dc.html`;
   try {
     const u = new URL(String(url || ''));
-    const ok = RETURN_ORIGINS.includes(u.origin) && (u.origin !== RETURN_ORIGINS[0] || u.pathname.startsWith('/summary-refresh/'));
-    return ok ? u.toString() : `${RETURN_ORIGINS[0]}/summary-refresh/Admin.dc.html`;
+    const ok = RETURN_ORIGINS.includes(u.origin) && (u.origin !== RETURN_ORIGINS[0] || SITE_PATHS.some((p) => u.pathname.startsWith(p)));
+    return ok ? u.toString() : home;
   } catch (_) {
-    return `${RETURN_ORIGINS[0]}/summary-refresh/Admin.dc.html`;
+    return home;
   }
 }
