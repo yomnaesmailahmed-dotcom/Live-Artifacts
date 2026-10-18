@@ -18,7 +18,8 @@ export function buildAccount(S, act) {
   const form = S.auth === 'signedOut';
   const sync = syncIndicator(S);
   const email = (S.profile && S.profile.email) || (S.user && S.user.email) || '';
-  const isAdmin = !!(S.profile && S.profile.role === 'admin');
+  const role = (S.profile && S.profile.role) || 'member';
+  const isAdmin = role === 'admin' || role === 'management';
   const notice = S.syncMsg || S.notice;
 
   return {
@@ -41,7 +42,7 @@ export function buildAccount(S, act) {
 
     signedIn: S.auth === 'ready' && !!S.user,
     acctEmail: email,
-    acctRole: isAdmin ? 'ADMIN' : 'MEMBER',
+    acctRole: role.toUpperCase(),
     acctRoleClass: isAdmin ? 'chip-you' : 'chip',
     syncLabel: sync.label, syncDot: sync.dot,
     hasNotice: !!notice, noticeMsg: notice,

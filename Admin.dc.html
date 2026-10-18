@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin – Project Controls</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<script type="module" src="./js/pages/admin.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/app.css">
+</helmet>
+<div style="background: #F6F5F1; color: #16191D; font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
+
+<header style="border-bottom: 1px solid #D9D6CE; background: #F6F5F1">
+<div style="max-width: 1240px; margin: 0 auto; padding: 14px 32px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">{{ companyName }} · PROJECT CONTROLS</span>
+<nav aria-label="Workspace" style="display: flex; gap: 16px; font-size: 14px"><a href="./Projects.dc.html" style="{{ navProjects }}">Projects</a><a href="./Main.dc.html" style="{{ navReview }}">Management review</a><sc-if value="{{ showAdminLink }}" hint-placeholder-val="{{ true }}"><a href="./Admin.dc.html" style="{{ navAdmin }}">Admin</a></sc-if></nav></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 14px; color: #5B6068"><span style="display: flex; align-items: center; gap: 6px"><span class="dot" style="{{ syncDot }}"></span><span class="mono" style="font-size: 12px">{{ syncLabel }}</span></span><sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span>{{ acctEmail }}</span><span class="{{ acctRoleClass }}">{{ acctRole }}</span><button class="link" onClick="{{ signOut }}">Sign out</button></span></sc-if></div>
+</div>
+<sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}"><div role="status" style="background: #FFF2CC; color: #5C4300; border-top: 1px solid #8A6A00"><div style="max-width: 1240px; margin: 0 auto; padding: 6px 32px; box-sizing: border-box; font-size: 14px">{{ noticeMsg }}</div></div></sc-if>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Admin</span><h1 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 600">Workspace settings</h1><p style="margin: 0; color: #3A3F46; max-width: 720px">Company settings, who has which role, and the client list. Project teams are managed on each project’s Team tab.</p></div>
+<sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}"><div class="lbl pulse">Loading…</div></sc-if>
+<sc-if value="{{ denied }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 20px">Only admins can open this page.</div></sc-if>
+
+<sc-if value="{{ allowed }}" hint-placeholder-val="{{ true }}">
+<div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 600">Company</h2>
+<div class="grid2">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Company name (shown in the header)</span><input class="field" value="{{ companyName2 }}" onChange="{{ setCompany }}"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">At-risk threshold · % of budget hours</span><input class="field" type="number" min="1" max="200" value="{{ atRisk }}" onChange="{{ setAtRisk }}"></label>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Email-scan keywords (comma or new line) · used by the Outlook VO scan</span><textarea class="field" rows="3" value="{{ keywords }}" onChange="{{ setKeywords }}" style="resize: vertical; font-size: 15px"></textarea></label>
+<div style="display: flex; align-items: center; gap: 12px"><button class="btn2" onClick="{{ saveKeywords }}" disabled="{{ keywordsClean }}">Save keywords</button><sc-if value="{{ keywordsDirty }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #5C4300">Unsaved changes</span></sc-if></div>
+</div>
+
+<div class="card">
+<div style="padding: 14px 16px; border-bottom: 1px solid #D9D6CE"><div style="font-weight: 600">People</div><div style="font-size: 14px; color: #5B6068">{{ usersLine }}. <strong>Management</strong> sees every project; <strong>members</strong> see only projects they’re added to. People appear here after they sign up.</div></div>
+<div style="overflow-x: auto"><table class="xl" style="min-width: 640px"><thead><tr><th>Email</th><th>Name</th><th style="width: 200px">Role</th></tr></thead><tbody>
+<sc-for list="{{ users }}" as="u" hint-placeholder-count="2"><tr>
+<td class="mono" style="font-size: 13px">{{ u.email }} <span class="chip-you" style="font-size: 10px">{{ u.meLabel }}</span></td>
+<td><input class="cell" value="{{ u.name }}" onChange="{{ u.setName }}" placeholder="Full name" aria-label="Full name"></td>
+<td><select class="cell" value="{{ u.role }}" onChange="{{ u.setRole }}" aria-label="Role"><sc-for list="{{ roleOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
+</tr></sc-for>
+</tbody></table></div>
+</div>
+
+<div class="card">
+<div style="padding: 14px 16px; border-bottom: 1px solid #D9D6CE"><div style="font-weight: 600">Clients</div><div style="font-size: 14px; color: #5B6068">Projects belong to a client. A client with projects can’t be deleted.</div></div>
+<form onSubmit="{{ addClient }}" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; padding: 14px 16px; margin: 0; border-bottom: 1px solid #ECE9E2">
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 2 1 220px"><span class="lbl">Client name</span><input class="field" name="name" placeholder="e.g. NHC"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 120px"><span class="lbl">Code</span><input class="field" name="code" placeholder="NHC"></label>
+<button class="btn" type="submit" disabled="{{ clientBusy }}">Add client</button>
+</form>
+<sc-if value="{{ hasClientErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="margin: 12px 16px; padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ clientErr }}</div></sc-if>
+<sc-if value="{{ noClients }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px 16px; color: #5B6068">No clients yet.</div></sc-if>
+<sc-for list="{{ clients }}" as="c" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 140px; gap: 8px; align-items: center; padding: 6px 16px; border-top: 1px solid #ECE9E2">
+<input class="cell" value="{{ c.name }}" onChange="{{ c.setName }}" aria-label="Client name">
+<input class="cell mono" value="{{ c.code }}" onChange="{{ c.setCode }}" aria-label="Client code">
+<span><sc-if value="{{ c.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ c.askDelete }}">Delete</button></sc-if><sc-if value="{{ c.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ c.confirmDelete }}">Confirm delete</button></sc-if></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</main>
+
+<sc-if value="{{ authGate }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; inset: 0; z-index: 30; background: #F6F5F1; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 20px">
+<div role="dialog" aria-modal="true" aria-labelledby="auth-title" class="card" style="max-width: 440px; width: 100%; box-sizing: border-box; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">PROJECT CONTROLS</span><span style="font-size: 14px; color: #5B6068">Projects · deliverables · management review</span></div>
+<h2 id="auth-title" style="margin: 0; font-size: 22px; line-height: 1.25; font-weight: 600">{{ authTitle }}</h2>
+<p style="margin: 0; color: #3A3F46; font-size: 14px">{{ authLede }}</p>
+<sc-if value="{{ authLoading }}" hint-placeholder-val="{{ false }}"><div class="lbl pulse">Connecting to Supabase…</div></sc-if>
+<sc-if value="{{ authForm }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ authSubmit }}" style="display: flex; flex-direction: column; gap: 14px; margin: 0">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Email</span><input class="field" type="email" name="email" autoComplete="email" placeholder="you@company.com"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Password</span><input class="field" type="password" name="password" autoComplete="{{ authPwAuto }}"></label>
+<sc-if value="{{ authHasErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ authErr }}</div></sc-if>
+<sc-if value="{{ authHasMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 10px 12px; font-size: 14px">{{ authMsg }}</div></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" type="submit" disabled="{{ authBusy }}">{{ authSubmitLabel }}</button><button class="btn2" type="button" onClick="{{ sendMagicLink }}" disabled="{{ authBusy }}">Email me a sign-in link</button></div>
+<button type="button" class="link" onClick="{{ toggleAuthMode }}" style="align-self: flex-start; min-height: 44px">{{ authToggleLabel }}</button>
+</form>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+// Thin adapter: everything lives in ./js (window.DCPage is set by js/pages/admin.js).
+var BOOT_VALS = { authGate: true, authLoading: true, authTitle: 'Loading…', authLede: 'One moment.', syncLabel: 'LOADING…', users: [], clients: [], roleOptions: [] };
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = window.DCPage ? window.DCPage.store.get() : {}; }
+componentDidMount() {
+var self = this;
+this.attach = function () { var P = window.DCPage; if (!P || self.detach) return; self.detach = P.store.subscribe(function (s) { self.setState(s); }); };
+if (window.DCPage) this.attach(); else window.addEventListener('dcpage:ready', this.attach);
+}
+componentWillUnmount() { window.removeEventListener('dcpage:ready', this.attach); if (this.detach) this.detach(); }
+renderVals() { var P = window.DCPage; if (!P || !this.state || !this.state.auth) return BOOT_VALS; return P.buildViewModel(this.state, P.actions); }
+}
+</script>
+</body>
+</html>

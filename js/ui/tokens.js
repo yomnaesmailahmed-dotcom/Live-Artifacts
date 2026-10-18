@@ -25,6 +25,17 @@ export const NUM_CURRENT = 'background: #16191D; color: #FFFFFF; border: 1px sol
 export const NUM_PAST = 'background: #FFFFFF; color: #16191D; border: 1px solid #16191D;';
 export const NUM_FUTURE = 'background: transparent; color: #8A8F96; border: 1px solid #C9CDD6;';
 
+// Project status chips (colour only for functional status, per the PMO look).
+export const STATUS_CHIP = {
+  'On Track': 'background: #FFFFFF; border-color: #16191D; color: #16191D;',
+  'At Risk': 'background: #FFF2CC; border-color: #8A6A00; color: #5C4300;',
+  'Delayed': 'background: #FDECEC; border-color: #C00000; color: #A00000;',
+  'On Hold': 'background: #F2F2F2; border-color: #8A8F96; color: #3A3F46;',
+  'Completed': 'background: #16191D; border-color: #16191D; color: #F6F5F1;',
+  'Not Started': 'border-style: dashed; color: #5B6068;',
+  'Not Awarded': 'background: #F2F2F2; border-style: dashed; color: #5B6068;',
+};
+
 export const SYNC_DOT = {
   live: 'background: #16191D;',
   saving: 'background: #2F5BFF;',

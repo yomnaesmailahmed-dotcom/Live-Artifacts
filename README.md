@@ -1,14 +1,41 @@
-# Summary Refresh – interactive prototype
+# Project Controls workspace (formerly Summary Refresh)
 
-The NHC COO executive-summary refresh workflow, now backed by Supabase
-(Auth, PostgreSQL, Row Level Security, Realtime). It is still a plain static
-site: no build step, no framework, and supabase-js comes from the CDN.
+A company-wide project-controls workspace for the management department, backed
+by Supabase (Auth, PostgreSQL, Row Level Security, Realtime, Presence). It is a
+plain static site: no build step, no framework, and supabase-js comes from the CDN.
+
+Being built in phases. Phase 1 (done): roles, clients, projects, deliverables +
+submissions, teams/invites, admin, live presence. Next: variation orders,
+incidents and hours (2) · PTM queries, team status, action plan (3) · generic
+management review (4) · Outlook VO scan (5).
+
+## Pages
+
+| Page | What it does |
+| --- | --- |
+| `Projects.dc.html` (home) | Portfolio of every project you can see: status (with the reason), late deliverables, next due, last submission, filters, **New project** (management) |
+| `Project.dc.html?id=…` | **Overview** (details, components, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel) · **Team** (roles, invites by email, who's here now) |
+| `Admin.dc.html` | Company name, at-risk %, email-scan keywords · people and global roles · clients |
+| `Main.dc.html` | The original 8-step COO summary refresh (made generic in phase 4) |
+
+Roles: **admin** / **management** see every project; **members** see projects
+they're on, as **DM** (edits + manages the team), **PTM** (edits), **team** or
+**viewer** (read). Everything is enforced by RLS in the database; the UI only
+hides what you can't do.
 
 ## Layout
 
 ```
-Main.dc.html            the page: <x-dc> template (UI) + a thin logic adapter
-index.html              redirects to Main.dc.html (for static hosts)
+Projects.dc.html, Project.dc.html, Admin.dc.html   workspace pages (template + thin adapter)
+Main.dc.html            the original review page: <x-dc> template (UI) + a thin logic adapter
+index.html              redirects to Projects.dc.html (for static hosts)
+css/app.css             shared design tokens for the workspace pages
+js/pages/*.js           one entry per workspace page → window.DCPage
+js/lib/live-table.js    two-way table sync: load, Postgres Changes, optimistic debounced writes
+js/state/session-store.js, page-base.js, *-store.js   session + one store per page
+js/domain/*.js          pure rules (deliverable sources/statuses, paste parser, roles)
+js/view/<page>/*.js     page view models; js/view/shell.js = header + sign-in gate
+scripts/dev_server.py   local server with caching disabled
 support.js, vendor/     DC runtime that renders the template (unchanged)
 js/
   main.js               entry module → exposes window.SummaryRefresh
@@ -23,8 +50,14 @@ js/
   ui/tokens.js          design-token style strings
   view/*.js             per-step view models → template bindings
 supabase/migrations/    schema, RLS, triggers, grants, realtime publication (kept local, not in the public repo)
-tests/app-store.test.mjs  `node tests/app-store.test.mjs` (fake Supabase client)
+tests/*.test.mjs        `node tests/workspace.test.mjs` and `node tests/app-store.test.mjs` (fake Supabase client)
 ```
+
+Workspace tables (Phase 1): `app_settings`, `clients`, `projects`,
+`project_members`, `project_invites`, `components`, `deliverables`,
+`submissions`, `audit_events` (written by triggers), and the
+`project_metrics` view (`security_invoker`), which computes status and the
+reason for it the same way on every page.
 
 The DC runtime evaluates the component as a classic script, so it cannot
 `import`. `js/main.js` publishes one frozen global (`window.SummaryRefresh`)

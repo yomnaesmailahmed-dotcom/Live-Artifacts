@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects – Project Controls</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<script type="module" src="./js/pages/projects.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/app.css">
+</helmet>
+<div style="background: #F6F5F1; color: #16191D; font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
+
+<header style="border-bottom: 1px solid #D9D6CE; background: #F6F5F1">
+<div style="max-width: 1240px; margin: 0 auto; padding: 14px 32px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">{{ companyName }} · PROJECT CONTROLS</span>
+<nav aria-label="Workspace" style="display: flex; gap: 16px; font-size: 14px"><a href="./Projects.dc.html" style="{{ navProjects }}">Projects</a><a href="./Main.dc.html" style="{{ navReview }}">Management review</a><sc-if value="{{ showAdminLink }}" hint-placeholder-val="{{ true }}"><a href="./Admin.dc.html" style="{{ navAdmin }}">Admin</a></sc-if></nav></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 14px; color: #5B6068"><span style="display: flex; align-items: center; gap: 6px"><span class="dot" style="{{ syncDot }}"></span><span class="mono" style="font-size: 12px">{{ syncLabel }}</span></span><sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span>{{ acctEmail }}</span><span class="{{ acctRoleClass }}">{{ acctRole }}</span><button class="link" onClick="{{ signOut }}">Sign out</button></span></sc-if></div>
+</div>
+<sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}"><div role="status" style="background: #FFF2CC; color: #5C4300; border-top: 1px solid #8A6A00"><div style="max-width: 1240px; margin: 0 auto; padding: 6px 32px; box-sizing: border-box; font-size: 14px">{{ noticeMsg }}</div></div></sc-if>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Portfolio</span><h1 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 600">Projects</h1><p style="margin: 0; color: #3A3F46; max-width: 720px">Every project you can see. Status is worked out from deliverables, submissions and dates — open a project to see why.</p></div>
+<sc-if value="{{ canCreate }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ notCreating }}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{ openCreate }}">New project</button></sc-if></sc-if>
+</div>
+
+<sc-if value="{{ creating }}" hint-placeholder-val="{{ false }}">
+<form class="card" onSubmit="{{ createProject }}" style="padding: 24px; display: flex; flex-direction: column; gap: 18px; margin: 0">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">New project</h2><span class="lbl">Management</span></div>
+<div class="grid2">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Client</span><select class="field" name="client_id"><option value="">— New client (type below) —</option><sc-for list="{{ clientOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">New client name</span><input class="field" name="new_client" placeholder="e.g. NHC"></label>
+</div>
+<div class="grid3">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Project code</span><input class="field" name="code" placeholder="P01"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; grid-column: span 2"><span class="lbl">Project name</span><input class="field" name="name" placeholder="Project name"></label>
+</div>
+<div class="grid3">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Location</span><input class="field" name="location"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Start</span><input class="field" type="date" name="start_date"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Baseline finish</span><input class="field" type="date" name="baseline_finish"></label>
+</div>
+<div class="grid3">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Budget hours</span><input class="field" type="number" min="0" name="budget_hours"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">DM email</span><input class="field" type="email" name="dm_email" placeholder="dm@company.com"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">PTM email</span><input class="field" type="email" name="ptm_email" placeholder="ptm@company.com"></label>
+</div>
+<div style="font-size: 14px; color: #5B6068">People who already have an account join straight away; anyone else is added when they sign up with that email.</div>
+<sc-if value="{{ hasCreateErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ createErr }}</div></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" type="submit" disabled="{{ createBusy }}">{{ createLabel }}</button><button class="btn2" type="button" onClick="{{ closeCreate }}">Cancel</button></div>
+</form>
+</sc-if>
+
+<div class="kpi card">
+<div><div class="lbl">Projects</div><div style="font-size: 24px; font-weight: 600">{{ kTotal }}</div></div>
+<div><div class="lbl">On track</div><div style="font-size: 24px; font-weight: 600">{{ kOn }}</div></div>
+<div><div class="lbl" style="color: #A00000">Delayed</div><div style="font-size: 24px; font-weight: 600">{{ kDelayed }}</div></div>
+<div><div class="lbl" style="color: #5C4300">At risk · on hold</div><div style="font-size: 24px; font-weight: 600">{{ kRisk }} · {{ kHold }}</div></div>
+<div><div class="lbl">Late deliverables</div><div style="font-size: 24px; font-weight: 600">{{ kOverdue }}</div></div>
+<div><div class="lbl">Budget hours</div><div style="font-size: 24px; font-weight: 600">{{ kBudget }}</div></div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px"><span class="lbl">Search</span><input class="field" value="{{ fQ }}" onChange="{{ setQ }}" placeholder="Code, name, client, location"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><span class="lbl">Client</span><select class="field" value="{{ fClient }}" onChange="{{ setClient }}"><option value="">All clients</option><sc-for list="{{ clientOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><span class="lbl">DM</span><select class="field" value="{{ fDm }}" onChange="{{ setDm }}"><option value="">All DMs</option><sc-for list="{{ dmOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><span class="lbl">Status</span><select class="field" value="{{ fStatus }}" onChange="{{ setStatus }}"><option value="">Any status</option><sc-for list="{{ statusOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+<sc-if value="{{ filtersOn }}" hint-placeholder-val="{{ false }}"><button class="tog" onClick="{{ clearFilters }}">Clear filters</button></sc-if>
+</div>
+
+<sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}"><div class="lbl pulse">Loading projects…</div></sc-if>
+<sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 24px; border: 1px dashed #8A8F96; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><div style="font-weight: 600; font-size: 18px">No projects yet</div><sc-if value="{{ canCreate }}" hint-placeholder-val="{{ true }}"><div style="color: #3A3F46">Create the first project with <strong>New project</strong>. Add its DM and PTM by email and they’ll see it when they sign in.</div></sc-if><sc-if value="{{ cannotCreate }}" hint-placeholder-val="{{ false }}"><div style="color: #3A3F46">You’ll see projects here once a DM or management adds you to one.</div></sc-if></div>
+</sc-if>
+<sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 16px 20px">No projects match these filters.</div></sc-if>
+
+<sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+<div class="lbl">{{ shownLabel }}</div>
+<div style="overflow-x: auto">
+<table class="xl" style="min-width: 980px"><thead><tr><th>Code</th><th>Project</th><th>Client</th><th>DM</th><th>Status</th><th>Delivered</th><th>Next due</th><th>Last submission</th><th style="text-align: right">Budget h</th></tr></thead><tbody>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="4"><tr>
+<td class="mono">{{ r.code }}</td>
+<td><a class="row-link" href="{{ r.href }}">{{ r.name }}</a></td>
+<td>{{ r.client }}</td>
+<td style="{{ r.dmStyle }}">{{ r.dm }}</td>
+<td><span class="chip" style="{{ r.statusStyle }}">{{ r.status }}</span><div style="font-size: 12px; color: #5B6068; margin-top: 4px">{{ r.why }}</div></td>
+<td class="mono">{{ r.deliv }} <span style="{{ r.overdueStyle }}">{{ r.overdue }}</span></td>
+<td>{{ r.next }}</td>
+<td>{{ r.last }}</td>
+<td class="num mono">{{ r.budget }}</td>
+</tr></sc-for>
+</tbody></table>
+</div>
+</sc-if>
+</main>
+
+<sc-if value="{{ authGate }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; inset: 0; z-index: 30; background: #F6F5F1; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 20px">
+<div role="dialog" aria-modal="true" aria-labelledby="auth-title" class="card" style="max-width: 440px; width: 100%; box-sizing: border-box; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">PROJECT CONTROLS</span><span style="font-size: 14px; color: #5B6068">Projects · deliverables · management review</span></div>
+<h2 id="auth-title" style="margin: 0; font-size: 22px; line-height: 1.25; font-weight: 600">{{ authTitle }}</h2>
+<p style="margin: 0; color: #3A3F46; font-size: 14px">{{ authLede }}</p>
+<sc-if value="{{ authLoading }}" hint-placeholder-val="{{ false }}"><div class="lbl pulse">Connecting to Supabase…</div></sc-if>
+<sc-if value="{{ authForm }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ authSubmit }}" style="display: flex; flex-direction: column; gap: 14px; margin: 0">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Email</span><input class="field" type="email" name="email" autoComplete="email" placeholder="you@company.com"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Password</span><input class="field" type="password" name="password" autoComplete="{{ authPwAuto }}"></label>
+<sc-if value="{{ authHasErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ authErr }}</div></sc-if>
+<sc-if value="{{ authHasMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 10px 12px; font-size: 14px">{{ authMsg }}</div></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" type="submit" disabled="{{ authBusy }}">{{ authSubmitLabel }}</button><button class="btn2" type="button" onClick="{{ sendMagicLink }}" disabled="{{ authBusy }}">Email me a sign-in link</button></div>
+<button type="button" class="link" onClick="{{ toggleAuthMode }}" style="align-self: flex-start; min-height: 44px">{{ authToggleLabel }}</button>
+</form>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+// Thin adapter: everything lives in ./js (window.DCPage is set by js/pages/projects.js).
+var BOOT_VALS = { authGate: true, authLoading: true, authTitle: 'Loading…', authLede: 'One moment.', syncLabel: 'LOADING…', rows: [], clientOptions: [], dmOptions: [], statusOptions: [] };
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = window.DCPage ? window.DCPage.store.get() : {}; }
+componentDidMount() {
+var self = this;
+this.attach = function () { var P = window.DCPage; if (!P || self.detach) return; self.detach = P.store.subscribe(function (s) { self.setState(s); }); };
+if (window.DCPage) this.attach(); else window.addEventListener('dcpage:ready', this.attach);
+}
+componentWillUnmount() { window.removeEventListener('dcpage:ready', this.attach); if (this.detach) this.detach(); }
+renderVals() { var P = window.DCPage; if (!P || !this.state || !this.state.auth) return BOOT_VALS; return P.buildViewModel(this.state, P.actions); }
+}
+</script>
+</body>
+</html>
