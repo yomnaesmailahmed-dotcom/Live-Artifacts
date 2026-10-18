@@ -111,7 +111,14 @@ then open http://localhost:5517/Main.dc.html.
 
 ## Deploy
 
-Upload this folder as-is to any static host (Netlify, Vercel static,
+Before each deploy, stamp module versions so browsers never mix new HTML with
+cached old modules (GitHub Pages caches ~10 minutes):
+
+```bash
+python scripts/stamp_versions.py
+```
+
+Then upload this folder as-is to any static host (Netlify, Vercel static,
 Cloudflare Pages, GitHub Pages, S3). Then, in the Supabase dashboard →
 Authentication → URL Configuration, set **Site URL** to the deployed page and
 add it (and `http://localhost:5517/**` for local use) to **Redirect URLs**, so
