@@ -9,6 +9,8 @@ import { parseDeliverableRows, nextRevision, deliverablePatchForSubmission, deli
 import { voFromCheckpoint, voFromIncident, deliverableFromVo, parsePcuRows, monthToPeriod, currentMonth, snapshotKey } from '../domain/registers.js';
 
 import { weekStart } from '../domain/schedule.js';
+import { candidateToVo } from '../domain/mail.js';
+import * as mail from '../services/mail.js';
 
 const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'team'];
 const tabFromHash = () => { const t = (window.location.hash || '').replace('#', ''); return TABS.includes(t) ? t : 'overview'; };
@@ -25,6 +27,9 @@ const pageInitial = () => ({
   pcuOpen: false, pcuText: '', pcuMsg: '',
   milestones: [], actions: [], queries: [], statuses: [],
   queryBusy: false, queryErr: '', statusBusy: false, statusErr: '', queryFilter: 'open',
+  // Outlook scan (phase 5)
+  candidates: [], mailFolders: [], mailStatus: null, mailBusy: '', mailErr: '', mailMsg: mail.takeOutlookReturn(),
+  folderList: null, folderPick: '', showDecided: false,
 });
 
 const NUM = Object.fromEntries(['planned_hours', 'budget_hours', 'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
@@ -66,7 +71,10 @@ export function createProjectStore(session) {
       T.queries = mk('queries', { table: 'ptm_queries', filter: byProject, sort: byNumber, onChange: (r) => { store.set({ queries: r }); scheduleMetrics(); loadPeople(r.flatMap((q) => [q.raised_by, q.assigned_to, q.answered_by].filter(Boolean).map((user_id) => ({ user_id })))); } });
       T.statuses = mk('statuses', { table: 'team_status', filter: byProject, sort: (a, b) => String(b.period_start).localeCompare(String(a.period_start)) || String(b.updated_at || '').localeCompare(String(a.updated_at || '')), onChange: (r) => { store.set({ statuses: r }); scheduleMetrics(); loadPeople(r.filter((x) => x.reported_by).map((x) => ({ user_id: x.reported_by }))); } });
       T.hours = mk('hours', { table: 'hours_snapshots', filter: byProject, sort: (a, b) => String(b.period).localeCompare(String(a.period)) || String(a.component_id || '').localeCompare(String(b.component_id || '')), onChange: (r) => { store.set({ hours: r }); scheduleMetrics(); } });
+      T.candidates = mk('candidates', { table: 'mail_candidates', filter: byProject, sort: (a, b) => String(b.received_at || b.created_at || '').localeCompare(String(a.received_at || a.created_at || '')), onChange: (r) => store.set({ candidates: r }) });
+      T.mailFolders = mk('mailFolders', { table: 'mail_folders', filter: byProject, columns: 'id, connection_id, project_id, folder_id, folder_name, enabled, last_scan_at, messages_seen, created_at, updated_origin', sort: (a, b) => String(a.folder_name).localeCompare(String(b.folder_name)), onChange: (r) => store.set({ mailFolders: r }) });
       await Promise.all(Object.values(T).map((t) => t.start()));
+      refreshMailStatus();
       T.invites = mk('invites', { table: 'project_invites', filter: byProject, hasOrigin: false, onChange: (r) => store.set({ invites: r }) });
       await T.invites.start({ live: false }); // not in the realtime publication; empty unless you manage the project
       if (!store.get().project) { store.set({ notFound: true, loaded: true }); return; }
@@ -242,6 +250,51 @@ export function createProjectStore(session) {
     try { await T.deliverables.insert(deliverableFromVo(S.projectId, vo, sort)); } catch (_) { /* shown in header */ }
   }
 
+  // ── Outlook scan: connection, folder → project mapping, candidate inbox ──
+  async function refreshMailStatus() {
+    if (!sb) return;
+    try { store.set({ mailStatus: await mail.mailStatus(sb) }); } catch (err) { store.set({ mailStatus: { unavailable: true, error: errMsg(err) } }); }
+  }
+  async function mailTask(name, fn) {
+    store.set({ mailBusy: name, mailErr: '' });
+    try { await fn(); } catch (err) { store.set({ mailErr: errMsg(err) }); }
+    store.set({ mailBusy: '' });
+  }
+  const connectOutlook = () => mailTask('connect', () => mail.connectOutlook(sb));
+  const openFolderPicker = () => mailTask('folders', async () => {
+    const { folders } = await mail.mailFolders(sb);
+    store.set({ folderList: folders || [], folderPick: '' });
+  });
+  async function mapFolder() {
+    const S = store.get();
+    const f = (S.folderList || []).find((x) => x.id === S.folderPick);
+    const conn = S.mailStatus && S.mailStatus.connection;
+    if (!f || !conn) return;
+    await mailTask('map', async () => {
+      try {
+        await T.mailFolders.insert({ connection_id: conn.id, project_id: S.projectId, folder_id: f.id, folder_name: f.path, enabled: true });
+      } catch (err) {
+        throw new Error(/duplicate|unique/i.test(errMsg(err)) ? 'That folder is already scanned for a project (one folder feeds one project).' : errMsg(err));
+      }
+      store.set({ folderList: null, folderPick: '', mailMsg: { ok: true, msg: `“${f.path}” will be scanned every 30 minutes. Use Scan now to check it straight away.` } });
+    });
+  }
+  const scanNow = () => mailTask('scan', async () => {
+    const r = await mail.scanNow(sb, store.get().projectId);
+    store.set({ mailMsg: { ok: !r.error, msg: mail.scanSummary(r) } });
+    await T.candidates.load();
+  });
+  async function acceptCandidate(id) {
+    const c = T.candidates.get(id);
+    if (!c || c.status !== 'new') return;
+    try {
+      const voId = await T.variations.insert(candidateToVo(c));
+      T.candidates.update(id, { status: 'accepted', variation_id: voId });
+      store.set({ highlightVo: voId });
+    } catch (_) { /* shown in header */ }
+  }
+  const setCandidateStatus = (id, status) => T.candidates.update(id, { status });
+
   // ── incidents ──
   async function addIncident(origin = 'internal') {
     try { await T.incidents.insert({ project_id: store.get().projectId, origin, title: '', occurred_on: todayIso(), status: 'Open' }); } catch (_) { /* shown in header */ }
@@ -385,6 +438,15 @@ export function createProjectStore(session) {
       setQueryFilter: (f) => store.set({ queryFilter: f }),
       togglePcu: () => store.set({ pcuOpen: !store.get().pcuOpen, pcuMsg: '' }),
       setPcuText: (e) => store.set({ pcuText: value(e) }),
+      connectOutlook, openFolderPicker, mapFolder, scanNow, acceptCandidate,
+      closeFolderPicker: () => store.set({ folderList: null, folderPick: '' }),
+      setFolderPick: (e) => store.set({ folderPick: value(e) }),
+      toggleFolder: (id) => { const f = T.mailFolders.get(id); if (f) T.mailFolders.update(id, { enabled: !f.enabled }); },
+      removeFolder: (id) => removeRow('mailFolders', id),
+      dismissCandidate: (id) => setCandidateStatus(id, 'dismissed'),
+      restoreCandidate: (id) => setCandidateStatus(id, 'new'),
+      toggleDecided: () => store.set({ showDecided: !store.get().showDecided }),
+      clearMailMsg: () => store.set({ mailMsg: null, mailErr: '' }),
       removeMember: (key) => removeRow('members', key),
       cancelInvite: (id) => removeRow('invites', id),
     },

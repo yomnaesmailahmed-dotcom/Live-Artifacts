@@ -15,7 +15,7 @@ const encoders = {
 };
 
 export function createLiveTable({
-  sb, table, filter = null, sort = null, codecs = {}, keyCols = null, hasOrigin = true,
+  sb, table, filter = null, sort = null, codecs = {}, keyCols = null, hasOrigin = true, columns = '*',
   onChange = () => {}, onStatus = () => {},
 }) {
   const rows = new Map();       // key -> row
@@ -61,7 +61,7 @@ export function createLiveTable({
   }
 
   async function load() {
-    let q = sb.from(table).select('*');
+    let q = sb.from(table).select(columns);
     if (filter) q = q.eq(filter.column, filter.value);
     const { data, error } = await q;
     if (error) throw error;
@@ -134,7 +134,7 @@ export function createLiveTable({
     inflight.set(key, patch);
     status();
     try {
-      const { data, error } = await whereKey(sb.from(table).update(stamp(encode(patch))), key, row).select();
+      const { data, error } = await whereKey(sb.from(table).update(stamp(encode(patch))), key, row).select(columns);
       if (error) throw error;
       if (!data || !data.length) throw new Error('You can’t edit this item.');
       lastError = '';
@@ -142,7 +142,7 @@ export function createLiveTable({
       fail(e);
       inflight.delete(key);
       // Re-read the row so the screen shows what is really stored.
-      const { data } = await whereKey(sb.from(table).select('*'), key, row).maybeSingle();
+      const { data } = await whereKey(sb.from(table).select(columns), key, row).maybeSingle();
       if (data) { rows.set(key, data); emit(); }
     } finally {
       inflight.delete(key);

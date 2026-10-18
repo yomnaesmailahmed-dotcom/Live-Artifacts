@@ -14,6 +14,15 @@ export function fmtHours(n) {
   return Number(n).toLocaleString('en-US', { maximumFractionDigits: 1 });
 }
 
+// A UTC timestamp from the database, shown in the viewer's local time: "18 Oct 2026 20:10".
+export function fmtLocalTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${fmtDate(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export const todayIso = () => new Date().toISOString().slice(0, 10);
 
 // Accepts 2026-09-20, 20/09/2026, 20-09-2026, 20 Sep 2026, 20-Sep-26. Returns ISO or null.

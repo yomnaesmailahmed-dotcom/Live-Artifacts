@@ -7,6 +7,7 @@ import { fmtDate, fmtHours, todayIso, displayName, initials } from '../../ui/for
 import { STATUS_CHIP, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js';
 import { buildRegisters } from './registers-vm.js';
 import { buildSchedule } from './schedule-vm.js';
+import { buildMail } from './mail-vm.js';
 
 const STATUS_OVERRIDES = ['', 'Not Started', 'On Track', 'At Risk', 'Delayed', 'On Hold', 'Completed', 'Not Awarded'];
 const PO = ['Not Provided', 'Received', 'Not Received'];
@@ -109,13 +110,15 @@ export function buildViewModel(S, act) {
 
     tabs: TAB_LABELS.map(([k, label]) => {
       const n = { deliverables: S.deliverables.length, timeline: S.milestones.length, queries: S.queries.filter((q) => q.status === 'Open').length, variations: S.variations.length, incidents: S.incidents.filter((i) => i.status !== 'Closed').length, team: S.members.length }[k];
-      return { label: n === undefined ? label : `${label} · ${n}`, selected: S.tab === k ? 'true' : 'false', pick: () => act.setTab(k) };
+      const inbox = k === 'variations' ? S.candidates.filter((c) => c.status === 'new').length : 0;
+      return { label: `${n === undefined ? label : `${label} · ${n}`}${inbox ? ` · ✉ ${inbox} new` : ''}`, selected: S.tab === k ? 'true' : 'false', pick: () => act.setTab(k) };
     }),
     tOverview: S.tab === 'overview', tDeliverables: S.tab === 'deliverables', tTeam: S.tab === 'team',
     tVariations: S.tab === 'variations', tIncidents: S.tab === 'incidents', tHours: S.tab === 'hours',
     tTimeline: S.tab === 'timeline', tQueries: S.tab === 'queries',
     ...buildRegisters(S, act, perm),
     ...buildSchedule(S, act, perm),
+    ...buildMail(S, act, perm),
     kConsumed: fmtHours(M.consumed_hours || 0), kBudgetTotal: fmtHours(M.budget_total ?? P.budget_hours), kEac: fmtHours(M.eac || 0),
     kPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, kVoOpen: M.vo_open || 0, kIncOpen: M.incidents_open || 0,
 

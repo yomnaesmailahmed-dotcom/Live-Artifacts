@@ -9,7 +9,17 @@ submissions, teams/invites, admin, live presence; (2) variation orders with the
 email checkpoint, internal/external incidents, PCU hours ledger; (3) timeline
 (milestones + Gantt), action plan, PTM → DM queries, weekly team status, and
 "Waiting on you" on the Projects page; (4) the management review runs over the
-real data. Next: Outlook VO scan (5).
+real data; (5) the Outlook scan finds VO candidates in client email — setup in
+[OUTLOOK_SETUP.md](OUTLOOK_SETUP.md).
+
+**Outlook scan (phase 5).** Each person connects their own Microsoft 365 mailbox
+(delegated `Mail.Read`; the refresh token is encrypted in Supabase Vault) and maps
+a folder to a project on its Variations tab. Every 30 minutes `pg_cron` calls the
+`mail-scan` Edge Function (`supabase/functions/mail-scan/`), which reads new mail
+with Graph delta queries, keeps only emails matching the admin keywords, and asks
+Claude (Opus 5.5, JSON schema output) whether each is a scope change. Changes land
+in `mail_candidates`; an editor accepts one into a draft VO (with the quote,
+sender, link, deliverable and estimate) or dismisses it.
 
 **Management review (phase 4, `Main.dc.html`).** Scope = whole company, one
 client or one DM; period = since the last approved review → report date.
@@ -40,8 +50,8 @@ still a draft.
 | Page | What it does |
 | --- | --- |
 | `Projects.dc.html` (home) | Portfolio of every project you can see: status (with the reason), late deliverables, next due, last submission, filters, **New project** (management) |
-| `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Timeline** (Gantt, milestones, action plan with owners) · **Queries & status** (PTM → DM queries with answers, weekly team status) · **Variations** (VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
-| `Admin.dc.html` | Company name, at-risk %, email-scan keywords · people and global roles · clients |
+| `Project.dc.html?id=…` | **Overview** (details, components, hours KPIs, archive/delete) · **Deliverables** (RFP / proposal / scope / added / VO, baseline–forecast–actual, submissions with client response, paste from Excel, ✉ email checkpoint) · **Timeline** (Gantt, milestones, action plan with owners) · **Queries & status** (PTM → DM queries with answers, weekly team status) · **Variations** (Outlook scan + candidate inbox, VO-nnn with email evidence, time/hours/fee impact, client decision, add as deliverable) · **Incidents** (INC-nnn internal/external, responsibility + basis, hours/cost/delay, recovery VO) · **Hours** (PCU snapshots, paste export, budget build-up, EAC) · **Team** (roles, invites by email, who's here now) |
+| `Admin.dc.html` | Company name, at-risk %, email-scan keywords · Outlook scan status, connected mailboxes, recent scans · people and global roles · clients |
 | `Main.dc.html` | Management review: the 8-step refresh over the real projects in a scope, with Excel export and briefing notes |
 
 Roles: **admin** / **management** see every project; **members** see projects

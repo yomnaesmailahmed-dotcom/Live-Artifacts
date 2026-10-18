@@ -1,3 +1,5 @@
 # Database migrations contain the admin allow-list; keep them out of the public repo.
-supabase/
+# The Edge Function source (supabase/functions/) holds no secrets and is published.
+supabase/*
+!supabase/functions/
 .claude/

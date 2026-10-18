@@ -24,7 +24,8 @@ export function buildRegisters(S, act, perm) {
   // ── VOs ──
   const variations = S.variations.map((v) => {
     const canDecide = perm.canManage;
-    const statusOptions = VO_STATUSES.filter(([k]) => canDecide || !['approved', 'rejected'].includes(k) || k === v.status).map(([value, label]) => ({ value, label }));
+    // Email-scan candidates live in their own inbox now; "candidate" only shows for older rows that still have it.
+    const statusOptions = VO_STATUSES.filter(([k]) => (k !== 'candidate' || k === v.status) && (canDecide || !['approved', 'rejected'].includes(k) || k === v.status)).map(([value, label]) => ({ value, label }));
     return {
       no: regNo('VO', v.number), title: v.title, description: v.description, direction: v.direction,
       status: v.status, statusShort: VO_STATUS_SHORT[v.status], statusStyle: VO_CHIP[v.status] || '', statusOptions,
