@@ -1,4 +1,5 @@
 // Entry for Project.dc.html.
+import { mountAssistant } from '../ui/assistant.js';
 import { createSession } from '../state/session-store.js';
 import { createProjectStore } from '../state/project-store.js';
 import { buildViewModel } from '../view/project/view-model.js';
@@ -10,3 +11,4 @@ window.DCPage = Object.freeze({ store: page.store, actions: page.actions, buildV
 window.dispatchEvent(new Event('dcpage:ready'));
 
 session.start();
+mountAssistant();

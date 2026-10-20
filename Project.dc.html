@@ -7,39 +7,37 @@
 <script src="./vendor/react.js"></script>
 <script src="./vendor/react-dom.js"></script>
 <script src="./support.js"></script>
-<script type="importmap" data-stamped>{"imports":{"./js/config.js":"./js/config.js?v=db6bbe35c2","./js/domain/deliverables.js":"./js/domain/deliverables.js?v=50ffaaa837","./js/domain/mail.js":"./js/domain/mail.js?v=25066e30fd","./js/domain/registers.js":"./js/domain/registers.js?v=9630ae0a78","./js/domain/review.js":"./js/domain/review.js?v=491e34f062","./js/domain/roles.js":"./js/domain/roles.js?v=30f9d76d33","./js/domain/schedule.js":"./js/domain/schedule.js?v=20b4a9668b","./js/lib/live-table.js":"./js/lib/live-table.js?v=f9a50615e8","./js/lib/store.js":"./js/lib/store.js?v=0ad090fcac","./js/lib/supabase-client.js":"./js/lib/supabase-client.js?v=e63c57d0c8","./js/pages/admin.js":"./js/pages/admin.js?v=0217318914","./js/pages/project.js":"./js/pages/project.js?v=f27cb80325","./js/pages/projects.js":"./js/pages/projects.js?v=b0910b2202","./js/pages/review.js":"./js/pages/review.js?v=fbff117c33","./js/services/auth.js":"./js/services/auth.js?v=ee34b099d9","./js/services/mail.js":"./js/services/mail.js?v=4f993e4484","./js/services/presence.js":"./js/services/presence.js?v=0059e484fb","./js/services/run-repository.js":"./js/services/run-repository.js?v=309c70087c","./js/state/admin-store.js":"./js/state/admin-store.js?v=b24f4f4d18","./js/state/page-base.js":"./js/state/page-base.js?v=86f14e0f7e","./js/state/portfolio-store.js":"./js/state/portfolio-store.js?v=65f7983798","./js/state/project-store.js":"./js/state/project-store.js?v=e4fdbdbfc3","./js/state/review-store.js":"./js/state/review-store.js?v=fe18950c7a","./js/state/session-store.js":"./js/state/session-store.js?v=976099fa5a","./js/ui/format.js":"./js/ui/format.js?v=0de1d92d21","./js/ui/tokens.js":"./js/ui/tokens.js?v=154ef2f234","./js/view/account.js":"./js/view/account.js?v=35af440527","./js/view/admin/view-model.js":"./js/view/admin/view-model.js?v=b340204150","./js/view/portfolio/view-model.js":"./js/view/portfolio/view-model.js?v=c0979ea873","./js/view/project/mail-vm.js":"./js/view/project/mail-vm.js?v=b6c81fe8e2","./js/view/project/registers-vm.js":"./js/view/project/registers-vm.js?v=453d53fae2","./js/view/project/schedule-vm.js":"./js/view/project/schedule-vm.js?v=502c428289","./js/view/project/view-model.js":"./js/view/project/view-model.js?v=7252cf57d5","./js/view/review/view-model.js":"./js/view/review/view-model.js?v=83123a2c04","./js/view/shell.js":"./js/view/shell.js?v=2bba8016d9"}}</script>
-<script type="module" src="./js/pages/project.js?v=f27cb80325"></script>
+<script type="importmap" data-stamped>{"imports":{"./js/config.js":"./js/config.js?v=db6bbe35c2","./js/domain/deliverables.js":"./js/domain/deliverables.js?v=50ffaaa837","./js/domain/mail.js":"./js/domain/mail.js?v=25066e30fd","./js/domain/progress.js":"./js/domain/progress.js?v=40d7736b7d","./js/domain/registers.js":"./js/domain/registers.js?v=9630ae0a78","./js/domain/review.js":"./js/domain/review.js?v=491e34f062","./js/domain/roles.js":"./js/domain/roles.js?v=30f9d76d33","./js/domain/schedule.js":"./js/domain/schedule.js?v=20b4a9668b","./js/lib/live-table.js":"./js/lib/live-table.js?v=f9a50615e8","./js/lib/store.js":"./js/lib/store.js?v=0ad090fcac","./js/lib/supabase-client.js":"./js/lib/supabase-client.js?v=e63c57d0c8","./js/pages/admin.js":"./js/pages/admin.js?v=b1fa8da4b2","./js/pages/project.js":"./js/pages/project.js?v=60103237cf","./js/pages/projects.js":"./js/pages/projects.js?v=742665447d","./js/pages/review.js":"./js/pages/review.js?v=6953334600","./js/services/auth.js":"./js/services/auth.js?v=ee34b099d9","./js/services/mail.js":"./js/services/mail.js?v=4f993e4484","./js/services/presence.js":"./js/services/presence.js?v=0059e484fb","./js/services/run-repository.js":"./js/services/run-repository.js?v=309c70087c","./js/state/admin-store.js":"./js/state/admin-store.js?v=b24f4f4d18","./js/state/page-base.js":"./js/state/page-base.js?v=86f14e0f7e","./js/state/portfolio-store.js":"./js/state/portfolio-store.js?v=742217bb65","./js/state/project-store.js":"./js/state/project-store.js?v=c500532630","./js/state/review-store.js":"./js/state/review-store.js?v=fe18950c7a","./js/state/session-store.js":"./js/state/session-store.js?v=976099fa5a","./js/ui/assistant.js":"./js/ui/assistant.js?v=05393ab408","./js/ui/format.js":"./js/ui/format.js?v=0de1d92d21","./js/ui/tokens.js":"./js/ui/tokens.js?v=c012f019cf","./js/view/account.js":"./js/view/account.js?v=35af440527","./js/view/admin/view-model.js":"./js/view/admin/view-model.js?v=afe34451fa","./js/view/portfolio/view-model.js":"./js/view/portfolio/view-model.js?v=58d1a86ca7","./js/view/project/mail-vm.js":"./js/view/project/mail-vm.js?v=f9e7c2bcd1","./js/view/project/registers-vm.js":"./js/view/project/registers-vm.js?v=da578623b4","./js/view/project/schedule-vm.js":"./js/view/project/schedule-vm.js?v=6e523bf5be","./js/view/project/view-model.js":"./js/view/project/view-model.js?v=e4accc8954","./js/view/review/view-model.js":"./js/view/review/view-model.js?v=516a95f4fe","./js/view/shell.js":"./js/view/shell.js?v=c76a66c6ac"}}</script>
+<script type="module" src="./js/pages/project.js?v=60103237cf"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./css/app.css?v=8167fc195c">
+<link rel="stylesheet" href="./css/app.css?v=aa656bfd8e">
 </helmet>
-<div style="background: #F6F5F1; color: #16191D; font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
+<div class="shell" style="background: #F1EFEA; color: #2A3042; font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
 
-<header style="border-bottom: 1px solid #D9D6CE; background: #F6F5F1">
-<div style="max-width: 1240px; margin: 0 auto; padding: 14px 32px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">{{ brand }}</span>
-<nav aria-label="Workspace" style="display: flex; gap: 16px; font-size: 14px"><a href="./Projects.dc.html" style="{{ navProjects }}">Projects</a><a href="./Main.dc.html" style="{{ navReview }}">Management review</a><sc-if value="{{ showAdminLink }}" hint-placeholder-val="{{ true }}"><a href="./Admin.dc.html" style="{{ navAdmin }}">Admin</a></sc-if></nav></div>
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 14px; color: #5B6068"><span style="display: flex; align-items: center; gap: 6px"><span class="dot" style="{{ syncDot }}"></span><span class="mono" style="font-size: 12px">{{ syncLabel }}</span></span><sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span>{{ acctEmail }}</span><span class="{{ acctRoleClass }}">{{ acctRole }}</span><button class="link" onClick="{{ signOut }}">Sign out</button></span></sc-if></div>
-</div>
-<sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}"><div role="status" style="background: #FFF2CC; color: #5C4300; border-top: 1px solid #8A6A00"><div style="max-width: 1240px; margin: 0 auto; padding: 6px 32px; box-sizing: border-box; font-size: 14px">{{ noticeMsg }}</div></div></sc-if>
+<header class="side">
+<div class="side-brand"><span class="logo"></span><span class="mono" style="font-size: 13px; letter-spacing: 0.08em; font-weight: 500">{{ brand }}</span></div>
+<nav aria-label="Workspace" class="side-nav"><div class="side-h">MENU</div><a href="./Projects.dc.html" style="{{ navProjects }}">Projects</a><a href="./Main.dc.html" style="{{ navReview }}">Management review</a><sc-if value="{{ showAdminLink }}" hint-placeholder-val="{{ true }}"><a href="./Admin.dc.html" style="{{ navAdmin }}">Admin</a></sc-if></nav>
+<div class="side-foot"><span style="display: flex; align-items: center; gap: 6px"><span class="dot" style="{{ syncDot }}"></span><span class="mono" style="font-size: 11px">{{ syncLabel }}</span></span><sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-size: 13px"><span style="word-break: break-all">{{ acctEmail }}</span><span class="{{ acctRoleClass }}">{{ acctRole }}</span><button class="link" onClick="{{ signOut }}">Sign out</button></div></sc-if>
+<sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}"><div role="status" class="notice">{{ noticeMsg }}</div></sc-if></div>
 </header>
 
 <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}"><div style="max-width: 1240px; margin: 0 auto; padding: 32px; box-sizing: border-box" class="lbl pulse">Loading project…</div></sc-if>
-<sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}"><div style="max-width: 1240px; margin: 0 auto; padding: 32px; box-sizing: border-box"><div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><div style="font-weight: 600; font-size: 18px">Project not available</div><div style="color: #3A3F46">It doesn’t exist, or you haven’t been added to it. Ask the project’s DM or management to add you.</div><div><a href="./Projects.dc.html">← All projects</a></div></div></div></sc-if>
+<sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}"><div style="max-width: 1240px; margin: 0 auto; padding: 32px; box-sizing: border-box"><div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><div style="font-weight: 600; font-size: 18px">Project not available</div><div style="color: #3F4554">It doesn’t exist, or you haven’t been added to it. Ask the project’s DM or management to add you.</div><div><a href="./Projects.dc.html">← All projects</a></div></div></div></sc-if>
 
 <sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
-<div style="border-bottom: 1px solid #D9D6CE; background: #FFFFFF">
+<div style="border-bottom: 1px solid #DCD8D0; background: #FFFFFF">
 <div style="max-width: 1240px; margin: 0 auto; padding: 20px 32px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
 <div style="font-size: 14px"><a href="./Projects.dc.html">← All projects</a></div>
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px">
 <div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-size: 12px; color: #5B6068">{{ pClient }} · {{ pCode }}</span><span class="chip" style="{{ statusStyle }}">{{ status }}</span><span style="font-size: 14px; color: #5B6068">{{ statusBasis }}</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-size: 12px; color: #646A78">{{ pClient }} · {{ pCode }}</span><span class="chip" style="{{ statusStyle }}">{{ status }}</span><span style="font-size: 14px; color: #646A78">{{ statusBasis }}</span></div>
 <h1 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 600">{{ pName }}</h1>
-<div style="font-size: 14px; color: #3A3F46">DM {{ dmNames }} · PTM {{ ptmNames }}</div>
+<div style="font-size: 14px; color: #3F4554">DM {{ dmNames }} · PTM {{ ptmNames }}</div>
 </div>
 <sc-if value="{{ hasHere }}" hint-placeholder-val="{{ true }}"><div style="display: flex; align-items: center; gap: 8px"><div style="display: flex; gap: 4px"><sc-for list="{{ here }}" as="h" hint-placeholder-count="2"><span class="avatar" title="{{ h.title }}">{{ h.initials }}</span></sc-for></div><span class="lbl">{{ hereLabel }}</span></div></sc-if>
 </div>
@@ -48,7 +46,7 @@
 </div>
 
 <main style="max-width: 1240px; margin: 0 auto; padding: 24px 32px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
-<sc-if value="{{ hasAccessNote }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 12px 16px; font-size: 14px; color: #3A3F46">{{ accessNote }}</div></sc-if>
+<sc-if value="{{ hasAccessNote }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 12px 16px; font-size: 14px; color: #3F4554">{{ accessNote }}</div></sc-if>
 
 <!-- ───────── Overview ───────── -->
 <sc-if value="{{ tOverview }}" hint-placeholder-val="{{ true }}">
@@ -56,11 +54,11 @@
 <div><div class="lbl">Deliverables</div><div style="font-size: 24px; font-weight: 600">{{ kTotal }}</div></div>
 <div><div class="lbl">Submitted</div><div style="font-size: 24px; font-weight: 600">{{ kSubmitted }}</div></div>
 <div><div class="lbl">Approved</div><div style="font-size: 24px; font-weight: 600">{{ kApproved }}</div></div>
-<div><div class="lbl" style="color: #A00000">Late</div><div style="font-size: 24px; font-weight: 600">{{ kLate }}</div></div>
+<div><div class="lbl" style="color: #944747">Late</div><div style="font-size: 24px; font-weight: 600">{{ kLate }}</div></div>
 <div><div class="lbl">With client</div><div style="font-size: 24px; font-weight: 600">{{ kAwaiting }}</div></div>
 <div><div class="lbl">Planned / budget h</div><div style="font-size: 18px; font-weight: 600">{{ kPlanned }} / {{ kBudget }}</div></div>
 </div>
-<div class="kpi card" style="background: #FBFAF7">
+<div class="kpi card" style="background: #F7F5F0">
 <div><div class="lbl">Budget h incl. VOs</div><div style="font-size: 20px; font-weight: 600">{{ kBudgetTotal }}</div></div>
 <div><div class="lbl">Consumed h (PCU)</div><div style="font-size: 20px; font-weight: 600">{{ kConsumed }}</div></div>
 <div><div class="lbl">Consumed %</div><div style="font-size: 20px; font-weight: 600; {{ hPctStyle }}">{{ kPct }}</div></div>
@@ -68,6 +66,28 @@
 <div><div class="lbl">Open VOs</div><div style="font-size: 20px; font-weight: 600">{{ kVoOpen }}</div></div>
 <div><div class="lbl">Open incidents</div><div style="font-size: 20px; font-weight: 600">{{ kIncOpen }}</div></div>
 </div>
+<sc-if value="{{ hasProgress }}" hint-placeholder-val="{{ true }}">
+<div class="grid2" style="align-items: start">
+<div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Progress</h2><span class="lbl">From deliverables</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>Delivered (submitted or approved)</span><span class="mono">{{ pDelivered }}</span></div><div class="meter"><span style="{{ barDelivered }}"></span></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>Approved by the client</span><span class="mono">{{ pApproved }}</span></div><div class="meter"><span style="{{ barApproved }}"></span></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>Hours consumed of budget</span><span class="mono">{{ pHours }}</span></div><div class="meter"><span style="{{ barHours }}"></span></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>Invoiced of fee</span><span class="mono">{{ pBilled }}</span></div><div class="meter"><span style="{{ barBilled }}"></span></div></div>
+<sc-if value="{{ hasProgressNotes }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #646A78; display: flex; flex-direction: column; gap: 2px"><span>{{ awaitingNote }}</span><span>{{ burnNote }}</span><span>{{ billingNote }}</span></div></sc-if>
+</div>
+<div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Budget</h2><span class="lbl">Fee &amp; cost</span></div>
+<div class="grid2" style="gap: 12px">
+<div><div class="lbl">Fee incl. approved VOs</div><div style="font-size: 20px; font-weight: 600">{{ bFee }}</div><div style="font-size: 12px; color: #646A78">{{ bFeeBase }} + {{ bFeeVo }} VOs</div></div>
+<div><div class="lbl">Value delivered</div><div style="font-size: 20px; font-weight: 600">{{ bEarned }}</div></div>
+<div><div class="lbl">Invoiced</div><div style="font-size: 20px; font-weight: 600">{{ bInvoiced }}</div><div style="font-size: 12px; color: #646A78">{{ bBilledPct }} of fee · {{ bRemaining }} left to invoice</div></div>
+<div><div class="lbl">Cost to date</div><div style="font-size: 20px; font-weight: 600">{{ bCost }}</div><div style="font-size: 12px; color: #646A78">{{ bCostPct }} of fee</div></div>
+</div>
+<div style="font-size: 14px">Margin on fee: <strong style="{{ bMarginStyle }}">{{ bMargin }}</strong></div>
+</div>
+</div>
+</sc-if>
 <div class="grid2">
 <div class="card" style="padding: 16px 20px"><div class="lbl" style="margin-bottom: 4px">Next due</div><div>{{ nextDue }}</div></div>
 <div class="card" style="padding: 16px 20px"><div class="lbl" style="margin-bottom: 4px">Last submission</div><div>{{ lastSub }}</div></div>
@@ -99,6 +119,14 @@
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">PO status</span><select class="field" value="{{ f.po }}" onChange="{{ set.po_status }}" disabled="{{ readOnlyManage }}"><sc-for list="{{ poOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
 </div>
 <div class="grid3">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Contract fee</span><input class="field" type="number" min="0" value="{{ f.fee }}" onChange="{{ set.contract_fee }}" disabled="{{ readOnlyManage }}"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Currency</span><input class="field" value="{{ f.currency }}" onChange="{{ set.currency }}" disabled="{{ readOnlyManage }}" placeholder="SAR"></label>
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Invoiced to date</span><input class="field" type="number" min="0" value="{{ f.invoiced }}" onChange="{{ set.invoiced_to_date }}" disabled="{{ readOnly }}"></label>
+</div>
+<div class="grid3">
+<label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Cost to date</span><input class="field" type="number" min="0" value="{{ f.cost }}" onChange="{{ set.cost_to_date }}" disabled="{{ readOnly }}"></label>
+</div>
+<div class="grid3">
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">RFP reference</span><input class="field" value="{{ f.rfp }}" onChange="{{ set.rfp_ref }}" disabled="{{ readOnlyManage }}"></label>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Technical proposal reference</span><input class="field" value="{{ f.proposal }}" onChange="{{ set.proposal_ref }}" disabled="{{ readOnlyManage }}"></label>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Status</span><select class="field" value="{{ f.override }}" onChange="{{ set.status_override }}" disabled="{{ readOnlyManage }}"><sc-for list="{{ overrideOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
@@ -107,8 +135,8 @@
 </div>
 
 <div class="card">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #D9D6CE"><div><div style="font-weight: 600">Components</div><div style="font-size: 14px; color: #5B6068">Packages, plots or workstreams. A project is On Hold when every component is.</div></div><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ addComponent }}">Add component</button></sc-if></div>
-<sc-if value="{{ noComponents }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px 16px; color: #5B6068; font-size: 14px">No components yet.</div></sc-if>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #DCD8D0"><div><div style="font-weight: 600">Components</div><div style="font-size: 14px; color: #646A78">Packages, plots or workstreams. A project is On Hold when every component is.</div></div><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ addComponent }}">Add component</button></sc-if></div>
+<sc-if value="{{ noComponents }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px 16px; color: #646A78; font-size: 14px">No components yet.</div></sc-if>
 <div style="overflow-x: auto"><table class="xl" style="min-width: 720px"><tbody>
 <sc-for list="{{ components }}" as="c" hint-placeholder-count="2"><tr>
 <td style="width: 90px"><input class="cell mono" value="{{ c.code }}" onChange="{{ c.setCode }}" disabled="{{ readOnly }}" aria-label="Code"></td>
@@ -116,23 +144,23 @@
 <td style="width: 150px"><input class="cell" value="{{ c.discipline }}" onChange="{{ c.setDiscipline }}" disabled="{{ readOnly }}" placeholder="Discipline" aria-label="Discipline"></td>
 <td style="width: 170px"><input class="cell" value="{{ c.stage }}" onChange="{{ c.setStage }}" disabled="{{ readOnly }}" placeholder="Stage" aria-label="Stage"></td>
 <td style="width: 140px"><select class="cell" value="{{ c.workStatus }}" onChange="{{ c.setWork }}" disabled="{{ readOnly }}" aria-label="Work status"><sc-for list="{{ workOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
-<td style="width: 110px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ c.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ c.askDelete }}">Remove</button></sc-if><sc-if value="{{ c.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ c.confirmDelete }}">Confirm remove</button></sc-if></sc-if></td>
+<td style="width: 110px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ c.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ c.askDelete }}">Remove</button></sc-if><sc-if value="{{ c.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ c.confirmDelete }}">Confirm remove</button></sc-if></sc-if></td>
 </tr></sc-for>
 </tbody></table></div>
 </div>
 
 <sc-if value="{{ canManage }}" hint-placeholder-val="{{ true }}">
 <div class="card" style="padding: 16px 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
-<div><div style="font-weight: 600">Archive</div><div style="font-size: 14px; color: #5B6068">{{ archiveNote }}</div></div>
+<div><div style="font-weight: 600">Archive</div><div style="font-size: 14px; color: #646A78">{{ archiveNote }}</div></div>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center"><button class="btn2" onClick="{{ toggleArchive }}">{{ archiveLabel }}</button>
-<sc-if value="{{ canDelete }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ notConfirmingProject }}" hint-placeholder-val="{{ true }}"><button class="link" style="color: #A00000" onClick="{{ askDeleteProject }}">Delete project…</button></sc-if><sc-if value="{{ confirmingProject }}" hint-placeholder-val="{{ false }}"><button class="btn" style="background: #A00000; border-color: #A00000" onClick="{{ deleteProject }}">Delete project and all its records</button></sc-if></sc-if></div>
+<sc-if value="{{ canDelete }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ notConfirmingProject }}" hint-placeholder-val="{{ true }}"><button class="link" style="color: #944747" onClick="{{ askDeleteProject }}">Delete project…</button></sc-if><sc-if value="{{ confirmingProject }}" hint-placeholder-val="{{ false }}"><button class="btn" style="background: #944747; border-color: #944747" onClick="{{ deleteProject }}">Delete project and all its records</button></sc-if></sc-if></div>
 </div>
 </sc-if>
 </sc-if>
 
 <!-- ───────── Deliverables ───────── -->
 <sc-if value="{{ tDeliverables }}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Deliverables</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">Everything the client asked for in the RFP, promised in the technical proposal or set in the scope — against what was actually delivered, by phase and date.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Deliverables</h2><p style="margin: 0; color: #3F4554; font-size: 15px">Everything the client asked for in the RFP, promised in the technical proposal or set in the scope — against what was actually delivered, by phase and date.</p></div>
 <div class="ai" style="padding: 12px 16px; font-size: 14px">{{ contractLine }}</div>
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
 <sc-for list="{{ sourceChips }}" as="s" hint-placeholder-count="5"><button class="tog" style="{{ s.style }}" onClick="{{ s.pick }}">{{ s.label }}</button></sc-for>
@@ -143,15 +171,15 @@
 <sc-if value="{{ pasteOpen }}" hint-placeholder-val="{{ false }}">
 <div class="you" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
 <div style="font-weight: 600">Paste deliverables from Excel</div>
-<div style="font-size: 14px; color: #3A3F46">Copy these columns from your sheet, in this order: <span class="mono" style="font-size: 12px">Phase · Deliverable · Source (RFP / Proposal / Scope / Added) · Source ref · Baseline date · Planned hours</span>. A header row is fine.</div>
+<div style="font-size: 14px; color: #3F4554">Copy these columns from your sheet, in this order: <span class="mono" style="font-size: 12px">Phase · Deliverable · Source (RFP / Proposal / Scope / Added) · Source ref · Baseline date · Planned hours</span>. A header row is fine.</div>
 <textarea class="field" rows="6" value="{{ pasteText }}" onChange="{{ setPasteText }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; resize: vertical" placeholder="Concept&#9;Concept design report&#9;RFP&#9;RFP 3.1&#9;15/11/2026&#9;120"></textarea>
 <div style="font-size: 14px">{{ pasteSummary }}</div>
-<sc-if value="{{ hasPasteErrors }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #A00000"><sc-for list="{{ pasteErrors }}" as="e" hint-placeholder-count="1"><div>· {{ e }}</div></sc-for></div></sc-if>
+<sc-if value="{{ hasPasteErrors }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #944747"><sc-for list="{{ pasteErrors }}" as="e" hint-placeholder-count="1"><div>· {{ e }}</div></sc-for></div></sc-if>
 <div><button class="btn" onClick="{{ importPaste }}" disabled="{{ pasteNone }}">{{ importLabel }}</button></div>
 </div>
 </sc-if>
 
-<sc-if value="{{ noDeliverables }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8A8F96; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No deliverables yet</div><div style="color: #3A3F46">Add them one by one, or paste the list from the RFP / technical proposal sheet.</div></div></sc-if>
+<sc-if value="{{ noDeliverables }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8D92A0; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No deliverables yet</div><div style="color: #3F4554">Add them one by one, or paste the list from the RFP / technical proposal sheet.</div></div></sc-if>
 <sc-if value="{{ noneShown }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 14px 16px">No deliverables match this filter.</div></sc-if>
 
 <sc-if value="{{ hasDeliverables }}" hint-placeholder-val="{{ true }}">
@@ -160,7 +188,7 @@
 <sc-for list="{{ deliverables }}" as="d" hint-placeholder-count="3">
 <tr>
 <td style="{{ d.rowStyle }}"><input class="cell" value="{{ d.phase }}" onChange="{{ d.setPhase }}" disabled="{{ readOnly }}" aria-label="Phase"></td>
-<td style="{{ d.rowStyle }}"><input class="cell" style="{{ d.titleStyle }}" value="{{ d.title }}" onChange="{{ d.setTitle }}" disabled="{{ readOnly }}" placeholder="Deliverable name" aria-label="Deliverable"><span class="mono" style="font-size: 11px; color: #A00000; font-weight: 600">{{ d.lateLabel }}</span> <span class="mono" style="font-size: 11px; color: #1E3FBF">{{ d.voRef }}</span></td>
+<td style="{{ d.rowStyle }}"><input class="cell" style="{{ d.titleStyle }}" value="{{ d.title }}" onChange="{{ d.setTitle }}" disabled="{{ readOnly }}" placeholder="Deliverable name" aria-label="Deliverable"><span class="mono" style="font-size: 11px; color: #944747; font-weight: 600">{{ d.lateLabel }}</span> <span class="mono" style="font-size: 11px; color: #3F477F">{{ d.voRef }}</span></td>
 <td style="{{ d.rowStyle }}"><select class="cell" value="{{ d.source }}" onChange="{{ d.setSource }}" disabled="{{ readOnly }}" aria-label="Source"><sc-for list="{{ sourceOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
 <td style="{{ d.rowStyle }}"><input class="cell" value="{{ d.sourceRef }}" onChange="{{ d.setRef }}" disabled="{{ readOnly }}" aria-label="Source reference"></td>
 <td style="{{ d.rowStyle }}"><select class="cell" value="{{ d.component }}" onChange="{{ d.setComponent }}" disabled="{{ readOnly }}" aria-label="Component"><sc-for list="{{ compOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
@@ -169,19 +197,19 @@
 <td style="{{ d.rowStyle }}"><input class="cell" type="date" value="{{ d.actual }}" onChange="{{ d.setActual }}" disabled="{{ readOnly }}" aria-label="Actual date"></td>
 <td style="{{ d.rowStyle }}"><input class="cell mono" type="number" min="0" value="{{ d.hours }}" onChange="{{ d.setHours }}" disabled="{{ readOnly }}" aria-label="Planned hours"></td>
 <td style="{{ d.rowStyle }}"><select class="cell" value="{{ d.status }}" onChange="{{ d.setStatus }}" disabled="{{ readOnly }}" aria-label="Status"><sc-for list="{{ statusOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
-<td style="{{ d.rowStyle }}"><button class="link" onClick="{{ d.toggle }}">{{ d.expandLabel }}</button><div class="mono" style="font-size: 11px; color: #5B6068">{{ d.subsLabel }}</div></td>
+<td style="{{ d.rowStyle }}"><button class="link" onClick="{{ d.toggle }}">{{ d.expandLabel }}</button><div class="mono" style="font-size: 11px; color: #646A78">{{ d.subsLabel }}</div></td>
 </tr>
-<sc-if value="{{ d.expanded }}" hint-placeholder-val="{{ false }}"><tr><td colSpan="11" style="background: #FBFAF7; padding: 12px 16px">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px"><span class="lbl">Submissions · {{ d.title }}</span><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ d.addSubmission }}">Add submission</button><button class="tog" style="border-color: #2F5BFF; color: #1E3FBF" onClick="{{ d.checkpoint }}">✉ Client email changed this…</button><sc-if value="{{ d.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ d.askDelete }}">Delete deliverable</button></sc-if><sc-if value="{{ d.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ d.confirmDelete }}">Confirm delete (and its submissions)</button></sc-if></sc-if></span></div>
-<sc-if value="{{ d.noSubs }}" hint-placeholder-val="{{ false }}"><div style="font-size: 14px; color: #5B6068">Nothing submitted yet.</div></sc-if>
+<sc-if value="{{ d.expanded }}" hint-placeholder-val="{{ false }}"><tr><td colSpan="11" style="background: #F7F5F0; padding: 12px 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px"><span class="lbl">Submissions · {{ d.title }}</span><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ d.addSubmission }}">Add submission</button><button class="tog" style="border-color: #5A63A8; color: #3F477F" onClick="{{ d.checkpoint }}">✉ Client email changed this…</button><sc-if value="{{ d.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ d.askDelete }}">Delete deliverable</button></sc-if><sc-if value="{{ d.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ d.confirmDelete }}">Confirm delete (and its submissions)</button></sc-if></sc-if></span></div>
+<sc-if value="{{ d.noSubs }}" hint-placeholder-val="{{ false }}"><div style="font-size: 14px; color: #646A78">Nothing submitted yet.</div></sc-if>
 <sc-for list="{{ d.subs }}" as="s" hint-placeholder-count="1">
-<div style="display: grid; grid-template-columns: 100px 150px 190px 150px minmax(0,1fr) 120px; gap: 8px; align-items: center; padding: 4px 0; border-top: 1px solid #ECE9E2">
+<div style="display: grid; grid-template-columns: 100px 150px 190px 150px minmax(0,1fr) 120px; gap: 8px; align-items: center; padding: 4px 0; border-top: 1px solid #E9E5DD">
 <input class="cell mono" value="{{ s.revision }}" onChange="{{ s.setRevision }}" disabled="{{ readOnly }}" aria-label="Revision">
 <input class="cell" type="date" value="{{ s.submitted }}" onChange="{{ s.setSubmitted }}" disabled="{{ readOnly }}" aria-label="Submitted on">
 <select class="cell" value="{{ s.response }}" onChange="{{ s.setResponse }}" disabled="{{ readOnly }}" aria-label="Client response"><sc-for list="{{ responseOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
 <input class="cell" type="date" value="{{ s.responseOn }}" onChange="{{ s.setResponseOn }}" disabled="{{ readOnly }}" aria-label="Response date">
 <input class="cell" value="{{ s.notes }}" onChange="{{ s.setNotes }}" disabled="{{ readOnly }}" placeholder="Notes / transmittal" aria-label="Notes">
-<span style="display: flex; gap: 10px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="link" title="The client’s response changed the scope — raise a VO" onClick="{{ s.checkpoint }}">✉ VO</button><sc-if value="{{ s.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ s.askDelete }}">Remove</button></sc-if><sc-if value="{{ s.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ s.confirmDelete }}">Confirm</button></sc-if></sc-if></span>
+<span style="display: flex; gap: 10px"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="link" title="The client’s response changed the scope — raise a VO" onClick="{{ s.checkpoint }}">✉ VO</button><sc-if value="{{ s.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ s.askDelete }}">Remove</button></sc-if><sc-if value="{{ s.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ s.confirmDelete }}">Confirm</button></sc-if></sc-if></span>
 </div>
 </sc-for>
 </td></tr></sc-if>
@@ -193,34 +221,34 @@
 
 <!-- ───────── Timeline ───────── -->
 <sc-if value="{{ tTimeline }}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Timeline &amp; action plan</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">Milestones carry the schedule; actions hang off the milestone they serve. A milestone slips when its forecast — or today, if it isn’t finished — passes its baseline. An action is late when it’s overdue or due after its milestone.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Timeline &amp; action plan</h2><p style="margin: 0; color: #3F4554; font-size: 15px">Milestones carry the schedule; actions hang off the milestone they serve. A milestone slips when its forecast — or today, if it isn’t finished — passes its baseline. An action is late when it’s overdue or due after its milestone.</p></div>
 <div class="ai" style="padding: 12px 16px; font-size: 14px">{{ scheduleLine }}</div>
 <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" onClick="{{ addMilestone }}">Add milestone</button><button class="btn2" onClick="{{ addLooseAction }}">Add action</button></div></sc-if>
 
 <sc-if value="{{ hasGantt }}" hint-placeholder-val="{{ true }}">
 <div class="card" style="overflow-x: auto">
 <div style="min-width: 920px">
-<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); border-bottom: 1px solid #D9D6CE; background: #FBFAF7">
+<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); border-bottom: 1px solid #DCD8D0; background: #F7F5F0">
 <div class="lbl" style="padding: 8px 12px">{{ ganttRange }}</div>
-<div style="position: relative; height: 32px"><sc-for list="{{ ticks }}" as="t" hint-placeholder-count="4"><span class="mono" style="position: absolute; top: 8px; font-size: 11px; color: #5B6068; border-left: 1px solid #D9D6CE; padding-left: 4px; {{ t.left }}">{{ t.label }}</span></sc-for></div>
+<div style="position: relative; height: 32px"><sc-for list="{{ ticks }}" as="t" hint-placeholder-count="4"><span class="mono" style="position: absolute; top: 8px; font-size: 11px; color: #646A78; border-left: 1px solid #DCD8D0; padding-left: 4px; {{ t.left }}">{{ t.label }}</span></sc-for></div>
 </div>
 <sc-for list="{{ ganttRows }}" as="g" hint-placeholder-count="4">
-<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); border-bottom: 1px solid #ECE9E2">
-<div style="padding: 6px 12px; line-height: 1.3"><div style="font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ g.label }}</div><div style="font-size: 12px; color: #5B6068">{{ g.sub }} <span style="color: #A00000; font-weight: 600">{{ g.lateText }}</span></div></div>
+<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); border-bottom: 1px solid #E9E5DD">
+<div style="padding: 6px 12px; line-height: 1.3"><div style="font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ g.label }}</div><div style="font-size: 12px; color: #646A78">{{ g.sub }} <span style="color: #944747; font-weight: 600">{{ g.lateText }}</span></div></div>
 <div style="position: relative; min-height: 40px">
-<span style="position: absolute; top: 0; bottom: 0; width: 1px; background: #2F5BFF; opacity: 0.6; {{ g.today }}"></span>
+<span style="position: absolute; top: 0; bottom: 0; width: 1px; background: #5A63A8; opacity: 0.6; {{ g.today }}"></span>
 <span style="position: absolute; top: 13px; height: 14px; {{ g.base }}"></span>
 <span style="position: absolute; top: 13px; height: 14px; {{ g.extra }}"></span>
 <span style="position: absolute; top: 9px; height: 22px; {{ g.done }}"></span>
 </div>
 </div>
 </sc-for>
-<div style="padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #5B6068"><span><span class="dot" style="background: #C9CDD6"></span> baseline</span><span><span class="dot" style="background: #C00000"></span> slip / late</span><span><span class="dot" style="background: #2F5BFF"></span> action</span><span><span class="dot" style="background: #16191D"></span> finished</span><span style="color: #2F5BFF">│ today</span></div>
+<div style="padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #646A78"><span><span class="dot" style="background: #CBCED8"></span> baseline</span><span><span class="dot" style="background: #B05A5A"></span> slip / late</span><span><span class="dot" style="background: #5A63A8"></span> action</span><span><span class="dot" style="background: #2A3042"></span> finished</span><span style="color: #5A63A8">│ today</span></div>
 </div>
 </div>
 </sc-if>
 
-<sc-if value="{{ noMilestones }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px; border: 1px dashed #8A8F96; background: #FFFFFF; color: #3A3F46">No milestones yet. Add the phases and key dates from the programme — baseline dates first, forecasts as things move.</div></sc-if>
+<sc-if value="{{ noMilestones }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px; border: 1px dashed #8D92A0; background: #FFFFFF; color: #3F4554">No milestones yet. Add the phases and key dates from the programme — baseline dates first, forecasts as things move.</div></sc-if>
 <sc-if value="{{ hasMilestones }}" hint-placeholder-val="{{ true }}">
 <div class="lbl">Milestones</div>
 <div style="overflow-x: auto"><table class="xl" style="min-width: 1100px"><thead><tr><th>Milestone</th><th style="width: 120px">Phase</th><th style="width: 130px">Kind</th><th style="width: 150px">Component</th><th style="width: 140px">Baseline start</th><th style="width: 140px">Baseline finish</th><th style="width: 140px">Forecast</th><th style="width: 140px">Actual</th><th style="width: 130px"></th></tr></thead><tbody>
@@ -233,7 +261,7 @@
 <td style="{{ m.rowStyle }}"><input class="cell" type="date" value="{{ m.baseline }}" onChange="{{ m.set.baseline_finish }}" disabled="{{ readOnly }}" aria-label="Baseline finish"></td>
 <td style="{{ m.rowStyle }}"><input class="cell" type="date" value="{{ m.forecast }}" onChange="{{ m.set.forecast_finish }}" disabled="{{ readOnly }}" aria-label="Forecast finish"></td>
 <td style="{{ m.rowStyle }}"><input class="cell" type="date" value="{{ m.actual }}" onChange="{{ m.set.actual_finish }}" disabled="{{ readOnly }}" aria-label="Actual finish"></td>
-<td style="{{ m.rowStyle }}"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.addAction }}">+ action</button> <sc-if value="{{ m.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.askDelete }}">Remove</button></sc-if><sc-if value="{{ m.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ m.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
+<td style="{{ m.rowStyle }}"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.addAction }}">+ action</button> <sc-if value="{{ m.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.askDelete }}">Remove</button></sc-if><sc-if value="{{ m.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ m.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
 </tr></sc-for>
 </tbody></table></div>
 </sc-if>
@@ -242,8 +270,8 @@
 <div class="lbl">Action plan</div>
 <div style="overflow-x: auto"><table class="xl" style="min-width: 1380px"><thead><tr><th style="width: 80px">No.</th><th>Action</th><th style="width: 190px">Owner</th><th style="width: 180px">Milestone</th><th style="width: 140px">Start</th><th style="width: 140px">Due</th><th style="width: 130px">Status</th><th style="width: 80px">Plan h</th><th style="width: 80px">Actual h</th><th style="width: 200px">Notes</th><th style="width: 90px"></th></tr></thead><tbody>
 <sc-for list="{{ actions }}" as="a" hint-placeholder-count="2"><tr>
-<td class="mono" style="{{ a.rowStyle }}">{{ a.no }}<div style="font-size: 10px; color: #8A6A00">{{ a.mineLabel }}</div></td>
-<td style="{{ a.rowStyle }}"><input class="cell" value="{{ a.title }}" onChange="{{ a.set.title }}" disabled="{{ a.roFull }}" placeholder="What needs doing" aria-label="Action"><div style="font-size: 12px; color: #A00000; font-weight: 600">{{ a.late }}</div></td>
+<td class="mono" style="{{ a.rowStyle }}">{{ a.no }}<div style="font-size: 10px; color: #9A7F3A">{{ a.mineLabel }}</div></td>
+<td style="{{ a.rowStyle }}"><input class="cell" value="{{ a.title }}" onChange="{{ a.set.title }}" disabled="{{ a.roFull }}" placeholder="What needs doing" aria-label="Action"><div style="font-size: 12px; color: #944747; font-weight: 600">{{ a.late }}</div></td>
 <td style="{{ a.rowStyle }}"><select class="cell" value="{{ a.owner }}" onChange="{{ a.set.owner_id }}" disabled="{{ a.roFull }}" aria-label="Owner"><sc-for list="{{ memberOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><input class="cell" style="font-size: 12px" value="{{ a.ownerName }}" onChange="{{ a.set.owner_name }}" disabled="{{ a.roFull }}" placeholder="or name (consultant…)" aria-label="Owner name"></td>
 <td style="{{ a.rowStyle }}"><select class="cell" value="{{ a.milestone }}" onChange="{{ a.set.milestone_id }}" disabled="{{ a.roFull }}" aria-label="Milestone"><sc-for list="{{ msOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></td>
 <td style="{{ a.rowStyle }}"><input class="cell" type="date" value="{{ a.start }}" onChange="{{ a.set.start_on }}" disabled="{{ a.roFull }}" aria-label="Start"></td>
@@ -252,10 +280,10 @@
 <td style="{{ a.rowStyle }}"><input class="cell mono" type="number" min="0" value="{{ a.planned }}" onChange="{{ a.set.planned_hours }}" disabled="{{ a.roFull }}" aria-label="Planned hours"></td>
 <td style="{{ a.rowStyle }}"><input class="cell mono" type="number" min="0" value="{{ a.actual }}" onChange="{{ a.set.actual_hours }}" disabled="{{ a.roProgress }}" aria-label="Actual hours"></td>
 <td style="{{ a.rowStyle }}"><input class="cell" value="{{ a.notes }}" onChange="{{ a.set.notes }}" disabled="{{ a.roProgress }}" aria-label="Notes"></td>
-<td style="{{ a.rowStyle }}"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ a.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ a.askDelete }}">Remove</button></sc-if><sc-if value="{{ a.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ a.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
+<td style="{{ a.rowStyle }}"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ a.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ a.askDelete }}">Remove</button></sc-if><sc-if value="{{ a.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ a.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
 </tr></sc-for>
 </tbody></table></div>
-<div style="font-size: 13px; color: #5B6068">Owners on the team can update the status, actual hours and notes of their own actions. Hours of actions not tied to a deliverable count in the forecast to complete.</div>
+<div style="font-size: 13px; color: #646A78">Owners on the team can update the status, actual hours and notes of their own actions. Hours of actions not tied to a deliverable count in the forecast to complete.</div>
 </sc-if>
 </sc-if>
 
@@ -263,10 +291,10 @@
 <sc-if value="{{ tQueries }}" hint-placeholder-val="{{ false }}">
 <div class="grid2" style="align-items: start">
 <div style="display: flex; flex-direction: column; gap: 14px">
-<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">PTM queries</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">Questions from the PTM and team to the DM — each with a due date, so nothing waits silently. <span class="mono" style="font-size: 12px">{{ queryLine }}</span></p></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">PTM queries</h2><p style="margin: 0; color: #3F4554; font-size: 15px">Questions from the PTM and team to the DM — each with a due date, so nothing waits silently. <span class="mono" style="font-size: 12px">{{ queryLine }}</span></p></div>
 <sc-if value="{{ canContribute }}" hint-placeholder-val="{{ true }}">
 <form class="you" onSubmit="{{ raiseQuery }}" style="padding: 14px; display: flex; flex-direction: column; gap: 10px; margin: 0">
-<label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #5C4300">Question for the DM</span><textarea class="field" name="question" rows="2" style="resize: vertical; font-size: 15px" placeholder="e.g. Is the mosque in scope for the concept submission?"></textarea></label>
+<label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #6B5622">Question for the DM</span><textarea class="field" name="question" rows="2" style="resize: vertical; font-size: 15px" placeholder="e.g. Is the mosque in scope for the concept submission?"></textarea></label>
 <input class="field" name="context" placeholder="Context / reference (optional)">
 <div class="grid3">
 <label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl">To</span><select class="field" name="assigned_to" defaultValue="{{ defaultAssignee }}"><sc-for list="{{ assigneeOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
@@ -277,31 +305,31 @@
 <select class="field" name="milestone_id" aria-label="Linked milestone"><sc-for list="{{ qMsOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
 <select class="field" name="deliverable_id" aria-label="Linked deliverable"><sc-for list="{{ qDelOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
 </div>
-<sc-if value="{{ hasQueryErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ queryErr }}</div></sc-if>
+<sc-if value="{{ hasQueryErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #B05A5A; background: #F6E7E4; font-size: 14px">{{ queryErr }}</div></sc-if>
 <div><button class="btn" type="submit" disabled="{{ queryBusy }}">{{ queryLabel }}</button></div>
 </form>
 </sc-if>
 <div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{ queryTabs }}" as="f" hint-placeholder-count="3"><button class="tog" style="{{ f.style }}" onClick="{{ f.pick }}">{{ f.label }}</button></sc-for></div>
-<sc-if value="{{ noQueries }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 14px 16px; color: #5B6068">No queries here.</div></sc-if>
+<sc-if value="{{ noQueries }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 14px 16px; color: #646A78">No queries here.</div></sc-if>
 <sc-for list="{{ queries }}" as="q" hint-placeholder-count="2">
 <article class="card" style="{{ q.cardStyle }}">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #ECE9E2">
-<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="mono" style="font-weight: 500">{{ q.no }}</span><span class="chip" style="{{ q.statusStyle }}">{{ q.status }}</span><span class="mono" style="font-size: 11px; {{ q.priorityStyle }}">{{ q.priority }}</span><span class="mono" style="font-size: 11px; color: #A00000; font-weight: 600">{{ q.overdueLabel }}</span></span>
-<span style="font-size: 13px; color: #5B6068">{{ q.from }} → {{ q.to }} · {{ q.dueLabel }}</span>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #E9E5DD">
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="mono" style="font-weight: 500">{{ q.no }}</span><span class="chip" style="{{ q.statusStyle }}">{{ q.status }}</span><span class="mono" style="font-size: 11px; {{ q.priorityStyle }}">{{ q.priority }}</span><span class="mono" style="font-size: 11px; color: #944747; font-weight: 600">{{ q.overdueLabel }}</span></span>
+<span style="font-size: 13px; color: #646A78">{{ q.from }} → {{ q.to }} · {{ q.dueLabel }}</span>
 </div>
 <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
 <textarea class="field" rows="2" value="{{ q.question }}" onChange="{{ q.set.question }}" disabled="{{ q.roQuestion }}" style="resize: vertical; font-size: 15px; font-weight: 500" aria-label="Question"></textarea>
-<div style="font-size: 13px; color: #5B6068">{{ q.context }} {{ q.linked }}</div>
-<label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #1E3FBF">Answer</span><textarea class="field" rows="2" value="{{ q.answer }}" onChange="{{ q.set.answer }}" disabled="{{ q.roAnswer }}" style="resize: vertical; font-size: 15px" placeholder="The DM’s answer"></textarea></label>
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px"><span style="font-size: 12px; color: #5B6068">{{ q.answeredLine }}</span>
-<span style="display: flex; gap: 12px"><sc-if value="{{ q.canClose }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ q.close }}">Close</button></sc-if><sc-if value="{{ q.canReopen }}" hint-placeholder-val="{{ false }}"><button class="link" onClick="{{ q.reopen }}">Reopen</button></sc-if><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ q.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ q.askDelete }}">Delete</button></sc-if><sc-if value="{{ q.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ q.confirmDelete }}">Confirm</button></sc-if></sc-if></span></div>
+<div style="font-size: 13px; color: #646A78">{{ q.context }} {{ q.linked }}</div>
+<label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #3F477F">Answer</span><textarea class="field" rows="2" value="{{ q.answer }}" onChange="{{ q.set.answer }}" disabled="{{ q.roAnswer }}" style="resize: vertical; font-size: 15px" placeholder="The DM’s answer"></textarea></label>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px"><span style="font-size: 12px; color: #646A78">{{ q.answeredLine }}</span>
+<span style="display: flex; gap: 12px"><sc-if value="{{ q.canClose }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ q.close }}">Close</button></sc-if><sc-if value="{{ q.canReopen }}" hint-placeholder-val="{{ false }}"><button class="link" onClick="{{ q.reopen }}">Reopen</button></sc-if><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ q.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ q.askDelete }}">Delete</button></sc-if><sc-if value="{{ q.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ q.confirmDelete }}">Confirm</button></sc-if></sc-if></span></div>
 </div>
 </article>
 </sc-for>
 </div>
 
 <div style="display: flex; flex-direction: column; gap: 14px">
-<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Team status</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">A short weekly update from each team. A “Blocked” update puts the project At Risk until it clears.</p></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Team status</h2><p style="margin: 0; color: #3F4554; font-size: 15px">A short weekly update from each team. A “Blocked” update puts the project At Risk until it clears.</p></div>
 <sc-if value="{{ hasLatestFlag }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="chip" style="{{ latestFlagStyle }}">{{ latestFlag }}</span><span style="font-size: 14px">{{ latestLine }}</span></div></sc-if>
 <sc-if value="{{ canContribute }}" hint-placeholder-val="{{ true }}">
 <form class="card" onSubmit="{{ addStatus }}" style="padding: 14px; display: flex; flex-direction: column; gap: 10px; margin: 0">
@@ -317,14 +345,14 @@
 <textarea class="field" name="done_text" rows="2" style="resize: vertical; font-size: 14px" placeholder="Done this week"></textarea>
 <textarea class="field" name="next_text" rows="2" style="resize: vertical; font-size: 14px" placeholder="Next week"></textarea>
 <textarea class="field" name="blockers" rows="2" style="resize: vertical; font-size: 14px" placeholder="Blockers (what the team needs, from whom)"></textarea>
-<sc-if value="{{ hasStatusErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ statusErr }}</div></sc-if>
+<sc-if value="{{ hasStatusErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #B05A5A; background: #F6E7E4; font-size: 14px">{{ statusErr }}</div></sc-if>
 <div><button class="btn" type="submit" disabled="{{ statusBusy }}">{{ statusLabel }}</button></div>
 </form>
 </sc-if>
-<sc-if value="{{ noStatuses }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 14px 16px; color: #5B6068">No updates yet.</div></sc-if>
+<sc-if value="{{ noStatuses }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 14px 16px; color: #646A78">No updates yet.</div></sc-if>
 <sc-for list="{{ statuses }}" as="s" hint-placeholder-count="2">
 <article class="card">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #ECE9E2"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="chip" style="{{ s.flagStyle }}">{{ s.flag }}</span><span style="font-weight: 600">{{ s.team }}</span></span><span style="font-size: 13px; color: #5B6068">{{ s.week }} · {{ s.by }}</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #E9E5DD"><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="chip" style="{{ s.flagStyle }}">{{ s.flag }}</span><span style="font-weight: 600">{{ s.team }}</span></span><span style="font-size: 13px; color: #646A78">{{ s.week }} · {{ s.by }}</span></div>
 <div style="padding: 10px 14px; display: flex; flex-direction: column; gap: 8px">
 <div class="grid3">
 <select class="field" value="{{ s.flag }}" onChange="{{ s.set.status_flag }}" disabled="{{ s.ro }}" aria-label="Status flag"><sc-for list="{{ flagOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
@@ -334,7 +362,7 @@
 <textarea class="field" rows="2" value="{{ s.doneText }}" onChange="{{ s.set.done_text }}" disabled="{{ s.ro }}" style="resize: vertical; font-size: 14px" placeholder="Done" aria-label="Done"></textarea>
 <textarea class="field" rows="2" value="{{ s.nextText }}" onChange="{{ s.set.next_text }}" disabled="{{ s.ro }}" style="resize: vertical; font-size: 14px" placeholder="Next" aria-label="Next"></textarea>
 <textarea class="field" rows="2" value="{{ s.blockers }}" onChange="{{ s.set.blockers }}" disabled="{{ s.ro }}" style="resize: vertical; font-size: 14px; {{ s.blockersStyle }}" placeholder="Blockers" aria-label="Blockers"></textarea>
-<sc-if value="{{ s.canDelete }}" hint-placeholder-val="{{ true }}"><div style="text-align: right"><sc-if value="{{ s.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ s.askDelete }}">Delete update</button></sc-if><sc-if value="{{ s.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ s.confirmDelete }}">Confirm</button></sc-if></div></sc-if>
+<sc-if value="{{ s.canDelete }}" hint-placeholder-val="{{ true }}"><div style="text-align: right"><sc-if value="{{ s.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ s.askDelete }}">Delete update</button></sc-if><sc-if value="{{ s.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ s.confirmDelete }}">Confirm</button></sc-if></div></sc-if>
 </div>
 </article>
 </sc-for>
@@ -344,12 +372,12 @@
 
 <!-- ───────── Variations ───────── -->
 <sc-if value="{{ tVariations }}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Variation orders</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">When a client email changes something, record it at a checkpoint — the email reference and quote stay with the VO. Approved external VOs add their hours to the budget and their days to the contract finish.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Variation orders</h2><p style="margin: 0; color: #3F4554; font-size: 15px">When a client email changes something, record it at a checkpoint — the email reference and quote stay with the VO. Approved external VOs add their hours to the budget and their days to the contract finish.</p></div>
 <div class="ai" style="padding: 12px 16px; font-size: 14px">{{ voLine }}</div>
-<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" style="background: #2F5BFF; border-color: #2F5BFF" onClick="{{ openGeneralCheckpoint }}">✉ Record a client email change</button><button class="btn2" onClick="{{ addVo }}">New VO (no email)</button></div></sc-if>
+<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" style="background: #5A63A8; border-color: #5A63A8" onClick="{{ openGeneralCheckpoint }}">✉ Record a client email change</button><button class="btn2" onClick="{{ addVo }}">New VO (no email)</button></div></sc-if>
 <section class="card" aria-labelledby="mail-title">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 12px 16px; border-bottom: 1px solid #D9D6CE">
-<div style="display: flex; flex-direction: column; gap: 2px"><h3 id="mail-title" style="margin: 0; font-size: 16px; font-weight: 600">Outlook scan</h3><span style="font-size: 14px; color: #5B6068">Every 30 minutes, new emails in the folders below are checked for the admin’s keywords; Claude reads the matches and lists likely changes here. Nothing becomes a VO until someone accepts it.</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 12px 16px; border-bottom: 1px solid #DCD8D0">
+<div style="display: flex; flex-direction: column; gap: 2px"><h3 id="mail-title" style="margin: 0; font-size: 16px; font-weight: 600">Outlook scan</h3><span style="font-size: 14px; color: #646A78">Every 30 minutes, new emails in the folders below are checked for the admin’s keywords; Claude reads the matches and lists likely changes here. Nothing becomes a VO until someone accepts it.</span></div>
 <div style="display: flex; flex-wrap: wrap; gap: 8px">
 <sc-if value="{{ mailCanConnect }}" hint-placeholder-val="{{ false }}"><button class="btn2" onClick="{{ connectOutlook }}" disabled="{{ mailBusy }}">{{ connectLabel }}</button></sc-if>
 <sc-if value="{{ mailReconnect }}" hint-placeholder-val="{{ false }}"><button class="btn2" onClick="{{ connectOutlook }}" disabled="{{ mailBusy }}">Reconnect Outlook</button></sc-if>
@@ -358,14 +386,14 @@
 </div>
 </div>
 <div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
-<sc-if value="{{ hasMailSetupLine }}" hint-placeholder-val="{{ false }}"><div style="color: #5B6068">{{ mailSetupLine }}</div></sc-if>
-<sc-if value="{{ mailConnected }}" hint-placeholder-val="{{ false }}"><div>Connected as <span class="mono" style="font-size: 13px">{{ mailMailbox }}</span> <span style="color: #A00000">{{ mailConnStatus }}</span></div></sc-if>
+<sc-if value="{{ hasMailSetupLine }}" hint-placeholder-val="{{ false }}"><div style="color: #646A78">{{ mailSetupLine }}</div></sc-if>
+<sc-if value="{{ mailConnected }}" hint-placeholder-val="{{ false }}"><div>Connected as <span class="mono" style="font-size: 13px">{{ mailMailbox }}</span> <span style="color: #944747">{{ mailConnStatus }}</span></div></sc-if>
 <sc-if value="{{ hasMailMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 8px 12px; display: flex; justify-content: space-between; gap: 12px; {{ mailMsgStyle }}"><span>{{ mailMsg }}</span><button class="link" onClick="{{ clearMailMsg }}" aria-label="Dismiss message">✕</button></div></sc-if>
-<sc-if value="{{ hasMailErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC">{{ mailErr }}</div></sc-if>
+<sc-if value="{{ hasMailErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #B05A5A; background: #F6E7E4">{{ mailErr }}</div></sc-if>
 <sc-if value="{{ folderPickerOpen }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center"><select class="field" style="flex: 1 1 320px; width: auto" value="{{ folderPick }}" onChange="{{ setFolderPick }}" aria-label="Outlook folder"><sc-for list="{{ folderOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><button class="btn" onClick="{{ mapFolder }}" disabled="{{ mapDisabled }}">Scan this folder for this project</button><button class="link" onClick="{{ closeFolderPicker }}">Cancel</button></div></sc-if>
 <sc-if value="{{ hasMailFolders }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column">
-<sc-for list="{{ mailFolders }}" as="f" hint-placeholder-count="1"><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; padding: 6px 0; border-top: 1px solid #ECE9E2">
-<span><strong>{{ f.name }}</strong> <span style="color: #5B6068">· {{ f.owner }} · {{ f.state }}</span></span>
+<sc-for list="{{ mailFolders }}" as="f" hint-placeholder-count="1"><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; padding: 6px 0; border-top: 1px solid #E9E5DD">
+<span><strong>{{ f.name }}</strong> <span style="color: #646A78">· {{ f.owner }} · {{ f.state }}</span></span>
 <span style="display: flex; gap: 12px"><sc-if value="{{ f.canToggle }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ f.toggle }}">{{ f.toggleLabel }}</button></sc-if><sc-if value="{{ f.canRemove }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ f.remove }}">Stop scanning</button></sc-if></span>
 </div></sc-for>
 </div></sc-if>
@@ -376,18 +404,18 @@
 <div style="display: flex; flex-direction: column; gap: 10px">
 <div class="you" style="padding: 10px 16px; font-size: 14px; font-weight: 500">✉ {{ candidateLine }}</div>
 <sc-for list="{{ candidates }}" as="c" hint-placeholder-count="1">
-<article class="card" style="border-style: dashed; border-color: #2F5BFF">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #D9D6CE">
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="chip" style="{{ c.confStyle }}">CANDIDATE</span><span style="font-size: 13px; color: #5B6068">{{ c.confidence }}</span></div>
-<span class="mono" style="font-size: 12px; color: #5B6068">{{ c.received }}</span>
+<article class="card" style="border-style: dashed; border-color: #5A63A8">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #DCD8D0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="chip" style="{{ c.confStyle }}">CANDIDATE</span><span style="font-size: 13px; color: #646A78">{{ c.confidence }}</span></div>
+<span class="mono" style="font-size: 12px; color: #646A78">{{ c.received }}</span>
 </div>
 <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
 <div style="font-weight: 600">{{ c.summary }}</div>
-<div style="font-size: 14px; color: #3A3F46">From {{ c.from }} · “{{ c.subject }}”<sc-if value="{{ c.hasLink }}" hint-placeholder-val="{{ false }}"> · <a href="{{ c.link }}" target="_blank" rel="noopener">Open email ↗</a></sc-if></div>
-<sc-if value="{{ c.hasQuote }}" hint-placeholder-val="{{ true }}"><blockquote style="margin: 0; padding: 8px 12px; border-left: 3px solid #8A6A00; background: #FFF9E6; font-size: 14px">{{ c.quote }}</blockquote></sc-if>
-<div style="display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: #5B6068"><sc-if value="{{ c.hasDeliverable }}" hint-placeholder-val="{{ false }}"><span>Affects: <strong style="color: #16191D">{{ c.deliverable }}</strong></span></sc-if><sc-if value="{{ c.hasImpact }}" hint-placeholder-val="{{ false }}"><span>Estimate: {{ c.impact }}</span></sc-if><sc-if value="{{ c.hasKeywords }}" hint-placeholder-val="{{ true }}"><span>Keywords: {{ c.keywords }}</span></sc-if></div>
-<sc-if value="{{ c.hasReason }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #5B6068">Why: {{ c.reason }}</div></sc-if>
-<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" style="background: #2F5BFF; border-color: #2F5BFF" onClick="{{ c.accept }}">Accept → draft VO</button><button class="btn2" onClick="{{ c.dismiss }}">Not a change</button></div></sc-if>
+<div style="font-size: 14px; color: #3F4554">From {{ c.from }} · “{{ c.subject }}”<sc-if value="{{ c.hasLink }}" hint-placeholder-val="{{ false }}"> · <a href="{{ c.link }}" target="_blank" rel="noopener">Open email ↗</a></sc-if></div>
+<sc-if value="{{ c.hasQuote }}" hint-placeholder-val="{{ true }}"><blockquote style="margin: 0; padding: 8px 12px; border-left: 3px solid #9A7F3A; background: #FFF9E6; font-size: 14px">{{ c.quote }}</blockquote></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: #646A78"><sc-if value="{{ c.hasDeliverable }}" hint-placeholder-val="{{ false }}"><span>Affects: <strong style="color: #2A3042">{{ c.deliverable }}</strong></span></sc-if><sc-if value="{{ c.hasImpact }}" hint-placeholder-val="{{ false }}"><span>Estimate: {{ c.impact }}</span></sc-if><sc-if value="{{ c.hasKeywords }}" hint-placeholder-val="{{ true }}"><span>Keywords: {{ c.keywords }}</span></sc-if></div>
+<sc-if value="{{ c.hasReason }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #646A78">Why: {{ c.reason }}</div></sc-if>
+<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" style="background: #5A63A8; border-color: #5A63A8" onClick="{{ c.accept }}">Accept → draft VO</button><button class="btn2" onClick="{{ c.dismiss }}">Not a change</button></div></sc-if>
 </div>
 </article>
 </sc-for>
@@ -395,17 +423,17 @@
 </sc-if>
 <sc-if value="{{ hasDecided }}" hint-placeholder-val="{{ false }}"><button class="link" style="align-self: flex-start" onClick="{{ toggleDecided }}">{{ decidedLabel }}</button></sc-if>
 <sc-if value="{{ showDecided }}" hint-placeholder-val="{{ false }}"><div class="card">
-<sc-for list="{{ decidedCandidates }}" as="c" hint-placeholder-count="1"><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; padding: 8px 16px; border-top: 1px solid #ECE9E2; font-size: 14px">
-<span><span class="mono" style="font-size: 12px; color: #5B6068">{{ c.outcome }}</span> {{ c.summary }} <span style="color: #5B6068">· {{ c.from }} · {{ c.received }}</span></span>
+<sc-for list="{{ decidedCandidates }}" as="c" hint-placeholder-count="1"><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; padding: 8px 16px; border-top: 1px solid #E9E5DD; font-size: 14px">
+<span><span class="mono" style="font-size: 12px; color: #646A78">{{ c.outcome }}</span> {{ c.summary }} <span style="color: #646A78">· {{ c.from }} · {{ c.received }}</span></span>
 <sc-if value="{{ c.isDismissed }}" hint-placeholder-val="{{ false }}"><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ c.restore }}">Back to the inbox</button></sc-if></sc-if>
 </div></sc-for>
 </div></sc-if>
 
-<sc-if value="{{ noVariations }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8A8F96; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No variations yet</div><div style="color: #3A3F46">Use <strong>✉ Client email changed this…</strong> on a deliverable or submission, record a change here, or accept a candidate from the Outlook scan.</div></div></sc-if>
+<sc-if value="{{ noVariations }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8D92A0; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No variations yet</div><div style="color: #3F4554">Use <strong>✉ Client email changed this…</strong> on a deliverable or submission, record a change here, or accept a candidate from the Outlook scan.</div></div></sc-if>
 <sc-for list="{{ variations }}" as="v" hint-placeholder-count="2">
 <article class="card" style="{{ v.highlight }}">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #D9D6CE">
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-weight: 500">{{ v.no }}</span><span class="chip" style="{{ v.statusStyle }}">{{ v.statusShort }}</span><span class="mono" style="font-size: 11px; color: #5B6068">{{ v.trigger }}</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #DCD8D0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-weight: 500">{{ v.no }}</span><span class="chip" style="{{ v.statusStyle }}">{{ v.statusShort }}</span><span class="mono" style="font-size: 11px; color: #646A78">{{ v.trigger }}</span></div>
 <select class="field" style="width: auto; min-height: 36px; padding: 4px 8px; font-size: 14px" value="{{ v.status }}" onChange="{{ v.set.status }}" disabled="{{ readOnly }}" aria-label="VO status"><sc-for list="{{ v.statusOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
 </div>
 <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
@@ -425,7 +453,7 @@
 <label style="display: flex; flex-direction: column; gap: 4px"><span class="lbl">Client decision date</span><input class="field" type="date" value="{{ v.decidedOn }}" onChange="{{ v.set.decided_on }}" disabled="{{ readOnlyManage }}"></label>
 </div>
 <div class="you" style="padding: 12px; display: flex; flex-direction: column; gap: 10px">
-<div class="lbl" style="color: #5C4300">Email evidence (checkpoint)</div>
+<div class="lbl" style="color: #6B5622">Email evidence (checkpoint)</div>
 <div class="grid3">
 <input class="field" value="{{ v.emailFrom }}" onChange="{{ v.set.email_from }}" disabled="{{ readOnly }}" placeholder="From" aria-label="Email from">
 <input class="field" value="{{ v.emailSubject }}" onChange="{{ v.set.email_subject }}" disabled="{{ readOnly }}" placeholder="Subject" aria-label="Email subject">
@@ -436,8 +464,8 @@
 </div>
 <textarea class="field" rows="2" value="{{ v.description }}" onChange="{{ v.set.description }}" disabled="{{ readOnly }}" placeholder="Notes for the VO letter (scope, assumptions, exclusions)" style="resize: vertical; font-size: 14px" aria-label="VO notes"></textarea>
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px">
-<span><sc-if value="{{ v.canAddDeliverable }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ v.toDeliverable }}">Add to deliverables as VO scope</button></sc-if><sc-if value="{{ v.inDeliverables }}" hint-placeholder-val="{{ false }}"><span class="mono" style="font-size: 12px; color: #5B6068">✓ IN DELIVERABLES</span></sc-if></span>
-<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><span><sc-if value="{{ v.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ v.askDelete }}">Delete VO</button></sc-if><sc-if value="{{ v.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ v.confirmDelete }}">Confirm delete</button></sc-if></span></sc-if>
+<span><sc-if value="{{ v.canAddDeliverable }}" hint-placeholder-val="{{ true }}"><button class="tog" onClick="{{ v.toDeliverable }}">Add to deliverables as VO scope</button></sc-if><sc-if value="{{ v.inDeliverables }}" hint-placeholder-val="{{ false }}"><span class="mono" style="font-size: 12px; color: #646A78">✓ IN DELIVERABLES</span></sc-if></span>
+<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><span><sc-if value="{{ v.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ v.askDelete }}">Delete VO</button></sc-if><sc-if value="{{ v.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ v.confirmDelete }}">Confirm delete</button></sc-if></span></sc-if>
 </div>
 </div>
 </article>
@@ -446,14 +474,14 @@
 
 <!-- ───────── Incidents ───────── -->
 <sc-if value="{{ tIncidents }}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Incidents</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">Anything that costs time or money. <strong>Internal</strong> incidents are our cost (rework, coordination); <strong>external</strong> ones come from the client or a third party and can be recovered through a VO. Name a responsible party only when a source documents it.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Incidents</h2><p style="margin: 0; color: #3F4554; font-size: 15px">Anything that costs time or money. <strong>Internal</strong> incidents are our cost (rework, coordination); <strong>external</strong> ones come from the client or a third party and can be recovered through a VO. Name a responsible party only when a source documents it.</p></div>
 <div class="ai" style="padding: 12px 16px; font-size: 14px">{{ incLine }}</div>
 <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" onClick="{{ addInternalIncident }}">Log internal incident</button><button class="btn2" onClick="{{ addExternalIncident }}">Log external incident</button></div></sc-if>
-<sc-if value="{{ noIncidents }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8A8F96; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No incidents logged</div><div style="color: #3A3F46">Open incidents with a time impact make the project Delayed; their remaining hours count in the forecast.</div></div></sc-if>
+<sc-if value="{{ noIncidents }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px; border: 1px dashed #8D92A0; background: #FFFFFF"><div style="font-weight: 600; font-size: 18px">No incidents logged</div><div style="color: #3F4554">Open incidents with a time impact make the project Delayed; their remaining hours count in the forecast.</div></div></sc-if>
 <sc-for list="{{ incidents }}" as="i" hint-placeholder-count="2">
 <article class="card">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #D9D6CE">
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-weight: 500">{{ i.no }}</span><span class="chip" style="{{ i.statusStyle }}">{{ i.status }}</span><span class="mono" style="font-size: 11px; color: #A00000; font-weight: 600">{{ i.overdueAction }}</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #DCD8D0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="mono" style="font-weight: 500">{{ i.no }}</span><span class="chip" style="{{ i.statusStyle }}">{{ i.status }}</span><span class="mono" style="font-size: 11px; color: #944747; font-weight: 600">{{ i.overdueAction }}</span></div>
 <select class="field" style="width: auto; min-height: 36px; padding: 4px 8px; font-size: 14px" value="{{ i.status }}" onChange="{{ i.set.status }}" disabled="{{ readOnly }}" aria-label="Incident status"><sc-for list="{{ incStatusOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
 </div>
 <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
@@ -479,8 +507,8 @@
 <input class="field" value="{{ i.action }}" onChange="{{ i.set.action }}" disabled="{{ readOnly }}" placeholder="Mitigation / corrective action" aria-label="Action">
 <textarea class="field" rows="2" value="{{ i.description }}" onChange="{{ i.set.description }}" disabled="{{ readOnly }}" placeholder="Details and source (email, meeting, drawing ref)" style="resize: vertical; font-size: 14px" aria-label="Incident details"></textarea>
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px">
-<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="lbl">Recovery VO</span><select class="field" style="width: auto; min-height: 36px; padding: 4px 8px; font-size: 14px" value="{{ i.vo }}" onChange="{{ i.set.variation_id }}" disabled="{{ readOnly }}"><sc-for list="{{ voOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><sc-if value="{{ i.canRaiseVo }}" hint-placeholder-val="{{ false }}"><button class="tog" style="border-color: #2F5BFF; color: #1E3FBF" onClick="{{ i.raiseVo }}">Raise VO to recover</button></sc-if></span>
-<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><span><sc-if value="{{ i.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ i.askDelete }}">Delete</button></sc-if><sc-if value="{{ i.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ i.confirmDelete }}">Confirm delete</button></sc-if></span></sc-if>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span class="lbl">Recovery VO</span><select class="field" style="width: auto; min-height: 36px; padding: 4px 8px; font-size: 14px" value="{{ i.vo }}" onChange="{{ i.set.variation_id }}" disabled="{{ readOnly }}"><sc-for list="{{ voOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><sc-if value="{{ i.canRaiseVo }}" hint-placeholder-val="{{ false }}"><button class="tog" style="border-color: #5A63A8; color: #3F477F" onClick="{{ i.raiseVo }}">Raise VO to recover</button></sc-if></span>
+<sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><span><sc-if value="{{ i.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ i.askDelete }}">Delete</button></sc-if><sc-if value="{{ i.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ i.confirmDelete }}">Confirm delete</button></sc-if></span></sc-if>
 </div>
 </div>
 </article>
@@ -489,34 +517,34 @@
 
 <!-- ───────── Hours ───────── -->
 <sc-if value="{{ tHours }}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Hours</h2><p style="margin: 0; color: #3A3F46; font-size: 15px">Consumed hours come from the PCU export — enter them per component or as one project total, not both. Approved VOs raise the budget; open deliverables and incident estimates make up the forecast.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 20px; font-weight: 600">Hours</h2><p style="margin: 0; color: #3F4554; font-size: 15px">Consumed hours come from the PCU export — enter them per component or as one project total, not both. Approved VOs raise the budget; open deliverables and incident estimates make up the forecast.</p></div>
 <div class="kpi card">
-<div><div class="lbl">Budget incl. VOs</div><div style="font-size: 22px; font-weight: 600">{{ hBudget }}</div><div style="font-size: 12px; color: #5B6068">{{ hBudgetBase }} + {{ hVoHours }} VO</div></div>
-<div><div class="lbl">Consumed (PCU)</div><div style="font-size: 22px; font-weight: 600">{{ hConsumed }}</div><div style="font-size: 12px; color: #5B6068">{{ hAsOf }}</div></div>
+<div><div class="lbl">Budget incl. VOs</div><div style="font-size: 22px; font-weight: 600">{{ hBudget }}</div><div style="font-size: 12px; color: #646A78">{{ hBudgetBase }} + {{ hVoHours }} VO</div></div>
+<div><div class="lbl">Consumed (PCU)</div><div style="font-size: 22px; font-weight: 600">{{ hConsumed }}</div><div style="font-size: 12px; color: #646A78">{{ hAsOf }}</div></div>
 <div><div class="lbl">Consumed %</div><div style="font-size: 22px; font-weight: 600; {{ hPctStyle }}">{{ hPct }}</div></div>
-<div><div class="lbl">To complete</div><div style="font-size: 22px; font-weight: 600">{{ hFtc }}</div><div style="font-size: 12px; color: #5B6068">open deliverables + incidents</div></div>
+<div><div class="lbl">To complete</div><div style="font-size: 22px; font-weight: 600">{{ hFtc }}</div><div style="font-size: 12px; color: #646A78">open deliverables + incidents</div></div>
 <div><div class="lbl">At completion</div><div style="font-size: 22px; font-weight: 600">{{ hEac }}</div></div>
 <div><div class="lbl">Variance</div><div style="font-size: 22px; font-weight: 600; {{ hVarianceStyle }}">{{ hVariance }}</div></div>
 </div>
 <div class="grid2">
 <div class="card" style="padding: 16px 20px"><div class="lbl" style="margin-bottom: 6px">Of which incident rework</div><div>{{ hIncInt }} h internal · {{ hIncExt }} h external</div></div>
-<div class="card" style="padding: 16px 20px"><div class="lbl" style="margin-bottom: 6px">Contract finish</div><div>{{ adjustedFinish }}<sc-if value="{{ hasEot }}" hint-placeholder-val="{{ false }}"><span style="color: #5B6068"> — baseline {{ baselineFinish }} + {{ eotDays }} days from approved VOs</span></sc-if></div></div>
+<div class="card" style="padding: 16px 20px"><div class="lbl" style="margin-bottom: 6px">Contract finish</div><div>{{ adjustedFinish }}<sc-if value="{{ hasEot }}" hint-placeholder-val="{{ false }}"><span style="color: #646A78"> — baseline {{ baselineFinish }} + {{ eotDays }} days from approved VOs</span></sc-if></div></div>
 </div>
-<sc-if value="{{ hasBudgetLines }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 12px 16px"><div class="lbl" style="margin-bottom: 6px">Budget build-up</div><div style="display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0">Baseline<span class="mono">{{ hBudgetBase }}</span></div><sc-for list="{{ budgetLines }}" as="b" hint-placeholder-count="1"><div style="display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; border-top: 1px solid #ECE9E2"><span>{{ b.label }}</span><span class="mono">{{ b.hours }}</span></div></sc-for></div></sc-if>
+<sc-if value="{{ hasBudgetLines }}" hint-placeholder-val="{{ false }}"><div class="card" style="padding: 12px 16px"><div class="lbl" style="margin-bottom: 6px">Budget build-up</div><div style="display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0">Baseline<span class="mono">{{ hBudgetBase }}</span></div><sc-for list="{{ budgetLines }}" as="b" hint-placeholder-count="1"><div style="display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; border-top: 1px solid #E9E5DD"><span>{{ b.label }}</span><span class="mono">{{ b.hours }}</span></div></sc-for></div></sc-if>
 
 <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" onClick="{{ addSnapshot }}">Add this month</button><button class="btn2" onClick="{{ togglePcu }}">{{ pcuLabel }}</button></div></sc-if>
 <sc-if value="{{ hasPcuMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 8px 12px; font-size: 14px">{{ pcuMsg }}</div></sc-if>
 <sc-if value="{{ pcuOpen }}" hint-placeholder-val="{{ false }}">
 <div class="you" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
 <div style="font-weight: 600">Paste the PCU export</div>
-<div style="font-size: 14px; color: #3A3F46">Columns: <span class="mono" style="font-size: 12px">Month (2026-10 or Oct 2026) · Component code (blank = project total) · Cumulative hours · Progress % (optional)</span>. Existing months are updated.</div>
+<div style="font-size: 14px; color: #3F4554">Columns: <span class="mono" style="font-size: 12px">Month (2026-10 or Oct 2026) · Component code (blank = project total) · Cumulative hours · Progress % (optional)</span>. Existing months are updated.</div>
 <textarea class="field" rows="5" value="{{ pcuText }}" onChange="{{ setPcuText }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; resize: vertical" placeholder="2026-10&#9;C01&#9;4,250&#9;62"></textarea>
 <div style="font-size: 14px">{{ pcuSummary }}</div>
-<sc-if value="{{ hasPcuErrors }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #A00000"><sc-for list="{{ pcuErrors }}" as="e" hint-placeholder-count="1"><div>· {{ e }}</div></sc-for></div></sc-if>
+<sc-if value="{{ hasPcuErrors }}" hint-placeholder-val="{{ false }}"><div style="font-size: 13px; color: #944747"><sc-for list="{{ pcuErrors }}" as="e" hint-placeholder-count="1"><div>· {{ e }}</div></sc-for></div></sc-if>
 <div><button class="btn" onClick="{{ importPcu }}" disabled="{{ pcuNone }}">{{ pcuImportLabel }}</button></div>
 </div>
 </sc-if>
-<sc-if value="{{ noSnapshots }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px; border: 1px dashed #8A8F96; background: #FFFFFF; color: #3A3F46">No PCU hours yet. Consumed hours stay at 0 — and unconfirmed — until you add them.</div></sc-if>
+<sc-if value="{{ noSnapshots }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px; border: 1px dashed #8D92A0; background: #FFFFFF; color: #3F4554">No PCU hours yet. Consumed hours stay at 0 — and unconfirmed — until you add them.</div></sc-if>
 <sc-if value="{{ hasSnapshots }}" hint-placeholder-val="{{ true }}">
 <div style="overflow-x: auto"><table class="xl" style="min-width: 720px"><thead><tr><th style="width: 170px">Month</th><th style="width: 220px">Component</th><th style="width: 140px">Cumulative h</th><th style="width: 110px">Progress %</th><th>Note</th><th style="width: 110px"></th></tr></thead><tbody>
 <sc-for list="{{ snapshots }}" as="h" hint-placeholder-count="2"><tr>
@@ -525,7 +553,7 @@
 <td><input class="cell mono" type="number" min="0" value="{{ h.hours }}" onChange="{{ h.set.cumulative_hours }}" disabled="{{ readOnly }}" aria-label="Cumulative hours"></td>
 <td><input class="cell mono" type="number" min="0" max="100" value="{{ h.progress }}" onChange="{{ h.set.progress_pct }}" disabled="{{ readOnly }}" aria-label="Progress"></td>
 <td><input class="cell" value="{{ h.note }}" onChange="{{ h.set.note }}" disabled="{{ readOnly }}" aria-label="Note"></td>
-<td><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ h.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ h.askDelete }}">Remove</button></sc-if><sc-if value="{{ h.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ h.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
+<td><sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ h.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ h.askDelete }}">Remove</button></sc-if><sc-if value="{{ h.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ h.confirmDelete }}">Confirm</button></sc-if></sc-if></td>
 </tr></sc-for>
 </tbody></table></div>
 </sc-if>
@@ -535,13 +563,13 @@
 <sc-if value="{{ tTeam }}" hint-placeholder-val="{{ false }}">
 <div class="grid2" style="align-items: start">
 <div class="card">
-<div style="padding: 14px 16px; border-bottom: 1px solid #D9D6CE"><div style="font-weight: 600">People on this project</div><div style="font-size: 14px; color: #5B6068">DM and PTM can edit the registers; the DM also manages the team. Viewers only read.</div></div>
-<sc-if value="{{ noMembers }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px 16px; color: #5B6068">Nobody added yet.</div></sc-if>
+<div style="padding: 14px 16px; border-bottom: 1px solid #DCD8D0"><div style="font-weight: 600">People on this project</div><div style="font-size: 14px; color: #646A78">DM and PTM can edit the registers; the DM also manages the team. Viewers only read.</div></div>
+<sc-if value="{{ noMembers }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px 16px; color: #646A78">Nobody added yet.</div></sc-if>
 <sc-for list="{{ members }}" as="m" hint-placeholder-count="3">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid #ECE9E2">
-<div><div style="font-weight: 500">{{ m.name }} <span class="mono" style="font-size: 11px; color: #2F5BFF">{{ m.online }}</span></div><div class="mono" style="font-size: 12px; color: #5B6068">{{ m.email }}</div></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid #E9E5DD">
+<div><div style="font-weight: 500">{{ m.name }} <span class="mono" style="font-size: 11px; color: #5A63A8">{{ m.online }}</span></div><div class="mono" style="font-size: 12px; color: #646A78">{{ m.email }}</div></div>
 <div style="display: flex; align-items: center; gap: 10px">
-<sc-if value="{{ canManage }}" hint-placeholder-val="{{ true }}"><select class="field" style="width: auto" value="{{ m.role }}" onChange="{{ m.setRole }}" aria-label="Role"><sc-for list="{{ roleOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><sc-if value="{{ m.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.askDelete }}">Remove</button></sc-if><sc-if value="{{ m.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ m.confirmDelete }}">Confirm</button></sc-if></sc-if>
+<sc-if value="{{ canManage }}" hint-placeholder-val="{{ true }}"><select class="field" style="width: auto" value="{{ m.role }}" onChange="{{ m.setRole }}" aria-label="Role"><sc-for list="{{ roleOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select><sc-if value="{{ m.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ m.askDelete }}">Remove</button></sc-if><sc-if value="{{ m.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ m.confirmDelete }}">Confirm</button></sc-if></sc-if>
 <sc-if value="{{ readOnlyManage }}" hint-placeholder-val="{{ false }}"><span class="chip">{{ m.roleShort }}</span></sc-if>
 </div>
 </div>
@@ -554,20 +582,20 @@
 <div style="font-weight: 600">Add someone</div>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Email</span><input class="field" type="email" name="email" placeholder="name@company.com"></label>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Role</span><select class="field" name="role"><sc-for list="{{ roleOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
-<sc-if value="{{ hasInviteErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ inviteErr }}</div></sc-if>
+<sc-if value="{{ hasInviteErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #B05A5A; background: #F6E7E4; font-size: 14px">{{ inviteErr }}</div></sc-if>
 <sc-if value="{{ hasInviteMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 8px 12px; font-size: 14px">{{ inviteMsg }}</div></sc-if>
 <div><button class="btn" type="submit" disabled="{{ inviteBusy }}">{{ inviteLabel }}</button></div>
-<div style="font-size: 13px; color: #5B6068">No email is sent from here — share the site link with them. They join this project as soon as they sign up with this email.</div>
+<div style="font-size: 13px; color: #646A78">No email is sent from here — share the site link with them. They join this project as soon as they sign up with this email.</div>
 </form>
 <sc-if value="{{ hasInvites }}" hint-placeholder-val="{{ false }}">
-<div class="card"><div style="padding: 12px 16px; border-bottom: 1px solid #D9D6CE; font-weight: 600">Waiting to sign up</div>
-<sc-for list="{{ invites }}" as="i" hint-placeholder-count="1"><div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid #ECE9E2"><span class="mono" style="font-size: 13px">{{ i.email }} · {{ i.role }}</span><span><sc-if value="{{ i.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ i.askDelete }}">Cancel</button></sc-if><sc-if value="{{ i.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #A00000" onClick="{{ i.confirmDelete }}">Confirm</button></sc-if></span></div></sc-for>
+<div class="card"><div style="padding: 12px 16px; border-bottom: 1px solid #DCD8D0; font-weight: 600">Waiting to sign up</div>
+<sc-for list="{{ invites }}" as="i" hint-placeholder-count="1"><div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid #E9E5DD"><span class="mono" style="font-size: 13px">{{ i.email }} · {{ i.role }}</span><span><sc-if value="{{ i.notConfirming }}" hint-placeholder-val="{{ true }}"><button class="link" onClick="{{ i.askDelete }}">Cancel</button></sc-if><sc-if value="{{ i.confirming }}" hint-placeholder-val="{{ false }}"><button class="link" style="color: #944747" onClick="{{ i.confirmDelete }}">Confirm</button></sc-if></span></div></sc-for>
 </div>
 </sc-if>
 </sc-if>
 <div class="card" style="padding: 16px">
 <div class="lbl" style="margin-bottom: 8px">Here now</div>
-<sc-for list="{{ presenceList }}" as="p" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 10px; padding: 4px 0"><span class="avatar">{{ p.initials }}</span><span>{{ p.name }}</span><span class="mono" style="font-size: 11px; color: #5B6068">{{ p.tab }}</span></div></sc-for>
+<sc-for list="{{ presenceList }}" as="p" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 10px; padding: 4px 0"><span class="avatar">{{ p.initials }}</span><span>{{ p.name }}</span><span class="mono" style="font-size: 11px; color: #646A78">{{ p.tab }}</span></div></sc-for>
 </div>
 </div>
 </div>
@@ -576,8 +604,8 @@
 
 <sc-if value="{{ checkpointOpen }}" hint-placeholder-val="{{ false }}">
 <div style="position: fixed; inset: 0; z-index: 20; background: rgba(22, 25, 29, 0.55); overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 24px 16px">
-<form role="dialog" aria-modal="true" aria-labelledby="cp-title" onSubmit="{{ submitCheckpoint }}" style="max-width: 640px; width: 100%; box-sizing: border-box; background: #FFFFFF; border: 1px solid #16191D; padding: 24px; display: flex; flex-direction: column; gap: 14px; margin: 0">
-<div class="lbl" style="color: #1E3FBF">Email checkpoint</div>
+<form role="dialog" aria-modal="true" aria-labelledby="cp-title" onSubmit="{{ submitCheckpoint }}" style="max-width: 640px; width: 100%; box-sizing: border-box; background: #FFFFFF; border: 1px solid #2A3042; padding: 24px; display: flex; flex-direction: column; gap: 14px; margin: 0">
+<div class="lbl" style="color: #3F477F">Email checkpoint</div>
 <h2 id="cp-title" style="margin: 0; font-size: 22px; font-weight: 600">Did the client change something?</h2>
 <div class="ai" style="padding: 10px 12px; font-size: 14px">{{ checkpointContext }}</div>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">What changed</span><input class="field" name="title" placeholder="e.g. Add a third private-garden option for Plot 2"></label>
@@ -595,26 +623,26 @@
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Hours impact</span><input class="field" type="number" min="0" name="hours_impact"></label>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Fee impact · {{ currency }}</span><input class="field" type="number" name="fee_impact"></label>
 </div>
-<div style="font-size: 13px; color: #5B6068">Saved as a <strong>draft external VO</strong> — the project shows At Risk until it’s sent to the client. Estimates can be filled in later.</div>
-<sc-if value="{{ hasCheckpointErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ checkpointErr }}</div></sc-if>
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end"><button class="btn2" type="button" onClick="{{ closeCheckpoint }}">Cancel</button><button class="btn" type="submit" disabled="{{ checkpointBusy }}" style="background: #2F5BFF; border-color: #2F5BFF">{{ checkpointLabel }}</button></div>
+<div style="font-size: 13px; color: #646A78">Saved as a <strong>draft external VO</strong> — the project shows At Risk until it’s sent to the client. Estimates can be filled in later.</div>
+<sc-if value="{{ hasCheckpointErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 8px 12px; border: 1px solid #B05A5A; background: #F6E7E4; font-size: 14px">{{ checkpointErr }}</div></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end"><button class="btn2" type="button" onClick="{{ closeCheckpoint }}">Cancel</button><button class="btn" type="submit" disabled="{{ checkpointBusy }}" style="background: #5A63A8; border-color: #5A63A8">{{ checkpointLabel }}</button></div>
 </form>
 </div>
 </sc-if>
 </sc-if>
 
 <sc-if value="{{ authGate }}" hint-placeholder-val="{{ false }}">
-<div style="position: fixed; inset: 0; z-index: 30; background: #F6F5F1; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 20px">
+<div style="position: fixed; inset: 0; z-index: 30; background: #F1EFEA; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 20px">
 <div role="dialog" aria-modal="true" aria-labelledby="auth-title" class="card" style="max-width: 440px; width: 100%; box-sizing: border-box; padding: 28px; display: flex; flex-direction: column; gap: 16px">
-<div style="display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">PROJECT CONTROLS</span><span style="font-size: 14px; color: #5B6068">Projects · deliverables · management review</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 14px; letter-spacing: 0.08em; font-weight: 500">PROJECT CONTROLS</span><span style="font-size: 14px; color: #646A78">Projects · deliverables · management review</span></div>
 <h2 id="auth-title" style="margin: 0; font-size: 22px; line-height: 1.25; font-weight: 600">{{ authTitle }}</h2>
-<p style="margin: 0; color: #3A3F46; font-size: 14px">{{ authLede }}</p>
+<p style="margin: 0; color: #3F4554; font-size: 14px">{{ authLede }}</p>
 <sc-if value="{{ authLoading }}" hint-placeholder-val="{{ false }}"><div class="lbl pulse">Connecting to Supabase…</div></sc-if>
 <sc-if value="{{ authForm }}" hint-placeholder-val="{{ true }}">
 <form onSubmit="{{ authSubmit }}" style="display: flex; flex-direction: column; gap: 14px; margin: 0">
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Email</span><input class="field" type="email" name="email" autoComplete="email" placeholder="you@company.com"></label>
 <label style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Password</span><input class="field" type="password" name="password" autoComplete="{{ authPwAuto }}"></label>
-<sc-if value="{{ authHasErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border: 1px solid #C00000; background: #FDECEC; font-size: 14px">{{ authErr }}</div></sc-if>
+<sc-if value="{{ authHasErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border: 1px solid #B05A5A; background: #F6E7E4; font-size: 14px">{{ authErr }}</div></sc-if>
 <sc-if value="{{ authHasMsg }}" hint-placeholder-val="{{ false }}"><div role="status" class="ai" style="padding: 10px 12px; font-size: 14px">{{ authMsg }}</div></sc-if>
 <div style="display: flex; flex-wrap: wrap; gap: 10px"><button class="btn" type="submit" disabled="{{ authBusy }}">{{ authSubmitLabel }}</button><button class="btn2" type="button" onClick="{{ sendMagicLink }}" disabled="{{ authBusy }}">Email me a sign-in link</button></div>
 <button type="button" class="link" onClick="{{ toggleAuthMode }}" style="align-self: flex-start; min-height: 44px">{{ authToggleLabel }}</button>

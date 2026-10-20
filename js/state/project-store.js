@@ -18,7 +18,7 @@ const projectIdFromUrl = () => new URL(window.location.href).searchParams.get('i
 
 const pageInitial = () => ({
   projectId: projectIdFromUrl(), project: null, notFound: false, loaded: false,
-  clients: [], components: [], deliverables: [], submissions: [], members: [], invites: [], people: {}, metrics: null,
+  clients: [], components: [], deliverables: [], submissions: [], members: [], invites: [], people: {}, metrics: null, progress: null,
   presence: [], tab: tabFromHash(),
   expanded: {}, confirmDelete: '', sourceFilter: '', phaseFilter: '',
   pasteOpen: false, pasteText: '', inviteBusy: false, inviteErr: '', inviteMsg: '',
@@ -33,7 +33,7 @@ const pageInitial = () => ({
 });
 
 const NUM = Object.fromEntries(['planned_hours', 'budget_hours', 'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
-  'actual_hours', 'hours_this_period'].map((k) => [k, 'number']));
+  'actual_hours', 'hours_this_period', 'contract_fee', 'invoiced_to_date', 'cost_to_date'].map((k) => [k, 'number']));
 const DATES = ['start_date', 'baseline_finish', 'forecast_finish', 'actual_finish', 'baseline_date', 'forecast_date', 'actual_date', 'submitted_on', 'response_on',
   'email_received_on', 'decided_on', 'occurred_on', 'due_on', 'baseline_start', 'start_on', 'done_on', 'period_start'];
 const codecs = { ...NUM, ...Object.fromEntries(DATES.map((d) => [d, 'date'])) };
@@ -88,8 +88,12 @@ export function createProjectStore(session) {
 
   async function loadMetrics() {
     if (!sb) return;
-    const { data } = await sb.from('project_metrics').select('*').eq('project_id', store.get().projectId).maybeSingle();
-    store.set({ metrics: data || null });
+    const id = store.get().projectId;
+    const [m, pr] = await Promise.all([
+      sb.from('project_metrics').select('*').eq('project_id', id).maybeSingle(),
+      sb.from('project_progress').select('*').eq('project_id', id).maybeSingle(),
+    ]);
+    store.set({ metrics: m.data || null, progress: pr.data || null });
   }
   function scheduleMetrics() { clearTimeout(metricsTimer); metricsTimer = setTimeout(() => loadMetrics().catch(() => {}), 500); }
 
@@ -105,7 +109,7 @@ export function createProjectStore(session) {
   const TYPED = new Set(['name', 'code', 'location', 'stage', 'scope_summary', 'rfp_ref', 'proposal_ref', 'title', 'phase', 'source_ref', 'notes', 'revision', 'discipline', 'planned_hours', 'budget_hours',
     'description', 'email_from', 'email_subject', 'email_link', 'email_quote', 'client_ref', 'action', 'owner', 'note',
     'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
-    'owner_name', 'question', 'context', 'answer', 'team', 'done_text', 'next_text', 'blockers', 'actual_hours', 'hours_this_period']);
+    'contract_fee', 'invoiced_to_date', 'cost_to_date', 'currency', 'owner_name', 'question', 'context', 'answer', 'team', 'done_text', 'next_text', 'blockers', 'actual_hours', 'hours_this_period']);
 
   function setTab(tab) {
     store.set({ tab });

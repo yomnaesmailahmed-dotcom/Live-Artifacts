@@ -69,7 +69,7 @@ export function buildViewModel(S, act) {
     const n = i + 1, curStep = n === step, past = n < step, locked = n > (run.max_step || 1) + (ro ? 7 : 0) && n > step;
     return {
       label, who, dot: DOT[dot], mark: past ? '✓' : String(n), current: curStep ? 'step' : 'false', locked,
-      style: (curStep ? 'border-bottom: 3px solid #16191D; color: #16191D;' : `border-bottom: 3px solid transparent; color: ${locked ? '#8A8F96' : '#16191D'};`) + (locked ? ' cursor: not-allowed;' : ' cursor: pointer;'),
+      style: (curStep ? 'border-bottom: 3px solid #2A3042; color: #2A3042;' : `border-bottom: 3px solid transparent; color: ${locked ? '#8D92A0' : '#2A3042'};`) + (locked ? ' cursor: not-allowed;' : ' cursor: pointer;'),
       numStyle: curStep ? NUM_CURRENT : (past ? NUM_PAST : NUM_FUTURE), go: () => act.goStep(n),
     };
   });
@@ -109,7 +109,7 @@ export function buildViewModel(S, act) {
   questions.forEach((q) => { const k = q.dm || 'none'; (groups[k] = groups[k] || []).push(q); });
   const dmLists = Object.entries(groups).map(([dm, qs]) => ({
     dm: dm === 'none' ? 'No DM assigned' : nameOf(dm), count: `${qs.length} QUESTION${qs.length === 1 ? '' : 'S'}`,
-    qs: qs.map((q, i) => ({ n: i + 1, project: q.p.name, t: q.text, val: dec.answer[q.key] || '', style: String(dec.answer[q.key] || '').trim() ? '' : 'background: #FFF2CC;', set: (e) => act.decide('answer', q.key, e.target.value, true) })),
+    qs: qs.map((q, i) => ({ n: i + 1, project: q.p.name, t: q.text, val: dec.answer[q.key] || '', style: String(dec.answer[q.key] || '').trim() ? '' : 'background: #F5ECD3;', set: (e) => act.decide('answer', q.key, e.target.value, true) })),
   }));
 
   const sheets = D ? workbookSheets(D, projects, decisions, since, until) : null;
@@ -131,7 +131,7 @@ export function buildViewModel(S, act) {
     approvedRun ? 'Approved — download the Excel and brief management.' : (resolved < conflictList.length ? 'Resolve all conflicts before approving.' : `${ckDone} of ${ck.length} checks done${openItems.length ? ` — ${openItems.length} open item${openItems.length === 1 ? '' : 's'} will be listed` : ''}.`),
   ];
   const nextActions = [['dl', 'Download the Excel', fileName], ['copy', 'Copy the briefing notes', 'For the verbal brief'], ['save', 'Save the Excel to the shared drive', 'You do this yourself'], ['brief', 'Brief management', 'You or the AM, from the notes']]
-    .map(([k, t, sub]) => ({ t, sub, mark: dec.next_action[k] ? '✓' : '', numStyle: dec.next_action[k] ? NUM_CURRENT : 'border: 1px solid #C9CDD6;', btn: dec.next_action[k] ? '✓ Done' : 'Mark done', btnStyle: dec.next_action[k] ? TOGGLE_ON : TOGGLE_OFF, act: () => act.decide('next_action', k, !dec.next_action[k]) }));
+    .map(([k, t, sub]) => ({ t, sub, mark: dec.next_action[k] ? '✓' : '', numStyle: dec.next_action[k] ? NUM_CURRENT : 'border: 1px solid #CBCED8;', btn: dec.next_action[k] ? '✓ Done' : 'Mark done', btnStyle: dec.next_action[k] ? TOGGLE_ON : TOGGLE_OFF, act: () => act.decide('next_action', k, !dec.next_action[k]) }));
 
   return {
     ...shell,
@@ -142,7 +142,7 @@ export function buildViewModel(S, act) {
     ready: S.loaded && !!D, noProjects: S.loaded && !!D && projects.length === 0,
     here: S.presence.filter((p) => p.user_id !== (S.user && S.user.id)).map((p) => ({ initials: initials(p.name || p.email), title: `${p.name || p.email} — step ${p.step}` })),
     // step 1
-    scopeButtons: SCOPES.map(([k, label]) => ({ label, style: scope.kind === k ? TOGGLE_ON : 'background: #FFFFFF; color: #16191D; border: 1px solid #D9D6CE;', pick: () => act.setScopeKind(k) })),
+    scopeButtons: SCOPES.map(([k, label]) => ({ label, style: scope.kind === k ? TOGGLE_ON : 'background: #FFFFFF; color: #2A3042; border: 1px solid #DCD8D0;', pick: () => act.setScopeKind(k) })),
     scopeClient: scope.kind === 'client', scopeDm: scope.kind === 'dm',
     clientOptions: [{ value: '', label: 'Choose a client…' }, ...((D && D.clients) || []).map((c) => ({ value: c.id, label: c.name }))], clientVal: scope.clientId || '',
     dmOptions: [{ value: '', label: 'Choose a DM…' }, ...dmIds.map((id) => ({ value: id, label: nameOf(id) }))], dmVal: scope.dmId || '',
@@ -163,7 +163,7 @@ export function buildViewModel(S, act) {
     cards: projects.map(card), allCardsReviewed: projects.length > 0 && reviewedCards === projects.length,
     // step 5
     dmLists, noQuestions: S.loaded && questions.length === 0, ansMsg: questions.length ? `${answered} of ${questions.length} answers recorded.` : 'No gaps — nothing to ask the DMs.',
-    ansStyle: answered === questions.length ? 'background: #16191D; color: #F6F5F1;' : 'background: #FFF2CC; color: #5C4300;',
+    ansStyle: answered === questions.length ? 'background: #2A3042; color: #F1EFEA;' : 'background: #F5ECD3; color: #6B5622;',
     // step 6
     conflicts: conflictList.map((c) => {
       const p = dec.pick[c.key];
@@ -191,13 +191,13 @@ export function buildViewModel(S, act) {
     checklist: ck.map((c) => ({ tag: c.good ? 'DONE' : 'OPEN', style: c.good ? CHIP_DONE : CHIP_OPEN, t: c.t })), ckDone, ckTotal: ck.length,
     openItems: openItems.length ? openItems : ['None — every check is done.'],
     openTitle: openItems.length ? `${openItems.length} open item${openItems.length === 1 ? '' : 's'} will be listed` : 'No open items',
-    openBoxStyle: openItems.length ? 'background: #FFF2CC; border: 1px solid #8A6A00;' : 'background: #F2F2F2; border: 1px solid #D9D6CE;',
+    openBoxStyle: openItems.length ? 'background: #F5ECD3; border: 1px solid #9A7F3A;' : 'background: #F2F2F2; border: 1px solid #DCD8D0;',
     kTotal: projects.length, kOn: kAll('On Track'), kDel: kAll('Delayed'), kRisk: kAll('At Risk'), kHold: kAll('On Hold'),
     kHours: `${fmtHours(consumed)} / ${fmtHours(budget)}`, kPct: budget ? `${Math.round((consumed / budget) * 1000) / 10}%` : '—', kEac: fmtHours(eac),
     xl: projects.map((p) => {
       const m = M(p), st = statusOf(p);
-      return { code: p.code || '—', name: p.name, client: (D && D.clientName[p.client_id]) || '', st, stS: dec.status_approved[p.id] ? (STATUS_CHIP[st] || '') : 'background: #FFF2CC;',
-        why: wording[p.id] || m.status_basis || '', r: ['Delayed', 'At Risk'].includes(st) ? (dec.responsibility[p.id] || '[your decision]') : '—', rS: ['Delayed', 'At Risk'].includes(st) && !dec.responsibility[p.id] ? 'background: #FFF2CC;' : '',
+      return { code: p.code || '—', name: p.name, client: (D && D.clientName[p.client_id]) || '', st, stS: dec.status_approved[p.id] ? (STATUS_CHIP[st] || '') : 'background: #F5ECD3;',
+        why: wording[p.id] || m.status_basis || '', r: ['Delayed', 'At Risk'].includes(st) ? (dec.responsibility[p.id] || '[your decision]') : '—', rS: ['Delayed', 'At Risk'].includes(st) && !dec.responsibility[p.id] ? 'background: #F5ECD3;' : '',
         last: m.last_submission_on ? fmtDate(m.last_submission_on) : '—', next: m.next_due_on ? fmtDate(m.next_due_on) : '—', late: m.deliverables_overdue || 0,
         hrs: `${fmtHours(m.consumed_hours || 0)} / ${fmtHours(m.budget_total ?? p.budget_hours)}`, pct: m.consumed_pct == null ? '—' : `${m.consumed_pct}%`, eac: fmtHours(m.eac || 0) };
     }),
@@ -211,7 +211,7 @@ export function buildViewModel(S, act) {
     newReview: act.newReview,
     // footer
     showBack: step > 1, showNext: step < 8, nextBlocked: !S.loaded, nextLabel: `${nextLabels[step - 1]} →`,
-    barMsg: msgs[step - 1], barDot: S.dataLoading ? 'background: #2F5BFF;' : 'background: #C9A227;',
+    barMsg: msgs[step - 1], barDot: S.dataLoading ? 'background: #5A63A8;' : 'background: #C2A25A;',
     back: () => act.goStep(step - 1), next: () => act.goStep(step + 1),
   };
 }

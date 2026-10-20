@@ -5,6 +5,7 @@ import { projectPermissions, PROJECT_ROLES, PROJECT_ROLE_SHORT } from '../../dom
 import { SOURCES, SOURCE_SHORT, DELIVERABLE_STATUSES, SUBMISSION_RESPONSES, WORK_STATUSES, isOverdue, parseDeliverableRows } from '../../domain/deliverables.js';
 import { fmtDate, fmtHours, todayIso, displayName, initials } from '../../ui/format.js';
 import { STATUS_CHIP, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js';
+import { moneyFigures, fmtMoney, fmtPct } from '../../domain/progress.js';
 import { buildRegisters } from './registers-vm.js';
 import { buildSchedule } from './schedule-vm.js';
 import { buildMail } from './mail-vm.js';
@@ -44,7 +45,7 @@ export function buildViewModel(S, act) {
       id: d.id, phase: d.phase, title: d.title, source: d.source, sourceShort: SOURCE_SHORT[d.source], sourceRef: d.source_ref,
       component: d.component_id || '', baseline: d.baseline_date || '', forecast: d.forecast_date || '', actual: d.actual_date || '',
       hours: d.planned_hours == null ? '' : String(d.planned_hours), status: d.status,
-      rowStyle: overdue ? 'background: #FDECEC;' : '', titleStyle: d.title ? '' : 'background: #FFF2CC;',
+      rowStyle: overdue ? 'background: #F6E7E4;' : '', titleStyle: d.title ? '' : 'background: #F5ECD3;',
       lateLabel: overdue ? 'LATE' : '', subsLabel: subs.length ? `${subs.length} · ${lastSub.revision}` : 'none',
       expanded: !!S.expanded[d.id], expandLabel: S.expanded[d.id] ? 'Hide' : 'Submissions',
       confirming: S.confirmDelete === delKey, notConfirming: S.confirmDelete !== delKey,
@@ -122,6 +123,9 @@ export function buildViewModel(S, act) {
     kConsumed: fmtHours(M.consumed_hours || 0), kBudgetTotal: fmtHours(M.budget_total ?? P.budget_hours), kEac: fmtHours(M.eac || 0),
     kPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, kVoOpen: M.vo_open || 0, kIncOpen: M.incidents_open || 0,
 
+    // budget & progress
+    ...buildProgress(S, P, M),
+
     // overview
     kTotal: M.deliverables_total || 0, kSubmitted: M.deliverables_submitted || 0, kApproved: M.deliverables_approved || 0,
     kLate: M.deliverables_overdue || 0, kAwaiting: M.awaiting_client || 0,
@@ -132,9 +136,11 @@ export function buildViewModel(S, act) {
       name: P.name || '', code: P.code || '', client: P.client_id || '', location: P.location || '', stage: P.stage || '',
       override: P.status_override || '', po: P.po_status || 'Not Provided', start: P.start_date || '', baseline: P.baseline_finish || '',
       forecast: P.forecast_finish || '', actual: P.actual_finish || '', budget: P.budget_hours == null ? '' : String(P.budget_hours),
+      fee: P.contract_fee == null ? '' : String(P.contract_fee), currency: P.currency || 'SAR',
+      invoiced: P.invoiced_to_date == null ? '' : String(P.invoiced_to_date), cost: P.cost_to_date == null ? '' : String(P.cost_to_date),
       rfp: P.rfp_ref || '', proposal: P.proposal_ref || '', scope: P.scope_summary || '',
     },
-    set: Object.fromEntries(['name', 'code', 'client_id', 'location', 'stage', 'status_override', 'po_status', 'start_date', 'baseline_finish', 'forecast_finish', 'actual_finish', 'budget_hours', 'rfp_ref', 'proposal_ref', 'scope_summary']
+    set: Object.fromEntries(['name', 'code', 'client_id', 'location', 'stage', 'status_override', 'po_status', 'start_date', 'baseline_finish', 'forecast_finish', 'actual_finish', 'budget_hours', 'contract_fee', 'currency', 'invoiced_to_date', 'cost_to_date', 'rfp_ref', 'proposal_ref', 'scope_summary']
       .map((k) => [k, act.editProject(k)])),
     clientOptions: S.clients.map((c) => ({ value: c.id, label: c.name })),
     overrideOptions: opts(STATUS_OVERRIDES), poOptions: opts(PO),
@@ -178,5 +184,28 @@ export function buildViewModel(S, act) {
     invite: act.invite, inviteBusy: S.inviteBusy, inviteLabel: S.inviteBusy ? 'Adding…' : 'Add to project',
     inviteErr: S.inviteErr, hasInviteErr: !!S.inviteErr, inviteMsg: S.inviteMsg, hasInviteMsg: !!S.inviteMsg,
     presenceList: S.presence.map((p) => ({ initials: initials(p.name || p.email), name: p.name || p.email, tab: p.tab, isMe: p.user_id === me })),
+  };
+}
+
+// Budget (money) and progress: ours (delivered) vs. what the client has approved, next to hours burned.
+const bar = (pct, color) => `width: ${Math.max(0, Math.min(100, Number(pct) || 0))}%; background: ${color};`;
+
+function buildProgress(S, P, M) {
+  const pr = S.progress || {};
+  const cur = pr.currency || P.currency || '';
+  const F = moneyFigures(S.progress, M);
+  const gapNote = (v, ahead, behind) => (v == null || Math.abs(v) < 0.5 ? '' : (v > 0 ? ahead : behind).replace('{n}', String(Math.abs(v))));
+  return {
+    hasProgress: !!S.progress,
+    bFee: fmtMoney(F.fee, cur), bFeeBase: fmtMoney(pr.contract_fee, cur), bFeeVo: fmtMoney(pr.vo_fee, cur),
+    bInvoiced: fmtMoney(F.invoiced, cur), bBilledPct: fmtPct(F.billedPct), bRemaining: fmtMoney(F.remaining, cur),
+    bCost: fmtMoney(F.cost, cur), bCostPct: fmtPct(F.costPct), bMargin: fmtMoney(F.margin, cur), bEarned: fmtMoney(F.earned, cur),
+    bMarginStyle: F.margin != null && F.margin < 0 ? 'color: #B05A5A;' : '',
+    pDelivered: fmtPct(F.completion), pApproved: fmtPct(F.approved), pHours: fmtPct(M.consumed_pct), pBilled: fmtPct(F.billedPct),
+    barDelivered: bar(F.completion, '#5A63A8'), barApproved: bar(F.approved, '#7FA08A'), barHours: bar(M.consumed_pct, '#C2A25A'), barBilled: bar(F.billedPct, '#8C8FC0'),
+    awaitingNote: gapNote(F.awaitingGap, '{n} points delivered but not yet approved by the client', ''),
+    burnNote: gapNote(F.burnGap, 'Hours burned are {n} points ahead of delivery', 'Delivery is {n} points ahead of hours burned'),
+    billingNote: gapNote(F.billingGap, 'Invoiced {n} points ahead of the work delivered', 'Invoiced {n} points behind the work delivered'),
+    hasProgressNotes: !!(gapNote(F.awaitingGap, 'x', '') || gapNote(F.burnGap, 'x', 'x') || gapNote(F.billingGap, 'x', 'x')),
   };
 }

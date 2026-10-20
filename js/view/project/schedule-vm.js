@@ -7,8 +7,8 @@ import { CHIP_DONE, CHIP_OPEN, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js'
 const opts = (list) => list.map((v) => (Array.isArray(v) ? { value: v[0], label: v[1] } : { value: v, label: v }));
 const str = (v) => (v === null || v === undefined ? '' : String(v));
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const FLAG_STYLE = { 'On Track': CHIP_DONE, 'At Risk': CHIP_OPEN, Blocked: 'background: #FDECEC; border-color: #C00000; color: #A00000;' };
-const QUERY_STYLE = { Open: CHIP_OPEN, Answered: 'background: #F2F5FF; border-color: #2F5BFF; color: #1E3FBF;', Closed: CHIP_DONE };
+const FLAG_STYLE = { 'On Track': CHIP_DONE, 'At Risk': CHIP_OPEN, Blocked: 'background: #F6E7E4; border-color: #B05A5A; color: #944747;' };
+const QUERY_STYLE = { Open: CHIP_OPEN, Answered: 'background: #EEF0F8; border-color: #5A63A8; color: #3F477F;', Closed: CHIP_DONE };
 
 export function buildSchedule(S, act, perm) {
   const today = todayIso();
@@ -34,16 +34,16 @@ export function buildSchedule(S, act, perm) {
     const late = actionLateReason(a, msById[a.milestone_id], today);
     const done = !isOpenAction(a);
     return ganttRow(`${regNo('ACT', a.number)} ${a.title || '(untitled action)'}`, `${a.owner_id ? name(a.owner_id) : (a.owner_name || 'no owner')} · ${a.status}`,
-      bar(a.start_on || a.due_on, a.due_on || a.start_on, done ? 'background: #8A8F96;' : (late ? 'background: #C00000;' : 'background: #2F5BFF;')),
+      bar(a.start_on || a.due_on, a.due_on || a.start_on, done ? 'background: #8D92A0;' : (late ? 'background: #B05A5A;' : 'background: #5A63A8;')),
       'display: none;', 'display: none;', 'action', late);
   };
   S.milestones.forEach((m) => {
     const slip = milestoneSlipDays(m, today);
     const effective = m.actual_finish || (m.forecast_finish || m.baseline_finish ? [m.forecast_finish || m.baseline_finish, today].sort().pop() : null);
     rows.push(ganttRow(m.title || '(untitled milestone)', `${m.kind}${m.baseline_finish ? ' · baseline ' + fmtDate(m.baseline_finish) : ''}`,
-      bar(m.baseline_start || m.baseline_finish, m.baseline_finish, 'background: #C9CDD6;'),
-      slip ? bar(m.baseline_finish, effective, 'background: repeating-linear-gradient(45deg, #C00000 0 4px, #FDECEC 4px 8px);') : 'display: none;',
-      m.actual_finish ? bar(m.actual_finish, m.actual_finish, 'background: #16191D; width: 6px;') : 'display: none;',
+      bar(m.baseline_start || m.baseline_finish, m.baseline_finish, 'background: #CBCED8;'),
+      slip ? bar(m.baseline_finish, effective, 'background: repeating-linear-gradient(45deg, #B05A5A 0 4px, #F6E7E4 4px 8px);') : 'display: none;',
+      m.actual_finish ? bar(m.actual_finish, m.actual_finish, 'background: #2A3042; width: 6px;') : 'display: none;',
       'milestone', slip ? `${slip} days late` : ''));
     (actionsBy[m.id] || []).forEach((a) => rows.push(actionRow(a)));
   });
@@ -56,8 +56,8 @@ export function buildSchedule(S, act, perm) {
     return {
       title: m.title, phase: m.phase, kind: m.kind, component: m.component_id || '',
       start: str(m.baseline_start), baseline: str(m.baseline_finish), forecast: str(m.forecast_finish), actual: str(m.actual_finish),
-      slipLabel: slip ? `${slip}d LATE` : (m.actual_finish ? 'DONE' : ''), slipStyle: slip ? 'color: #A00000; font-weight: 600;' : 'color: #5B6068;',
-      rowStyle: slip ? 'background: #FDECEC;' : '',
+      slipLabel: slip ? `${slip}d LATE` : (m.actual_finish ? 'DONE' : ''), slipStyle: slip ? 'color: #944747; font-weight: 600;' : 'color: #646A78;',
+      rowStyle: slip ? 'background: #F6E7E4;' : '',
       actionsCount: (actionsBy[m.id] || []).length,
       set: Object.fromEntries(['title', 'phase', 'kind', 'component_id', 'baseline_start', 'baseline_finish', 'forecast_finish', 'actual_finish'].map((k) => [k, act.editMilestone(m.id, k)])),
       addAction: () => act.addAction(m.id),
@@ -71,7 +71,7 @@ export function buildSchedule(S, act, perm) {
     return {
       no: regNo('ACT', a.number), title: a.title, owner: a.owner_id || '', ownerName: a.owner_name, milestone: a.milestone_id || '', deliverable: a.deliverable_id || '',
       start: str(a.start_on), due: str(a.due_on), done: str(a.done_on), status: a.status, planned: str(a.planned_hours), actual: str(a.actual_hours), notes: a.notes,
-      late, rowStyle: late ? 'background: #FDECEC;' : (isOpenAction(a) ? '' : 'background: #F6F5F1;'),
+      late, rowStyle: late ? 'background: #F6E7E4;' : (isOpenAction(a) ? '' : 'background: #F1EFEA;'),
       mineLabel: mine ? 'YOURS' : '', roFull: !full, roProgress: !progress,
       set: Object.fromEntries(['title', 'owner_id', 'owner_name', 'milestone_id', 'deliverable_id', 'start_on', 'due_on', 'status', 'planned_hours', 'actual_hours', 'notes'].map((k) => [k, act.editAction(a.id, k)])),
       ...confirm(`ac:${a.id}`), confirmDelete: () => act.removeRow('actions', a.id),
@@ -87,13 +87,13 @@ export function buildSchedule(S, act, perm) {
     const overdue = q.status === 'Open' && q.due_on && q.due_on < today;
     return {
       no: regNo('Q', q.number), question: q.question, context: q.context, priority: q.priority, status: q.status, statusStyle: QUERY_STYLE[q.status] || '',
-      priorityStyle: q.priority === 'Urgent' ? 'color: #A00000; font-weight: 600;' : (q.priority === 'High' ? 'color: #5C4300; font-weight: 600;' : 'color: #5B6068;'),
+      priorityStyle: q.priority === 'Urgent' ? 'color: #944747; font-weight: 600;' : (q.priority === 'High' ? 'color: #6B5622; font-weight: 600;' : 'color: #646A78;'),
       from: q.raised_by ? name(q.raised_by) : '—', to: q.assigned_to ? name(q.assigned_to) : 'unassigned', assignee: q.assigned_to || '',
       due: str(q.due_on), dueLabel: q.due_on ? fmtDate(q.due_on) : 'no due date', overdueLabel: overdue ? 'OVERDUE' : '',
       linked: [q.milestone_id && msById[q.milestone_id] ? msById[q.milestone_id].title : '', q.deliverable_id ? (S.deliverables.find((d) => d.id === q.deliverable_id) || {}).title || '' : ''].filter(Boolean).join(' · '),
       answer: q.answer, answeredLine: q.answered_at ? `Answered by ${q.answered_by ? name(q.answered_by) : '…'} · ${fmtDate(String(q.answered_at).slice(0, 10))}` : '',
       roAnswer: !canAnswer, roQuestion: !canEditQ, canClose: (canAnswer || canEditQ) && q.status !== 'Closed', canReopen: (canAnswer || canEditQ) && q.status === 'Closed',
-      cardStyle: q.assigned_to === me && q.status === 'Open' ? 'border-color: #C9A227;' : '',
+      cardStyle: q.assigned_to === me && q.status === 'Open' ? 'border-color: #C2A25A;' : '',
       set: Object.fromEntries(['question', 'context', 'priority', 'assigned_to', 'due_on', 'answer', 'status'].map((k) => [k, act.editQuery(q.id, k)])),
       close: () => act.editQuery(q.id, 'status')('Closed'), reopen: () => act.editQuery(q.id, 'status')('Open'),
       ...confirm(`q:${q.id}`), confirmDelete: () => act.removeRow('queries', q.id),
@@ -107,7 +107,7 @@ export function buildSchedule(S, act, perm) {
     return {
       week: `Week of ${fmtDate(s.period_start)}`, team: s.team || 'Team', by: s.reported_by ? name(s.reported_by) : '—',
       flag: s.status_flag, flagStyle: FLAG_STYLE[s.status_flag] || '', progress: str(s.progress_pct), hours: str(s.hours_this_period),
-      doneText: s.done_text, nextText: s.next_text, blockers: s.blockers, blockersStyle: s.blockers ? 'border-color: #C00000;' : '', ro: !canEditS,
+      doneText: s.done_text, nextText: s.next_text, blockers: s.blockers, blockersStyle: s.blockers ? 'border-color: #B05A5A;' : '', ro: !canEditS,
       set: Object.fromEntries(['team', 'status_flag', 'progress_pct', 'hours_this_period', 'done_text', 'next_text', 'blockers'].map((k) => [k, act.editStatus(s.id, k)])),
       ...confirm(`st:${s.id}`), confirmDelete: () => act.removeRow('statuses', s.id), canDelete: canEditS,
     };

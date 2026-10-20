@@ -4,7 +4,7 @@ import { createPageStore } from './page-base.js';
 import { errMsg, newId } from '../lib/store.js';
 
 const pageInitial = () => ({
-  projects: [], clients: [], members: [], people: {}, metrics: {}, myQueries: [], myActions: [], newMail: [],
+  projects: [], clients: [], members: [], people: {}, metrics: {}, progress: {}, myQueries: [], myActions: [], newMail: [],
   loaded: false,
   filter: { client: '', dm: '', status: '', q: '' },
   creating: false, createBusy: false, createErr: '',
@@ -59,9 +59,12 @@ export function createPortfolioStore(session) {
 
   async function loadMetrics() {
     if (!sb) return;
-    const { data, error } = await sb.from('project_metrics').select('*');
-    if (error) throw error;
-    store.set({ metrics: Object.fromEntries((data || []).map((m) => [m.project_id, m])) });
+    const [m, pr] = await Promise.all([sb.from('project_metrics').select('*'), sb.from('project_progress').select('*')]);
+    if (m.error) throw m.error;
+    store.set({
+      metrics: Object.fromEntries((m.data || []).map((x) => [x.project_id, x])),
+      progress: Object.fromEntries((pr.data || []).map((x) => [x.project_id, x])), // empty until the phase 6 migration is applied
+    });
   }
   function scheduleMetrics() {
     clearTimeout(metricsTimer);
@@ -85,7 +88,7 @@ export function createPortfolioStore(session) {
     const v = (n) => (form && form.elements[n] ? String(form.elements[n].value || '').trim() : '');
     return {
       clientId: v('client_id'), newClient: v('new_client'), code: v('code'), name: v('name'), location: v('location'),
-      budget: v('budget_hours'), start: v('start_date'), finish: v('baseline_finish'), dm: v('dm_email').toLowerCase(), ptm: v('ptm_email').toLowerCase(),
+      budget: v('budget_hours'), fee: v('contract_fee'), currency: v('currency'), start: v('start_date'), finish: v('baseline_finish'), dm: v('dm_email').toLowerCase(), ptm: v('ptm_email').toLowerCase(),
     };
   }
 
@@ -105,7 +108,8 @@ export function createPortfolioStore(session) {
       }
       const id = await api.projects.insert({
         client_id: clientId, code: f.code, name: f.name, location: f.location,
-        budget_hours: f.budget === '' ? 0 : Number(f.budget), start_date: f.start || null, baseline_finish: f.finish || null,
+        budget_hours: f.budget === '' ? 0 : Number(f.budget),
+        contract_fee: f.fee === '' ? 0 : Number(f.fee), currency: (f.currency || 'SAR').toUpperCase(), start_date: f.start || null, baseline_finish: f.finish || null,
       });
       const invites = [[f.dm, 'dm'], [f.ptm, 'ptm']].filter(([email]) => email).map(([email, role]) => ({ project_id: id, email, role }));
       if (invites.length) {

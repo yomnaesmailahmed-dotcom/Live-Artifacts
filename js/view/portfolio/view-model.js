@@ -2,6 +2,7 @@
 import { buildShell } from '../shell.js';
 import { isManagement } from '../../state/session-store.js';
 import { fmtDate, fmtHours, displayName, todayIso } from '../../ui/format.js';
+import { clientRollup, fmtMoney, fmtPct } from '../../domain/progress.js';
 import { STATUS_CHIP } from '../../ui/tokens.js';
 
 const STATUSES = ['On Track', 'At Risk', 'Delayed', 'On Hold', 'Not Started', 'Completed', 'Not Awarded'];
@@ -75,19 +76,31 @@ export function buildViewModel(S, act) {
     rows: shown.map(({ p, m, status, dms }) => ({
       href: `./Project.dc.html?id=${p.id}`,
       code: p.code || '—', name: p.name, client: clientName[p.client_id] || '—',
-      dm: dms.length ? dms.map(nameOf).join(', ') : '[needed]', dmStyle: dms.length ? '' : 'background: #FFF2CC;',
+      dm: dms.length ? dms.map(nameOf).join(', ') : '[needed]', dmStyle: dms.length ? '' : 'background: #F5ECD3;',
       status, statusStyle: STATUS_CHIP[status] || '', why: m.status_basis || '',
       deliv: m.deliverables_total ? `${m.deliverables_submitted} / ${m.deliverables_total}` : '—',
-      overdue: m.deliverables_overdue ? `${m.deliverables_overdue} late` : '', overdueStyle: m.deliverables_overdue ? 'color: #C00000; font-weight: 600;' : '',
+      overdue: m.deliverables_overdue ? `${m.deliverables_overdue} late` : '', overdueStyle: m.deliverables_overdue ? 'color: #B05A5A; font-weight: 600;' : '',
       next: m.next_due_on ? `${fmtDate(m.next_due_on)} · ${m.next_due_title || ''}` : '—',
       last: m.last_submission_on ? `${fmtDate(m.last_submission_on)} · ${m.last_submission_title || ''} ${m.last_submission_rev || ''}`.trim() : '—',
       budget: fmtHours(m.budget_total ?? p.budget_hours),
+      fee: S.progress[p.id] ? fmtMoney(S.progress[p.id].fee_total, S.progress[p.id].currency) : '—',
+      done: S.progress[p.id] && S.progress[p.id].completion_pct != null ? `${fmtPct(S.progress[p.id].completion_pct)} · ${fmtPct(S.progress[p.id].approved_pct)} appr.` : '—',
       hours: m.consumed_hours ? `${fmtHours(m.consumed_hours)} · ${m.consumed_pct ?? '—'}%` : '—',
-      hoursStyle: m.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #A00000; font-weight: 600;' : '',
-      eac: m.eac ? fmtHours(m.eac) : '—', eacStyle: Number(m.hours_variance) < 0 ? 'color: #C00000; font-weight: 600;' : '',
+      hoursStyle: m.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #944747; font-weight: 600;' : '',
+      eac: m.eac ? fmtHours(m.eac) : '—', eacStyle: Number(m.hours_variance) < 0 ? 'color: #B05A5A; font-weight: 600;' : '',
       open: [m.vo_open ? `${m.vo_open} VO` : '', m.incidents_open ? `${m.incidents_open} INC` : '', m.queries_open ? `${m.queries_open} Q` : '',
         m.actions_late ? `${m.actions_late} late ACT` : '', m.milestones_late ? `${m.milestones_late} slip` : ''].filter(Boolean).join(' · ') || '—',
     })),
+    clientRows: clientRollup(S.projects, S.clients, S.progress, S.metrics).filter((r) => !F.client || r.clientId === F.client).map((r) => ({
+      client: r.client, projects: `${r.projects} project${r.projects === 1 ? '' : 's'}`,
+      flags: [r.delayed ? `${r.delayed} delayed` : '', r.atRisk ? `${r.atRisk} at risk` : ''].filter(Boolean).join(' · '),
+      fee: r.mixed ? 'mixed currencies' : fmtMoney(r.fee, r.currency), invoiced: r.mixed ? '—' : `${fmtMoney(r.invoiced, r.currency)}${r.billedPct == null ? '' : ` · ${fmtPct(r.billedPct)}`}`,
+      cost: r.mixed ? '—' : fmtMoney(r.cost, r.currency),
+      completion: fmtPct(r.completion), approved: fmtPct(r.approved), hours: fmtPct(r.hoursPct),
+      barCompletion: `width: ${Math.min(100, r.completion || 0)}%; background: #5A63A8;`, barApproved: `width: ${Math.min(100, r.approved || 0)}%; background: #7FA08A;`,
+      gap: r.awaitingGap != null && r.awaitingGap >= 0.5 ? `${r.awaitingGap} pts awaiting client approval` : '',
+    })),
+    hasClientRows: S.loaded && all.length > 0,
     creating: S.creating, notCreating: !S.creating,
     createBusy: S.createBusy, createErr: S.createErr, hasCreateErr: !!S.createErr,
     createLabel: S.createBusy ? 'Creating…' : 'Create project',

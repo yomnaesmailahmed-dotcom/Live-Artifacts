@@ -4,9 +4,9 @@ import { regNo } from '../../domain/registers.js';
 import { fmtLocalTime } from '../../ui/format.js';
 
 const CONF_CHIP = {
-  high: 'background: #F2F5FF; border-color: #2F5BFF; color: #1E3FBF;',
-  medium: 'border-style: dashed; color: #1E3FBF; border-color: #2F5BFF;',
-  low: 'border-style: dashed; color: #5B6068; border-color: #8A8F96;',
+  high: 'background: #EEF0F8; border-color: #5A63A8; color: #3F477F;',
+  medium: 'border-style: dashed; color: #3F477F; border-color: #5A63A8;',
+  low: 'border-style: dashed; color: #646A78; border-color: #8D92A0;',
 };
 const when = fmtLocalTime;
 
@@ -69,7 +69,7 @@ export function buildMail(S, act, perm) {
     mapDisabled: !S.folderPick || S.mailBusy === 'map',
     mailFolders: folders, hasMailFolders: folders.length > 0,
     mailErr: S.mailErr, hasMailErr: !!S.mailErr,
-    mailMsg: msg ? msg.msg : '', hasMailMsg: !!msg, mailMsgStyle: msg && !msg.ok ? 'border-color: #C00000; background: #FDECEC;' : '',
+    mailMsg: msg ? msg.msg : '', hasMailMsg: !!msg, mailMsgStyle: msg && !msg.ok ? 'border-color: #B05A5A; background: #F6E7E4;' : '',
     clearMailMsg: act.clearMailMsg,
     candidates: fresh.map(card), hasCandidates: fresh.length > 0,
     candidateLine: fresh.length ? `${fresh.length} email${fresh.length === 1 ? '' : 's'} may change the scope — accept to raise a draft VO, or dismiss.` : '',

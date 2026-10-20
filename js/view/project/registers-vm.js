@@ -7,9 +7,9 @@ const opts = (list) => list.map((v) => (Array.isArray(v) ? { value: v[0], label:
 const str = (v) => (v === null || v === undefined ? '' : String(v));
 const money = (n, cur) => (n === null || n === undefined || n === '' ? '—' : `${Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })} ${cur}`);
 const VO_CHIP = {
-  candidate: 'border-style: dashed; color: #1E3FBF; border-color: #2F5BFF;',
-  draft: CHIP_OPEN, submitted: 'background: #F2F5FF; border-color: #2F5BFF; color: #1E3FBF;',
-  approved: CHIP_DONE, rejected: 'background: #FDECEC; border-color: #C00000; color: #A00000;', withdrawn: 'color: #8A8F96; border-color: #C9CDD6;',
+  candidate: 'border-style: dashed; color: #3F477F; border-color: #5A63A8;',
+  draft: CHIP_OPEN, submitted: 'background: #EEF0F8; border-color: #5A63A8; color: #3F477F;',
+  approved: CHIP_DONE, rejected: 'background: #F6E7E4; border-color: #B05A5A; color: #944747;', withdrawn: 'color: #8D92A0; border-color: #CBCED8;',
 };
 
 export function buildRegisters(S, act, perm) {
@@ -35,7 +35,7 @@ export function buildRegisters(S, act, perm) {
       hasEmail: !!(v.email_subject || v.email_from || v.email_quote || v.email_link), hasLink: /^https?:\/\//i.test(v.email_link || ''),
       days: str(v.time_impact_days), hours: str(v.hours_impact), fee: str(v.fee_impact), clientRef: v.client_ref,
       submittedOn: str(v.submitted_on), decidedOn: str(v.decided_on),
-      highlight: S.highlightVo === v.id ? 'outline: 2px solid #2F5BFF;' : '',
+      highlight: S.highlightVo === v.id ? 'outline: 2px solid #5A63A8;' : '',
       inDeliverables: fromVo.has(v.id), canAddDeliverable: perm.canEdit && !fromVo.has(v.id) && v.status !== 'rejected' && v.status !== 'withdrawn',
       set: Object.fromEntries(['title', 'description', 'direction', 'status', 'deliverable_id', 'email_from', 'email_subject', 'email_received_on', 'email_link', 'email_quote', 'time_impact_days', 'hours_impact', 'fee_impact', 'client_ref', 'submitted_on', 'decided_on']
         .map((k) => [k, act.editVo(v.id, k)])),
@@ -98,9 +98,9 @@ export function buildRegisters(S, act, perm) {
     hBudgetBase: fmtHours(P.budget_hours), hVoHours: fmtHours(M.vo_approved_hours || 0), hBudget: fmtHours(budget),
     hConsumed: fmtHours(M.consumed_hours || 0), hAsOf: M.consumed_as_of ? `as of ${fmtDate(M.consumed_as_of).slice(3)}` : 'no PCU data yet',
     hPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, hFtc: fmtHours(M.forecast_to_complete || 0), hEac: fmtHours(eac),
-    hVariance: fmtHours(M.hours_variance || 0), hVarianceStyle: Number(M.hours_variance || 0) < 0 ? 'color: #C00000;' : '',
+    hVariance: fmtHours(M.hours_variance || 0), hVarianceStyle: Number(M.hours_variance || 0) < 0 ? 'color: #B05A5A;' : '',
     hIncInt: fmtHours(M.incident_hours_internal || 0), hIncExt: fmtHours(M.incident_hours_external || 0),
-    hPctStyle: M.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #A00000;' : '',
+    hPctStyle: M.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #944747;' : '',
     adjustedFinish: M.adjusted_finish ? fmtDate(M.adjusted_finish) : '—', baselineFinish: fmtDate(P.baseline_finish),
     hasEot: Number(M.vo_approved_days || 0) !== 0, eotDays: String(M.vo_approved_days || 0),
     budgetLines: approvedVos.map((v) => ({ label: `${regNo('VO', v.number)} ${v.title}`, hours: `+${fmtHours(v.hours_impact || 0)}` })),

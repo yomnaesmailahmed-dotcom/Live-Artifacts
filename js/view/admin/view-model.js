@@ -46,7 +46,7 @@ function mailBlock(S, act) {
   const ms = S.mailStatus;
   const people = Object.fromEntries(S.profiles.map((p) => [p.id, p.full_name || p.email]));
   const conns = S.mailConns.map((c) => ({
-    mailbox: c.mailbox || '(unknown)', person: people[c.user_id] || '', status: c.status, statusStyle: c.status === 'active' ? '' : 'color: #A00000;',
+    mailbox: c.mailbox || '(unknown)', person: people[c.user_id] || '', status: c.status, statusStyle: c.status === 'active' ? '' : 'color: #944747;',
     folders: String(S.mailFolderCount[c.id] || 0), lastScan: when(c.last_scan_at), lastError: c.last_error || '',
     confirming: S.confirmDelete === `mc:${c.id}`, notConfirming: S.confirmDelete !== `mc:${c.id}`,
     askDelete: () => act.askDelete(`mc:${c.id}`), confirmDelete: () => act.disconnectMail(c.id),

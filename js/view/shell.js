@@ -1,8 +1,8 @@
 // Header, navigation and sign-in gate bindings shared by every workspace page.
 import { buildAccount } from './account.js';
 
-const NAV_ON = 'color: #16191D; font-weight: 600; text-decoration: none; border-bottom: 2px solid #16191D; padding-bottom: 2px;';
-const NAV_OFF = 'color: #3A3F46; text-decoration: none; padding-bottom: 2px;';
+const NAV_ON = 'color: #FFFFFF; background: rgba(255,255,255,0.13); font-weight: 600; text-decoration: none;';
+const NAV_OFF = 'color: #C9CDDA; text-decoration: none;';
 
 export function buildShell(S, act, active) {
   const role = (S.profile && S.profile.role) || 'member';
