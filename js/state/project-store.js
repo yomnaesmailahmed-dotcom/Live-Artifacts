@@ -6,13 +6,15 @@ import { joinPresence } from '../services/presence.js';
 import { errMsg } from '../lib/store.js';
 import { todayIso, displayName } from '../ui/format.js';
 import { parseDeliverableRows, nextRevision, deliverablePatchForSubmission, deliverableSort } from '../domain/deliverables.js';
+import { readTable } from '../lib/xlsx-reader.js';
+import { detectTarget, buildRows, splitDuplicates } from '../domain/import-map.js';
 import { voFromCheckpoint, voFromIncident, deliverableFromVo, parsePcuRows, monthToPeriod, currentMonth, snapshotKey } from '../domain/registers.js';
 
 import { weekStart } from '../domain/schedule.js';
 import { candidateToVo } from '../domain/mail.js';
 import * as mail from '../services/mail.js';
 
-const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'qc', 'team'];
+const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'qc', 'import', 'team'];
 const tabFromHash = () => { const t = (window.location.hash || '').replace('#', ''); return TABS.includes(t) ? t : 'overview'; };
 const projectIdFromUrl = () => new URL(window.location.href).searchParams.get('id') || '';
 
@@ -23,6 +25,7 @@ const pageInitial = () => ({
   expanded: {}, confirmDelete: '', sourceFilter: '', phaseFilter: '',
   pasteOpen: false, pasteText: '', inviteBusy: false, inviteErr: '', inviteMsg: '',
   variations: [], incidents: [], hours: [], qc: [], qcOpen: '',
+  imp: { name: '', sheets: [], sheet: 0, target: '', busy: false, msg: '', err: '' },
   checkpoint: null, checkpointBusy: false, checkpointErr: '', highlightVo: '',
   pcuOpen: false, pcuText: '', pcuMsg: '',
   milestones: [], actions: [], queries: [], statuses: [],
@@ -300,6 +303,58 @@ export function createProjectStore(session) {
   }
   const setCandidateStatus = (id, status) => T.candidates.update(id, { status });
 
+  // ── file import (Excel / CSV → registers) ──
+  const BLANK_IMP = { name: '', sheets: [], sheet: 0, target: '', busy: false, msg: '', err: '' };
+  async function pickImportFile(e) {
+    const input = e && e.target;
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { store.set({ imp: { ...BLANK_IMP, err: 'That file is over 10 MB. Split it or remove unused sheets.' } }); if (input) input.value = ''; return; }
+    store.set({ imp: { ...BLANK_IMP, name: file.name, busy: true } });
+    try {
+      const sheets = (await readTable(file)).filter((s) => s.rows.length > 1);
+      if (!sheets.length) throw new Error('I found no rows to import in that file.');
+      store.set({ imp: { ...BLANK_IMP, name: file.name, sheets, target: detectTarget(sheets[0].rows) } });
+    } catch (err) {
+      store.set({ imp: { ...BLANK_IMP, err: errMsg(err) } });
+    }
+    if (input) input.value = '';
+  }
+  const setImportSheet = (e) => {
+    const imp = store.get().imp, i = Number(value(e)) || 0;
+    store.set({ imp: { ...imp, sheet: i, target: detectTarget(imp.sheets[i].rows), msg: '' } });
+  };
+  const setImportTarget = (e) => store.set({ imp: { ...store.get().imp, target: value(e), msg: '' } });
+  async function runImport() {
+    const S = store.get(), imp = S.imp, sheet = imp.sheets[imp.sheet];
+    if (!sheet || !imp.target || imp.busy) return;
+    const res = buildRows(imp.target, sheet.rows, { components: S.components });
+    const existing = { deliverables: S.deliverables, milestones: S.milestones, actions: S.actions, hours: S.hours }[imp.target];
+    const { fresh, duplicates } = splitDuplicates(imp.target, res.rows, existing);
+    store.set({ imp: { ...imp, busy: true, err: '', msg: '' } });
+    try {
+      const pid = S.projectId;
+      let updated = 0;
+      if (imp.target === 'deliverables') {
+        let sort = S.deliverables.reduce((m, d) => Math.max(m, d.sort_order || 0), 0);
+        if (fresh.length) await T.deliverables.insertMany(fresh.map((r) => ({ ...r, project_id: pid, sort_order: ++sort })));
+      } else if (imp.target === 'milestones') {
+        let sort = S.milestones.reduce((m, x) => Math.max(m, x.sort_order || 0), 0);
+        if (fresh.length) await T.milestones.insertMany(fresh.map((r) => ({ ...r, project_id: pid, sort_order: ++sort })));
+      } else if (imp.target === 'actions') {
+        if (fresh.length) await T.actions.insertMany(fresh.map((r) => ({ ...r, project_id: pid })));
+      } else if (imp.target === 'hours') {
+        const have = new Map(S.hours.map((h) => [snapshotKey(h.component_id, h.period), h]));
+        duplicates.forEach((r) => { const hit = have.get(snapshotKey(r.component_id, r.period)); if (hit) { T.hours.update(hit.id, { cumulative_hours: r.cumulative_hours, progress_pct: r.progress_pct }); updated++; } });
+        if (fresh.length) await T.hours.insertMany(fresh.map((r) => ({ ...r, project_id: pid, source: 'PCU' })));
+      }
+      const skipped = imp.target === 'hours' ? 0 : duplicates.length;
+      store.set({ imp: { ...BLANK_IMP, msg: `Imported ${fresh.length} ${imp.target === 'hours' ? 'hours row' : imp.target.replace(/s$/, '')}${fresh.length === 1 ? '' : 's'} from ${imp.name}${updated ? `, updated ${updated}` : ''}${skipped ? `, skipped ${skipped} already in the project` : ''}${res.errors.length ? `, ${res.errors.length} row${res.errors.length === 1 ? '' : 's'} had problems and were left out` : ''}.` } });
+    } catch (err) {
+      store.set({ imp: { ...imp, busy: false, err: errMsg(err) } });
+    }
+  }
+
   // ── QC gates (QC1 → QC2 → QC3, with the sign-off email as evidence) ──
   const qcInserts = new Map(); // "deliverable:gate" -> pending insert, so quick edits never create the same row twice
   async function ensureQc(deliverableId, gate) {
@@ -459,7 +514,7 @@ export function createProjectStore(session) {
       importPaste, invite, setMemberRole, toggleArchive, deleteProject,
       openCheckpoint, closeCheckpoint: () => store.set({ checkpoint: null, checkpointErr: '' }), submitCheckpoint,
       addVo, editVo, voToDeliverable,
-      addIncident, editIncident, incidentToVo, editGate, openGate,
+      addIncident, editIncident, incidentToVo, editGate, openGate, pickImportFile, setImportSheet, setImportTarget, runImport, clearImport: () => store.set({ imp: { ...BLANK_IMP } }),
       addSnapshot, editSnapshot, importPcu,
       addMilestone, editMilestone, addAction, editAction,
       raiseQuery, editQuery, addStatus, editStatus,

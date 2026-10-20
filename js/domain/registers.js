@@ -94,7 +94,7 @@ export function parsePcuRows(text, components) {
   return { rows, errors };
 }
 
-function toPeriod(text) {
+export function toPeriod(text) {
   const s = String(text || '').trim();
   let m = s.match(/^(\d{4})-(\d{1,2})(?:-\d{1,2})?$/);
   if (m) return `${m[1]}-${String(m[2]).padStart(2, '0')}-01`;

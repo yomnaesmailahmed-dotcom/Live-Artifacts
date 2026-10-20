@@ -7,6 +7,7 @@ import { fmtDate, fmtHours, todayIso, displayName, initials } from '../../ui/for
 import { STATUS_CHIP, TOGGLE_ON, FILTER_OFF } from '../../ui/tokens.js';
 import { qcSummary } from '../../domain/qc.js';
 import { moneyFigures, fmtMoney, fmtPct } from '../../domain/progress.js';
+import { buildImport } from './import-vm.js';
 import { buildQc } from './qc-vm.js';
 import { buildRegisters } from './registers-vm.js';
 import { buildSchedule } from './schedule-vm.js';
@@ -15,7 +16,7 @@ import { buildMail } from './mail-vm.js';
 const STATUS_OVERRIDES = ['', 'Not Started', 'On Track', 'At Risk', 'Delayed', 'On Hold', 'Completed', 'Not Awarded'];
 const PO = ['Not Provided', 'Received', 'Not Received'];
 const opts = (list) => list.map((v) => (Array.isArray(v) ? { value: v[0], label: v[1] } : { value: v, label: v || 'Automatic (from data)' }));
-const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['timeline', 'Timeline'], ['queries', 'Queries & status'], ['variations', 'Variations'], ['incidents', 'Incidents'], ['hours', 'Hours'], ['qc', 'QC'], ['team', 'Team']];
+const TAB_LABELS = [['overview', 'Overview'], ['deliverables', 'Deliverables'], ['timeline', 'Timeline'], ['queries', 'Queries & status'], ['variations', 'Variations'], ['incidents', 'Incidents'], ['hours', 'Hours'], ['qc', 'QC'], ['import', 'Import'], ['team', 'Team']];
 
 export function buildViewModel(S, act) {
   const shell = buildShell(S, act, 'projects');
@@ -118,10 +119,11 @@ export function buildViewModel(S, act) {
     }),
     tOverview: S.tab === 'overview', tDeliverables: S.tab === 'deliverables', tTeam: S.tab === 'team',
     tVariations: S.tab === 'variations', tIncidents: S.tab === 'incidents', tHours: S.tab === 'hours',
-    tQc: S.tab === 'qc', tTimeline: S.tab === 'timeline', tQueries: S.tab === 'queries',
+    tQc: S.tab === 'qc', tImport: S.tab === 'import', tTimeline: S.tab === 'timeline', tQueries: S.tab === 'queries',
     ...buildRegisters(S, act, perm),
     ...buildSchedule(S, act, perm),
     ...buildQc(S, act, perm),
+    ...buildImport(S, act, perm),
     ...buildMail(S, act, perm),
     kConsumed: fmtHours(M.consumed_hours || 0), kBudgetTotal: fmtHours(M.budget_total ?? P.budget_hours), kEac: fmtHours(M.eac || 0),
     kPct: M.consumed_pct == null ? '—' : `${M.consumed_pct}%`, kVoOpen: M.vo_open || 0, kIncOpen: M.incidents_open || 0,
