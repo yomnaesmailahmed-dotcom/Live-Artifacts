@@ -4,7 +4,7 @@ import { createPageStore } from './page-base.js';
 import { errMsg, newId } from '../lib/store.js';
 
 const pageInitial = () => ({
-  projects: [], clients: [], members: [], people: {}, metrics: {}, progress: {}, myQueries: [], myActions: [], newMail: [],
+  projects: [], clients: [], members: [], people: {}, metrics: {}, progress: {}, qc: {}, myQueries: [], myActions: [], newMail: [],
   loaded: false,
   filter: { client: '', dm: '', status: '', q: '' },
   creating: false, createBusy: false, createErr: '',
@@ -49,6 +49,7 @@ export function createPortfolioStore(session) {
         .on('postgres_changes', { event: '*', schema: 'public', table: 'actions' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'ptm_queries' }, scheduleMetrics)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'team_status' }, scheduleMetrics)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'qc_checks' }, scheduleMetrics)
         .subscribe();
       await loadMetrics();
       store.set({ loaded: true });
@@ -59,11 +60,12 @@ export function createPortfolioStore(session) {
 
   async function loadMetrics() {
     if (!sb) return;
-    const [m, pr] = await Promise.all([sb.from('project_metrics').select('*'), sb.from('project_progress').select('*')]);
+    const [m, pr, qc] = await Promise.all([sb.from('project_metrics').select('*'), sb.from('project_progress').select('*'), sb.from('project_qc').select('*')]);
     if (m.error) throw m.error;
     store.set({
       metrics: Object.fromEntries((m.data || []).map((x) => [x.project_id, x])),
       progress: Object.fromEntries((pr.data || []).map((x) => [x.project_id, x])), // empty until the phase 6 migration is applied
+      qc: Object.fromEntries((qc.data || []).map((x) => [x.project_id, x])),
     });
   }
   function scheduleMetrics() {

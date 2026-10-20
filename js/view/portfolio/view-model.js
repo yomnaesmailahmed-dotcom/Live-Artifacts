@@ -89,7 +89,8 @@ export function buildViewModel(S, act) {
       hoursStyle: m.consumed_pct >= Number((S.settings && S.settings.at_risk_pct) || 90) ? 'color: #944747; font-weight: 600;' : '',
       eac: m.eac ? fmtHours(m.eac) : '—', eacStyle: Number(m.hours_variance) < 0 ? 'color: #B05A5A; font-weight: 600;' : '',
       open: [m.vo_open ? `${m.vo_open} VO` : '', m.incidents_open ? `${m.incidents_open} INC` : '', m.queries_open ? `${m.queries_open} Q` : '',
-        m.actions_late ? `${m.actions_late} late ACT` : '', m.milestones_late ? `${m.milestones_late} slip` : ''].filter(Boolean).join(' · ') || '—',
+        m.actions_late ? `${m.actions_late} late ACT` : '', m.milestones_late ? `${m.milestones_late} slip` : '',
+        (S.qc[p.id] || {}).submitted_without_qc ? `${S.qc[p.id].submitted_without_qc} no QC` : ''].filter(Boolean).join(' · ') || '—',
     })),
     clientRows: clientRollup(S.projects, S.clients, S.progress, S.metrics).filter((r) => !F.client || r.clientId === F.client).map((r) => ({
       client: r.client, projects: `${r.projects} project${r.projects === 1 ? '' : 's'}`,

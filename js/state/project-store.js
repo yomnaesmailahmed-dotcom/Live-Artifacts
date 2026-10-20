@@ -12,7 +12,7 @@ import { weekStart } from '../domain/schedule.js';
 import { candidateToVo } from '../domain/mail.js';
 import * as mail from '../services/mail.js';
 
-const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'team'];
+const TABS = ['overview', 'deliverables', 'timeline', 'queries', 'variations', 'incidents', 'hours', 'qc', 'team'];
 const tabFromHash = () => { const t = (window.location.hash || '').replace('#', ''); return TABS.includes(t) ? t : 'overview'; };
 const projectIdFromUrl = () => new URL(window.location.href).searchParams.get('id') || '';
 
@@ -22,7 +22,7 @@ const pageInitial = () => ({
   presence: [], tab: tabFromHash(),
   expanded: {}, confirmDelete: '', sourceFilter: '', phaseFilter: '',
   pasteOpen: false, pasteText: '', inviteBusy: false, inviteErr: '', inviteMsg: '',
-  variations: [], incidents: [], hours: [],
+  variations: [], incidents: [], hours: [], qc: [], qcOpen: '',
   checkpoint: null, checkpointBusy: false, checkpointErr: '', highlightVo: '',
   pcuOpen: false, pcuText: '', pcuMsg: '',
   milestones: [], actions: [], queries: [], statuses: [],
@@ -35,7 +35,7 @@ const pageInitial = () => ({
 const NUM = Object.fromEntries(['planned_hours', 'budget_hours', 'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
   'actual_hours', 'hours_this_period', 'contract_fee', 'invoiced_to_date', 'cost_to_date'].map((k) => [k, 'number']));
 const DATES = ['start_date', 'baseline_finish', 'forecast_finish', 'actual_finish', 'baseline_date', 'forecast_date', 'actual_date', 'submitted_on', 'response_on',
-  'email_received_on', 'decided_on', 'occurred_on', 'due_on', 'baseline_start', 'start_on', 'done_on', 'period_start'];
+  'email_received_on', 'evidence_received_on', 'checked_on', 'decided_on', 'occurred_on', 'due_on', 'baseline_start', 'start_on', 'done_on', 'period_start'];
 const codecs = { ...NUM, ...Object.fromEntries(DATES.map((d) => [d, 'date'])) };
 
 export function createProjectStore(session) {
@@ -71,6 +71,7 @@ export function createProjectStore(session) {
       T.queries = mk('queries', { table: 'ptm_queries', filter: byProject, sort: byNumber, onChange: (r) => { store.set({ queries: r }); scheduleMetrics(); loadPeople(r.flatMap((q) => [q.raised_by, q.assigned_to, q.answered_by].filter(Boolean).map((user_id) => ({ user_id })))); } });
       T.statuses = mk('statuses', { table: 'team_status', filter: byProject, sort: (a, b) => String(b.period_start).localeCompare(String(a.period_start)) || String(b.updated_at || '').localeCompare(String(a.updated_at || '')), onChange: (r) => { store.set({ statuses: r }); scheduleMetrics(); loadPeople(r.filter((x) => x.reported_by).map((x) => ({ user_id: x.reported_by }))); } });
       T.hours = mk('hours', { table: 'hours_snapshots', filter: byProject, sort: (a, b) => String(b.period).localeCompare(String(a.period)) || String(a.component_id || '').localeCompare(String(b.component_id || '')), onChange: (r) => { store.set({ hours: r }); scheduleMetrics(); } });
+      T.qc = mk('qc', { table: 'qc_checks', filter: byProject, sort: (a, b) => a.gate - b.gate, onChange: (r) => store.set({ qc: r }) });
       T.candidates = mk('candidates', { table: 'mail_candidates', filter: byProject, sort: (a, b) => String(b.received_at || b.created_at || '').localeCompare(String(a.received_at || a.created_at || '')), onChange: (r) => store.set({ candidates: r }) });
       T.mailFolders = mk('mailFolders', { table: 'mail_folders', filter: byProject, columns: 'id, connection_id, project_id, folder_id, folder_name, enabled, last_scan_at, messages_seen, created_at, updated_origin', sort: (a, b) => String(a.folder_name).localeCompare(String(b.folder_name)), onChange: (r) => store.set({ mailFolders: r }) });
       await Promise.all(Object.values(T).map((t) => t.start()));
@@ -109,7 +110,7 @@ export function createProjectStore(session) {
   const TYPED = new Set(['name', 'code', 'location', 'stage', 'scope_summary', 'rfp_ref', 'proposal_ref', 'title', 'phase', 'source_ref', 'notes', 'revision', 'discipline', 'planned_hours', 'budget_hours',
     'description', 'email_from', 'email_subject', 'email_link', 'email_quote', 'client_ref', 'action', 'owner', 'note',
     'hours_impact', 'hours_spent', 'fee_impact', 'cost_impact', 'time_impact_days', 'cumulative_hours', 'progress_pct',
-    'contract_fee', 'invoiced_to_date', 'cost_to_date', 'currency', 'owner_name', 'question', 'context', 'answer', 'team', 'done_text', 'next_text', 'blockers', 'actual_hours', 'hours_this_period']);
+    'contract_fee', 'invoiced_to_date', 'cost_to_date', 'currency', 'checked_by_name', 'evidence_subject', 'evidence_from', 'evidence_link', 'evidence_quote', 'owner_name', 'question', 'context', 'answer', 'team', 'done_text', 'next_text', 'blockers', 'actual_hours', 'hours_this_period']);
 
   function setTab(tab) {
     store.set({ tab });
@@ -299,6 +300,29 @@ export function createProjectStore(session) {
   }
   const setCandidateStatus = (id, status) => T.candidates.update(id, { status });
 
+  // ── QC gates (QC1 → QC2 → QC3, with the sign-off email as evidence) ──
+  const qcInserts = new Map(); // "deliverable:gate" -> pending insert, so quick edits never create the same row twice
+  async function ensureQc(deliverableId, gate) {
+    const key = `${deliverableId}:${gate}`;
+    const have = store.get().qc.find((c) => c.deliverable_id === deliverableId && c.gate === gate);
+    if (have) return have.id;
+    if (!qcInserts.has(key)) {
+      const p = T.qc.insert({ project_id: store.get().projectId, deliverable_id: deliverableId, gate }).finally(() => qcInserts.delete(key));
+      qcInserts.set(key, p);
+    }
+    return qcInserts.get(key);
+  }
+  const editGate = (deliverableId, gate, field) => async (e) => {
+    const v = value(e);
+    try {
+      const id = await ensureQc(deliverableId, gate);
+      const patch = { [field]: v };
+      if (field === 'status' && v !== 'pending' && !(T.qc.get(id) || {}).checked_on) patch.checked_on = todayIso();
+      T.qc.update(id, patch, { typing: TYPED.has(field) });
+    } catch (_) { /* shown in header */ }
+  };
+  const openGate = (key) => store.set({ qcOpen: store.get().qcOpen === key ? '' : key });
+
   // ── incidents ──
   async function addIncident(origin = 'internal') {
     try { await T.incidents.insert({ project_id: store.get().projectId, origin, title: '', occurred_on: todayIso(), status: 'Open' }); } catch (_) { /* shown in header */ }
@@ -435,7 +459,7 @@ export function createProjectStore(session) {
       importPaste, invite, setMemberRole, toggleArchive, deleteProject,
       openCheckpoint, closeCheckpoint: () => store.set({ checkpoint: null, checkpointErr: '' }), submitCheckpoint,
       addVo, editVo, voToDeliverable,
-      addIncident, editIncident, incidentToVo,
+      addIncident, editIncident, incidentToVo, editGate, openGate,
       addSnapshot, editSnapshot, importPcu,
       addMilestone, editMilestone, addAction, editAction,
       raiseQuery, editQuery, addStatus, editStatus,
