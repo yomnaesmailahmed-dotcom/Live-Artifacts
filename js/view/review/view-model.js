@@ -20,7 +20,7 @@ const INFO = [
   { title: 'Review & output', badge: 'YOUR APPROVAL', badgeClass: 'chip-you', lede: 'Check the summary and briefing notes, download the Excel, then approve. Nothing is sent from here.', provide: 'Your approval.', ai: 'Builds the summary, the briefing notes and a 4-sheet Excel.', produces: 'Executive summary Excel and briefing notes.', decide: 'Approve, then brief management yourself.' },
 ];
 const STATUSES = ['On Track', 'At Risk', 'Delayed', 'On Hold', 'Completed', 'Not Started'];
-const RESP = ['', 'Client', 'Pinnacle', 'Shared', 'To Be Confirmed'];
+const RESP = ['', 'Client', 'Our company', 'Shared', 'To Be Confirmed'];
 
 export function buildViewModel(S, act) {
   const shell = buildShell(S, act, 'review');

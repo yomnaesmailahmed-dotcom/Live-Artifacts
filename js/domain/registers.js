@@ -14,7 +14,7 @@ export const VO_DECISIONS = new Set(['approved', 'rejected']);
 export const VO_TRIGGERS = { manual: 'Entered manually', checkpoint: 'Email checkpoint', email_scan: 'Outlook scan', incident: 'From an incident' };
 
 export const INCIDENT_CATEGORIES = ['Design error', 'Coordination', 'Rework', 'Resource', 'Late information', 'Client change', 'Client delay', 'Authority / permit', 'Third party', 'Other'];
-export const RESPONSIBILITIES = ['To Be Confirmed', 'Client', 'Pinnacle', 'Shared', 'Third party'];
+export const RESPONSIBILITIES = ['To Be Confirmed', 'Client', 'Our company', 'Shared', 'Third party'];
 export const RESPONSIBILITY_BASES = ['Not established', 'Cause under review', 'Documented in source'];
 export const INCIDENT_STATUSES = ['Open', 'Mitigating', 'Closed'];
 export const ORIGINS = [['internal', 'Internal (our cost)'], ['external', 'External (client / third party)']];
