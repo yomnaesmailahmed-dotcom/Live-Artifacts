@@ -24,7 +24,7 @@ export const regNo = (prefix, n) => (n ? `${prefix}-${String(n).padStart(3, '0')
 // <input type="month"> gives "2026-10"; the ledger stores the first of the month.
 export const monthToPeriod = (m) => (/^\d{4}-\d{2}$/.test(m || '') ? `${m}-01` : null);
 export const periodToMonth = (p) => (p ? String(p).slice(0, 7) : '');
-export const currentMonth = () => new Date().toISOString().slice(0, 7);
+export const currentMonth = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; };
 
 // A VO drafted at an email checkpoint on a deliverable / submission.
 export function voFromCheckpoint({ projectId, deliverable = null, submission = null, form }) {

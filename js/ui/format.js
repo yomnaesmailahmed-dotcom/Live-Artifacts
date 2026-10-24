@@ -23,7 +23,11 @@ export function fmtLocalTime(iso) {
   return `${fmtDate(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export const todayIso = () => new Date().toISOString().slice(0, 10);
+// The viewer's calendar day, not UTC's: just after midnight in Riyadh UTC still says "yesterday".
+export const todayIso = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
 // Accepts 2026-09-20, 20/09/2026, 20-09-2026, 20 Sep 2026, 20-Sep-26. Returns ISO or null.
 export function parseDateLoose(text) {

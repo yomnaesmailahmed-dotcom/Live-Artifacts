@@ -97,6 +97,7 @@ export function createPortfolioStore(session) {
   async function createProject(e) {
     if (e && e.preventDefault) e.preventDefault();
     const f = readCreateForm(e);
+    if (store.get().createBusy) return; // double click / Enter twice must not create two projects
     if (!f.name) { store.set({ createErr: 'Give the project a name.' }); return; }
     if (!f.clientId && !f.newClient) { store.set({ createErr: 'Choose a client or type a new client name.' }); return; }
     const emailOk = (x) => !x || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x);
@@ -114,12 +115,13 @@ export function createPortfolioStore(session) {
         contract_fee: f.fee === '' ? 0 : Number(f.fee), currency: (f.currency || 'SAR').toUpperCase(), start_date: f.start || null, baseline_finish: f.finish || null,
       });
       const invites = [[f.dm, 'dm'], [f.ptm, 'ptm']].filter(([email]) => email).map(([email, role]) => ({ project_id: id, email, role }));
+      let inviteFailed = false;
       if (invites.length) {
         const { error } = await sb.from('project_invites').insert(invites);
-        if (error) throw error;
+        inviteFailed = !!error; // the project exists now: open it on the Team tab instead of leaving a form that would create a duplicate
       }
       store.set({ createBusy: false, creating: false });
-      window.location.href = `./Project.dc.html?id=${id}`;
+      window.location.href = `./Project.dc.html?id=${id}${inviteFailed ? '#team' : ''}`;
     } catch (err) {
       store.set({ createBusy: false, createErr: errMsg(err) });
     }

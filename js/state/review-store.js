@@ -31,6 +31,7 @@ export function createReviewStore(session) {
         onChange: (r) => store.set({ run: r[0] || store.get().run }), onStatus: trackStatus('run') });
       T.decisions = createLiveTable({ sb, table: 'run_decisions', filter: { column: 'run_id', value: runId }, keyCols: ['run_id', 'kind', 'item_key'],
         onChange: (r) => store.set({ decisions: r }), onStatus: trackStatus('decisions') });
+      const runTable = T.run;
       await Promise.all([T.run.start(), T.decisions.start()]);
       const member = run.owner_id === uid ? null : await repo.findMembership(sb, runId, uid).catch(() => null);
       const mgmt = ['admin', 'management'].includes((s.profile || {}).role);
@@ -40,7 +41,10 @@ export function createReviewStore(session) {
       store.set({ loaded: true });
       const me = s.profile || { email: s.user.email };
       joinPresence(sb, `review:${runId}`, { user_id: uid, email: me.email, name: displayName(me), step: run.step, at: Date.now() },
-        (people) => store.set({ presence: people })).then((p) => { presence = p; }).catch(() => {});
+        (people) => store.set({ presence: people })).then((p) => {
+        // signed out or switched user while joining: leave straight away instead of leaking the channel
+        if (T.run && store.get().user && store.get().user.id === s.user.id && T.run === runTable) presence = p; else p.leave();
+      }).catch(() => {});
     },
   });
 

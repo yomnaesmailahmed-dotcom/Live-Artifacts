@@ -77,6 +77,7 @@ export function createProjectStore(session) {
       T.qc = mk('qc', { table: 'qc_checks', filter: byProject, sort: (a, b) => a.gate - b.gate, onChange: (r) => store.set({ qc: r }) });
       T.candidates = mk('candidates', { table: 'mail_candidates', filter: byProject, sort: (a, b) => String(b.received_at || b.created_at || '').localeCompare(String(a.received_at || a.created_at || '')), onChange: (r) => store.set({ candidates: r }) });
       T.mailFolders = mk('mailFolders', { table: 'mail_folders', filter: byProject, columns: 'id, connection_id, project_id, folder_id, folder_name, enabled, last_scan_at, messages_seen, created_at, updated_origin', sort: (a, b) => String(a.folder_name).localeCompare(String(b.folder_name)), onChange: (r) => store.set({ mailFolders: r }) });
+      const projectTable = T.project;
       await Promise.all(Object.values(T).map((t) => t.start()));
       refreshMailStatus();
       T.invites = mk('invites', { table: 'project_invites', filter: byProject, hasOrigin: false, onChange: (r) => store.set({ invites: r }) });
@@ -86,7 +87,10 @@ export function createProjectStore(session) {
       store.set({ loaded: true });
       const me = s.profile || { id: s.user.id, email: s.user.email };
       joinPresence(sb, `project:${id}`, { user_id: s.user.id, email: me.email, name: displayName(me), tab: store.get().tab, at: Date.now() },
-        (people) => store.set({ presence: people })).then((p) => { presence = p; }).catch(() => {});
+        (people) => store.set({ presence: people })).then((p) => {
+        // signed out or switched user while joining: leave straight away instead of leaking the channel
+        if (T.project === projectTable && store.get().user && store.get().user.id === s.user.id) presence = p; else p.leave();
+      }).catch(() => {});
     },
   });
 
@@ -292,14 +296,16 @@ export function createProjectStore(session) {
     store.set({ mailMsg: { ok: !r.error, msg: mail.scanSummary(r) } });
     await T.candidates.load();
   });
+  const accepting = new Set(); // a double click must not create two VOs from one candidate
   async function acceptCandidate(id) {
     const c = T.candidates.get(id);
-    if (!c || c.status !== 'new') return;
+    if (!c || c.status !== 'new' || accepting.has(id)) return;
+    accepting.add(id);
     try {
       const voId = await T.variations.insert(candidateToVo(c));
       T.candidates.update(id, { status: 'accepted', variation_id: voId });
       store.set({ highlightVo: voId });
-    } catch (_) { /* shown in header */ }
+    } catch (_) { /* shown in header */ } finally { accepting.delete(id); }
   }
   const setCandidateStatus = (id, status) => T.candidates.update(id, { status });
 

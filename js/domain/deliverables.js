@@ -53,7 +53,7 @@ export function parseDeliverableRows(text) {
 
 export function nextRevision(submissions) {
   const nums = submissions.map((s) => Number((String(s.revision || '').match(/(\d+)/) || [])[1])).filter((n) => !Number.isNaN(n));
-  const n = nums.length ? Math.max(...nums) + 1 : 0;
+  const n = nums.length ? Math.max(...nums) + 1 : submissions.length; // unnumbered revisions still count
   return `Rev ${String(n).padStart(2, '0')}`;
 }
 

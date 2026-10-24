@@ -30,12 +30,23 @@ export function createSession({ getClient = getSupabase } = {}) {
     }
     store.set({ auth: 'loading', user: { id: uid, email: session.user.email }, authBusy: false, authErr: '', authMsg: '' });
     try {
-      const [profile, settings] = await Promise.all([
-        auth.fetchProfile(sb, uid),
-        sb.from('app_settings').select('company_name, at_risk_pct, scan_keywords').maybeSingle().then(({ data, error }) => { if (error) throw error; return data; }),
-      ]);
+      // A single failed request must not turn an admin into a member, so retry before giving up.
+      let loaded;
+      for (let attempt = 0; ; attempt += 1) {
+        try {
+          loaded = await Promise.all([
+            auth.fetchProfile(sb, uid),
+            sb.from('app_settings').select('company_name, at_risk_pct, scan_keywords').maybeSingle().then(({ data, error }) => { if (error) throw error; return data; }),
+          ]);
+          break;
+        } catch (e) {
+          if (attempt >= 2 || mine !== seq) throw e;
+          await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+          if (mine !== seq) return;
+        }
+      }
       if (mine !== seq) return;
-      store.set({ auth: 'ready', profile, settings });
+      store.set({ auth: 'ready', profile: loaded[0], settings: loaded[1] });
     } catch (e) {
       if (mine !== seq) return;
       store.set({ auth: 'ready', profile: null, settings: null, authErr: errMsg(e) });
